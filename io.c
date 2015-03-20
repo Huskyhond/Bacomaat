@@ -235,116 +235,17 @@ void loop()
          run = 0; 
       break;      
       
-      case '1':
-        if(keyCounter<4)
+      case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
+        if(keyCounter < 4)
         {
           input[keyCounter]=keypress;
           keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break;
-      
-      case '2':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break;
-      
-      case '3':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break;
-      
-      case '4':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break;
-   
-      case '5':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break;      
-      
-      case '6':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break;
-      
-      case '7':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break; 
-      
-      case '8':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
-        }
-      break;
-      
-      case '9':
-        if(keyCounter<4)
-        {
-          input[keyCounter]=keypress;
-          keyCounter++;
-        }
-        else
-        {
-          break;
         }
       break;
        
       default:
-         break;     
+      
+      break;     
     }    
   }
 }
