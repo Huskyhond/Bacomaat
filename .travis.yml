@@ -2,6 +2,13 @@ language: node_js
 node_js:
 	- "0.12"
 	- "0.11"
+before_install: "sudo apt-get update"
 install: "express mysql"
 services:
 	- mysql
+before_script: {
+	"gotodir": "cd Server"
+}
+script: {
+	"run": "sudo nodejs server.js"
+}
