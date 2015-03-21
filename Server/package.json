@@ -1,0 +1,20 @@
+{
+  "name": "MLB",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "check-types": "~2.2.0",
+    "exec": "~0.2.0",
+    "express": "~4.11.2",
+    "forever": "~0.14.1",
+    "mysql": "~2.5.4",
+    "ssl-root-cas": "~1.1.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "sudo node server.js"
+  },
+  "author": "",
+  "license": "BSD-2-Clause"
+}
