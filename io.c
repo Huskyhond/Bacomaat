@@ -83,10 +83,15 @@ void loop()
 {
   loop:
   
-  if(!mfrc522.PICC_IsNewCardPresent())
-  {
-    return;
-  }
+  byte* reply[16];
+  byte* atqa[2];
+  mfrc522.PICC_RequestA(atqa[2], reply[16]);
+  
+//  if(!mfrc522.PICC_IsNewCardPresent())
+//  {
+//    return;
+//  }
+
   if(!mfrc522.PICC_ReadCardSerial())
   {
     return;
@@ -150,13 +155,13 @@ void loop()
                 input[x] = 0;
               }
               Serial.println("Verification Failed");
-              return;
+              
             } 
           }
           Serial.println("Pin verified");
+          runAuth=1;
         }
         //Start the authorized loop.
-        runAuth=1;
         while(runAuth)
         {
           char keypress = keyPad.getKey();
@@ -204,7 +209,7 @@ void loop()
                             runWithdraw = 0;
                             runAuth = 0;
                             run = 0;
-                            goto loop;
+                            return;
                          break;
                          
                          case 'B':
@@ -213,7 +218,7 @@ void loop()
                            runWithdraw = 0;
                            runAuth = 0;
                            run = 0;
-                           goto loop;
+                           return;
                          break;
                         }
                       }
