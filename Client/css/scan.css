@@ -1,0 +1,15 @@
+#scanbody {
+  margin: 0 auto;
+  margin-top: 50px;
+  background-color: #F20056;
+  width: 93%;
+  height: 534px;
+  padding-top: 195px;
+  padding-left: 51px;
+  border-radius: 25px;
+}
+
+#scanbody b {
+	color: white;
+	font-size: 246px;
+}

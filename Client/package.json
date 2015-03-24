@@ -1,0 +1,11 @@
+{
+	"version": "1.0.0",
+  "name": "Hoi",
+  "main": "scan.html",
+  "window": {
+  	"title": "MLB Inc",
+  	"toolbar": true,
+  	"frame": false,
+  	"kiosk": true
+  }
+}
