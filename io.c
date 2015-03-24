@@ -162,7 +162,6 @@ void loop()
         while(runAuth)
         {
           char keypress = keyPad.getKey();
-          //Serial.println(keypress);
           switch(keypress)
           {
             case 'A':
