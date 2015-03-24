@@ -49,14 +49,22 @@ Keypad keyPad = Keypad(makeKeymap(keys), rowPins, colPins, rows, columns);
 int readBlock(int blockNumber, byte arrayAddress[]) 
 {
   int largestModulo4Number=blockNumber/4*4;
-  int trailerBlock=largestModulo4Number+3;
+  int trailerBlock=largestModulo4Number+3;//determine trailer block for the sector
   byte status = mfrc522.PCD_Authenticate(MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
-  
-  if(status != MFRC522::STATUS_OK)
+
+  if (status != MFRC522::STATUS_OK) 
   {
-   Serial.print("PCD_Authenticate() failed (read): ");
-   Serial.println(mfrc522.GetStatusCodeName(status));
-   return 3;
+         Serial.print("PCD_Authenticate() failed (read): ");
+         Serial.println(mfrc522.GetStatusCodeName(status));
+         return 3;//return "3" as error message
+  }
+        
+  byte buffersize = 18;
+  status = mfrc522.MIFARE_Read(blockNumber, arrayAddress, &buffersize);
+  if (status != MFRC522::STATUS_OK) {
+          Serial.print("MIFARE_read() failed: ");
+          Serial.println(mfrc522.GetStatusCodeName(status));
+          return 4;//return "4" as error message
   }
 }
 
@@ -73,6 +81,8 @@ void setup()
 
 void loop()
 {
+  loop:
+  
   if(!mfrc522.PICC_IsNewCardPresent())
   {
     return;
@@ -84,22 +94,24 @@ void loop()
   
   Serial.println("New card found"); //tell java to wake from idle with code: 1.
   //read the accountnumber. 
-  readBlock(block2, readblockBuffer);
+  readBlock(2, readblockBuffer);
   byte accountNumber[16];
   for(int c = 0; c < 16; c++)
   {
     accountNumber[c]=readblockBuffer[c];
+    Serial.write(readblockBuffer[c]);
   }
-  //Serial.println(""); 
+  Serial.println(""); 
   
   //read the pin number.
-  readBlock(block3, readblockBuffer);
+  readBlock(6, readblockBuffer);
   byte pin[4];
-  for(int c = 0; c < 5; c++)
+  for(int c = 0; c < 4; c++)
   {
     pin[c]=readblockBuffer[c];
+    Serial.write(pin[c]);
   }
-  //Serial.println(""); 
+  Serial.println(""); 
   
   //setup variables, and start pin verification loop.
   byte input[4];
@@ -112,20 +124,21 @@ void loop()
     if(retryChances <= 0)
     {
       retryChances = 3;
-      Serial.write("Block ");
+      Serial.println("Block ");
       for(int x=0; x<16; x++)
       {
-        Serial.write(accountNumber[x]);
+        Serial.println(accountNumber[x]);
       }
-      return;
+      break;
     }
     char keypress = keyPad.getKey();
+    //Serial.println(keypress);
     switch(keypress)
     {
       case 'A':
         if(keyCounter >= 4)
         {
-          for(int x=0; x<4; x++)
+          for(int x=0; x<=3; x++)
           {
             if(pin[x] != input[x])
             {
@@ -136,7 +149,8 @@ void loop()
                 pin[x] = 0;
                 input[x] = 0;
               }
-              break;
+              Serial.println("Verification Failed");
+              return;
             } 
           }
           Serial.println("Pin verified");
@@ -146,6 +160,7 @@ void loop()
         while(runAuth)
         {
           char keypress = keyPad.getKey();
+          //Serial.println(keypress);
           switch(keypress)
           {
             case 'A':
@@ -153,12 +168,14 @@ void loop()
             break;
             
             case 'B':
+              Serial.println("Withdraw wait for amount");
               byte amount[3];
               keyCounter3=0;
               runWithdraw=1;
               while(runWithdraw)
               {
                 char keypress = keyPad.getKey();
+                //Serial.println(keypress);
                 switch(keypress)
                 {
                   case 'A':
@@ -169,11 +186,36 @@ void loop()
                       {
                         Serial.write(amount[x]);
                       }
+                      Serial.println("");
                       int runTicket=1;
                       while(runTicket)
                       {
-                        //put ticket option code here.
-                        runTicket=0;
+                        char keypress = keyPad.getKey();
+                        switch(keypress)
+                        {
+                          case 'A':
+                            Serial.write("Print ticket for: ");
+                            for(int i = 0; i < 16; i++)
+                            {
+                              Serial.write(accountNumber[i]);
+                            }
+                            Serial.println("");
+                            runTicket = 0;
+                            runWithdraw = 0;
+                            runAuth = 0;
+                            run = 0;
+                            goto loop;
+                         break;
+                         
+                         case 'B':
+                           Serial.println("Say goodbye");
+                           runTicket = 0;       
+                           runWithdraw = 0;
+                           runAuth = 0;
+                           run = 0;
+                           goto loop;
+                         break;
+                        }
                       }
                     }
                   break;
@@ -186,6 +228,7 @@ void loop()
                   break;
 
                   case 'C':
+                    Serial.println("Cancel");
                     keyCounter3=0;
                     for (int i=0; i<3; ++i)
                     {
@@ -200,15 +243,28 @@ void loop()
                     {
                      accountNumber[x]=0;
                     }
-                    runWithdraw=0;
+                    runWithdraw = 0;
+                    runAuth = 0;
+                    run = 0;
+                    break;
+                  
+                  case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
+                    if(keyCounter3 < 3)
+                    {
+                      amount[keyCounter3]=keypress;
+                      keyCounter3++;
+                    }
                   break;
+                    
                 }
               }
               break;
               
               case 'C':
-                 runAuth=0;
-              break;
+                Serial.println("Cancel");
+                    runAuth = 0;
+                    run = 0;
+              return;
           }
         }
         break;
@@ -232,8 +288,10 @@ void loop()
          {
            accountNumber[x]=0;
          }
-         run = 0; 
-      break;      
+         Serial.println("Cancel");
+         run = 0;
+         goto loop;
+      break; 
       
       case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
         if(keyCounter < 4)
@@ -241,11 +299,7 @@ void loop()
           input[keyCounter]=keypress;
           keyCounter++;
         }
-      break;
-       
-      default:
-      
-      break;     
+      break;  
     }    
   }
 }
