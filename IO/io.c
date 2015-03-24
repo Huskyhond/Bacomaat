@@ -100,7 +100,7 @@ void loop()
     return;
   }
   
-  Serial.println("New card found"); //tell java to wake from idle with code: 1.
+  Serial.println("1"); //tell java to wake from idle with code: 1.
   //read the accountnumber. 
   readBlock(2, readblockBuffer);
   byte accountNumber[16];
@@ -117,16 +117,15 @@ void loop()
   for(int c = 0; c < 4; c++)
   {
     pin[c]=readblockBuffer[c];
-    Serial.write(pin[c]);
+    //Serial.write(pin[c]);
   }
-  Serial.println(""); 
+  //Serial.println(""); 
   
   //setup variables, and start pin verification loop.
+  loop:
   byte input[4];
   int keyCounter = 0;
   int failedAttempts = 0;
-  
-  firstLoop:
   run=1;
   while(run)
   {
@@ -134,42 +133,47 @@ void loop()
     switch(keypress)
     {
       case 'A':
+        if(keyCounter < 4)
+        {
+          run = 0;
+          goto loop;
+        }
         if(keyCounter >= 4)
         {
+          keyCounter=0;
           for(int x=0; x<=3; x++)
           {
             if(pin[x] != input[x])
             {
-              keyCounter=0;
-              for(int x=0; x<4; x++)
-              {
-                pin[x] = 0;
-                input[x] = 0;
-              }
-              Serial.write("Failed attempt for: ");
+              Serial.println("2");//fase 2, verification
+              Serial.println("False");//means the verification failed
               for(int x=0; x<16; x++)
               {
                 Serial.write(accountNumber[x]);
               }
               Serial.println("");
-              goto firstLoop;
-            } 
+              run = 0;
+              goto loop;
+            }
           }
-          Serial.println("Pin verified");
-          runAuth=1;
         }
+        Serial.println("2");//fase 2, verification
+        Serial.println("True");//means the verification succeeded
+        runAuth=1;
+        
         //Start the authorized loop.
         while(runAuth)
         {
           char keypress = keyPad.getKey();
+          //Serial.println(keypress);
           switch(keypress)
           {
             case 'A':
-              Serial.println("Give balance");
+              Serial.println("3");//Give balance
             break;
             
             case 'B':
-              Serial.println("Withdraw wait for amount");
+              Serial.println("4");//withdraw
               byte amount[3];
               keyCounter3=0;
               runWithdraw=1;
@@ -195,12 +199,13 @@ void loop()
                         switch(keypress)
                         {
                           case 'A':
-                            Serial.write("Print ticket for: ");
+                            Serial.println("5");//Print ticket
                             for(int i = 0; i < 16; i++)
                             {
                               Serial.write(accountNumber[i]);
                             }
-                            Serial.println(" Say goodbye");
+                            Serial.println("");
+                            Serial.println("6");
                             runTicket = 0;
                             runWithdraw = 0;
                             runAuth = 0;
@@ -210,7 +215,7 @@ void loop()
                          break;
                          
                          case 'B':
-                           Serial.println(" Say goodbye");
+                           Serial.println("6");
                            runTicket = 0;       
                            runWithdraw = 0;
                            runAuth = 0;
@@ -231,7 +236,7 @@ void loop()
                   break;
 
                   case 'C':
-                    Serial.println("Cancel");
+                    Serial.println("6");
                     keyCounter3=0;
                     for (int i=0; i<3; ++i)
                     {
@@ -265,7 +270,7 @@ void loop()
               break;
               
               case 'C':
-                Serial.println("Cancel");
+                Serial.println("6");
                     runAuth = 0;
                     run = 0;
                     finish();
@@ -293,7 +298,7 @@ void loop()
          {
            accountNumber[x]=0;
          }
-         Serial.println("Cancel");
+         Serial.println("6");
          run = 0;
          finish();
       break; 
