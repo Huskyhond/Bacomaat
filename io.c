@@ -68,11 +68,16 @@ int readBlock(int blockNumber, byte arrayAddress[])
   }
 }
 
+int finish()
+{
+  mfrc522.PCD_Init();
+}
+
 void setup()
 {
  Serial.begin(9600);
  SPI.begin();
- mfrc522.PCD_Init();
+ finish();
  for (byte i = 0; i < 6; i++)
  {
   key.keyByte[i] = 0xFF;
@@ -80,9 +85,7 @@ void setup()
 }
 
 void loop()
-{
-  loop:
-  
+{ 
   byte* reply[16];
   byte* atqa[2];
   mfrc522.PICC_RequestA(atqa[2], reply[16]);
@@ -121,23 +124,13 @@ void loop()
   //setup variables, and start pin verification loop.
   byte input[4];
   int keyCounter = 0;
-  int retryChances = 3;
+  int failedAttempts = 0;
   
+  firstLoop:
   run=1;
   while(run)
   {
-    if(retryChances <= 0)
-    {
-      retryChances = 3;
-      Serial.println("Block ");
-      for(int x=0; x<16; x++)
-      {
-        Serial.println(accountNumber[x]);
-      }
-      break;
-    }
     char keypress = keyPad.getKey();
-    //Serial.println(keypress);
     switch(keypress)
     {
       case 'A':
@@ -148,14 +141,18 @@ void loop()
             if(pin[x] != input[x])
             {
               keyCounter=0;
-              retryChances--;
               for(int x=0; x<4; x++)
               {
                 pin[x] = 0;
                 input[x] = 0;
               }
-              Serial.println("Verification Failed");
-              
+              Serial.write("Failed attempt for: ");
+              for(int x=0; x<16; x++)
+              {
+                Serial.write(accountNumber[x]);
+              }
+              Serial.println("");
+              goto firstLoop;
             } 
           }
           Serial.println("Pin verified");
@@ -204,20 +201,22 @@ void loop()
                             {
                               Serial.write(accountNumber[i]);
                             }
-                            Serial.println("");
+                            Serial.println(" Say goodbye");
                             runTicket = 0;
                             runWithdraw = 0;
                             runAuth = 0;
                             run = 0;
+                            finish();
                             return;
                          break;
                          
                          case 'B':
-                           Serial.println("Say goodbye");
+                           Serial.println(" Say goodbye");
                            runTicket = 0;       
                            runWithdraw = 0;
                            runAuth = 0;
                            run = 0;
+                           finish();
                            return;
                          break;
                         }
@@ -251,6 +250,7 @@ void loop()
                     runWithdraw = 0;
                     runAuth = 0;
                     run = 0;
+                    finish();
                     break;
                   
                   case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
@@ -269,6 +269,7 @@ void loop()
                 Serial.println("Cancel");
                     runAuth = 0;
                     run = 0;
+                    finish();
               return;
           }
         }
@@ -295,7 +296,7 @@ void loop()
          }
          Serial.println("Cancel");
          run = 0;
-         goto loop;
+         finish();
       break; 
       
       case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
