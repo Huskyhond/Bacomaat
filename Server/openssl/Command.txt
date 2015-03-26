@@ -1,0 +1,1 @@
+keytool -import -alias MLB -keystore "E:/Program Files/Java/jre7/lib/security/cacerts" -file server.crt
