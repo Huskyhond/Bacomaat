@@ -2,6 +2,21 @@
 //The SPI and MiFare header are strictly required.
 //There's no other way of normally (with limited time) implementing MiFare's RFID Implementation without the MFRC522 header.
 
+/*
+
+Case explantion
+You can except the following cases:
+01 = card found, break idle, wait for accountnumber 10 bytes.
+20 = pin verification failed.
+21 = pin verification succeeded.
+03 = return balance. 
+04 = withdraw cash, wait for amount, 3 bytes.
+05 = print ticket, with accountnumber, withdrawn amount, date and time.
+06 = cancel return to idle.
+07 = input length, either 0 to 4 or 0 to 3. 
+08 = clear input.
+
+*/
 #include <Keypad.h>
 #include <SPI.h>
 #include <MFRC522.h>
@@ -100,8 +115,8 @@ void loop()
     return;
   }
   
-  Serial.println("1"); //tell java to wake from idle with code: 1.
-  //read the accountnumber. 
+  Serial.println("01"); //tell java to wake from idle with code: 1.
+  //read the accountnumber from block 2. 
   readBlock(2, readblockBuffer);
   byte accountNumber[16];
   for(int c = 0; c < 16; c++)
@@ -111,7 +126,7 @@ void loop()
   }
   Serial.println(""); 
   
-  //read the pin number.
+  //read the pin number from block 6.
   readBlock(6, readblockBuffer);
   byte pin[4];
   for(int c = 0; c < 4; c++)
@@ -145,8 +160,7 @@ void loop()
           {
             if(pin[x] != input[x])
             {
-              Serial.println("2");//fase 2, verification
-              Serial.println("0");//means the verification failed
+              Serial.println("20");//fase 2, verification
               for(int x=0; x<16; x++)
               {
                 Serial.write(accountNumber[x]);
@@ -157,8 +171,7 @@ void loop()
             }
           }
         }
-        Serial.println("2");//fase 2, verification
-        Serial.println("1");//means the verification succeeded
+        Serial.println("21");//fase 2, verification
         runAuth=1;
         
         //Start the authorized loop.
@@ -169,11 +182,11 @@ void loop()
           switch(keypress)
           {
             case 'A':
-              Serial.println("3");//Give balance
+              Serial.println("03");//Give balance
             break;
             
             case 'B':
-              Serial.println("4");//withdraw
+              Serial.println("04");//withdraw
               byte amount[3];
               keyCounter3=0;
               runWithdraw=1;
@@ -199,13 +212,13 @@ void loop()
                         switch(keypress)
                         {
                           case 'A':
-                            Serial.println("5");//Print ticket
+                            Serial.println("05");//Print ticket
                             for(int i = 0; i < 16; i++)
                             {
                               Serial.write(accountNumber[i]);
                             }
                             Serial.println("");
-                            Serial.println("6");
+                            Serial.println("06");
                             runTicket = 0;
                             runWithdraw = 0;
                             runAuth = 0;
@@ -215,7 +228,7 @@ void loop()
                          break;
                          
                          case 'B':
-                           Serial.println("6");
+                           Serial.println("06");
                            runTicket = 0;       
                            runWithdraw = 0;
                            runAuth = 0;
@@ -229,6 +242,7 @@ void loop()
                   break;
 
                   case 'B':
+                    Serial.println("08"); //case 8 reset input
                     for (int i=0; i<3; ++i)
                     {
                       amount[i]=0;
@@ -236,7 +250,7 @@ void loop()
                   break;
 
                   case 'C':
-                    Serial.println("6");
+                    Serial.println("06");
                     keyCounter3=0;
                     for (int i=0; i<3; ++i)
                     {
@@ -262,6 +276,8 @@ void loop()
                     {
                       amount[keyCounter3]=keypress;
                       keyCounter3++;
+                      Serial.println("07");//case 7 for keycount 
+                      Serial.println(keyCounter3);
                     }
                   break;
                     
@@ -270,7 +286,7 @@ void loop()
               break;
               
               case 'C':
-                Serial.println("6");
+                Serial.println("06");
                     runAuth = 0;
                     run = 0;
                     finish();
@@ -280,11 +296,12 @@ void loop()
         break;
       
       case 'B':
-         keyCounter=0;
-         for(int x=0; x<4; x++)
-         {
-          input[x] = 0;
-         }
+        Serial.println("08"); //case 8 reset input
+        keyCounter=0;
+        for(int x=0; x<4; x++)
+        {
+        input[x] = 0;
+        }
       break;
       
       case 'C':
@@ -298,7 +315,7 @@ void loop()
          {
            accountNumber[x]=0;
          }
-         Serial.println("6");
+         Serial.println("06");
          run = 0;
          finish();
       break; 
@@ -308,6 +325,8 @@ void loop()
         {
           input[keyCounter]=keypress;
           keyCounter++;
+          Serial.println("07");//case 7 for keycount 
+          Serial.println(keyCounter);
         }
       break;  
     }    
