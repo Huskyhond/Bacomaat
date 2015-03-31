@@ -141,7 +141,12 @@ void loop()
   byte input[4];
   int keyCounter = 0;
   int failedAttempts = 0;
+  for(int x=0; x<3; x++)
+  {
+    amount[x]=0;
+  }
   run=1;
+  
   while(run)
   {
     char keypress = keyPad.getKey();
@@ -197,7 +202,7 @@ void loop()
                 switch(keypress)
                 {
                   case 'A':
-                    if(keyCounter3>=3)
+                    if(keyCounter3 >= 3 || keyCounter3 >= 2)
                     {
                       keyCounter3=0;
                       for(int x=0; x<3; x++)
