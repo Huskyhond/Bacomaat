@@ -36,6 +36,7 @@
 	        boolean pinVerify = false;
 	        String accountState = "OPEN";
 	        boolean receipt = true;
+	        String pinLength = "";
 
 	       
 	        //*************Serial to Java********************//
@@ -136,6 +137,13 @@
 	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
                         wk.sendCancelRequest(true);
 	            	break;
+	            	
+	            	case 07: 
+		        pinLength = new String(serialPort.readBytes(1));
+		        result = "pin length"+pinLength;
+		            	
+		        //HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
+		        break;
 	            	}
 	            	System.out.println("case "+caseFromArduino);
 	            	System.out.println(result+"\n"); //check reply
