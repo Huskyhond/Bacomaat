@@ -146,7 +146,7 @@ void loop()
             if(pin[x] != input[x])
             {
               Serial.println("2");//fase 2, verification
-              Serial.println("False");//means the verification failed
+              Serial.println("0");//means the verification failed
               for(int x=0; x<16; x++)
               {
                 Serial.write(accountNumber[x]);
@@ -158,7 +158,7 @@ void loop()
           }
         }
         Serial.println("2");//fase 2, verification
-        Serial.println("True");//means the verification succeeded
+        Serial.println("1");//means the verification succeeded
         runAuth=1;
         
         //Start the authorized loop.
