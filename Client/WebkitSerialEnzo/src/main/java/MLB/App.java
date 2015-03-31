@@ -139,11 +139,17 @@
 	            	break;
 	            	
 	            	case 07: 
-		        pinLength = new String(serialPort.readBytes(1));
-		        result = "pin length"+pinLength;
+	            	pinLength = new String(serialPort.readBytes(1));
+	            	result = "pin length"+pinLength;
 		            	
-		        //HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
-		        break;
+	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
+	            	break;
+	            	
+	            	case 08:
+	            	result = "clear input";
+	            	
+	            	//HIER MOET CLEAR INPUT REQUEST
+	            	break;
 	            	}
 	            	System.out.println("case "+caseFromArduino);
 	            	System.out.println(result+"\n"); //check reply
