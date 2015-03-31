@@ -107,7 +107,7 @@ import jssc.SerialPortException;
 	            		break;
 	            	}
 	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-	            	biljet(Integer.parseInt(withdrawAmount));
+	            	biljet(Integer.parseInt(withdrawAmount)); // DIT IS EEN ARRAY VAN BILJETTEN
 	            	
 	            	db.updatedb(withdrawAmount,reknummer);
 	            	result = "withdraw: " + withdrawAmount;
@@ -168,7 +168,7 @@ import jssc.SerialPortException;
 	        } 
 	        
 	    }
-	    public static void biljet(int withdrawAmount)
+	    public static int[] biljet(int withdrawAmount)
         {
 	    	int oldWithdraw = withdrawAmount;
 	    	int withdraw = withdrawAmount;
@@ -189,6 +189,7 @@ import jssc.SerialPortException;
 				String message = "Withdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro";
 				System.out.println("Withdraw: "+oldWithdraw+"\nWithdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro");
 			}
+			return outputs;
         }
 	    
 	}
