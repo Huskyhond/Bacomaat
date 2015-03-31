@@ -7,6 +7,7 @@
 Case explantion
 You can except the following cases:
 01 = card found, break idle, wait for accountnumber 10 bytes.
+02 = clear input.
 20 = pin verification failed.
 21 = pin verification succeeded.
 03 = return balance. 
@@ -14,7 +15,6 @@ You can except the following cases:
 05 = print ticket, with accountnumber, withdrawn amount, date and time.
 06 = cancel return to idle.
 07 = input length, either 0 to 4 or 0 to 3. 
-08 = clear input.
 
 */
 #include <Keypad.h>
@@ -146,7 +146,7 @@ void loop()
     amount[x]=0;
   }
   run=1;
-  
+
   while(run)
   {
     char keypress = keyPad.getKey();
@@ -247,7 +247,7 @@ void loop()
                   break;
 
                   case 'B':
-                    Serial.println("08"); //case 8 reset input
+                    Serial.println("02"); //case 8 reset input
                     for (int i=0; i<3; ++i)
                     {
                       amount[i]=0;
@@ -301,7 +301,7 @@ void loop()
         break;
       
       case 'B':
-        Serial.println("08"); //case 8 reset input
+        Serial.println("02"); //case 8 reset input
         keyCounter=0;
         for(int x=0; x<4; x++)
         {
