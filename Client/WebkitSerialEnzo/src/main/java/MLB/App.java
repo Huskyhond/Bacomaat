@@ -145,7 +145,7 @@
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	            	break;
 	            	
-	            	case 08:
+	            	case 02:
 	            	result = "clear input";
 	            	
 	            	//HIER MOET CLEAR INPUT REQUEST
