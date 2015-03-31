@@ -11,95 +11,111 @@ public class Webkit
     JSONObject wdAmount;
     JSONObject receiptStatus;
     JSONObject cancelReq;
+    JSONObject clearInput;
+    JSONObject pinLengthObj;
     
-    WebkitConnect objSender = new WebkitConnect();
+    WebkitConnect objSender;
+    
+    public Webkit() 
+    {
+        objSender = new WebkitConnect();
+        objSender.connect();
+    }
     
     public void sendAccExist(int accountExist)
     {
-        if (accExist != null) // Als het object niet leeg is, leegmaken om hem opnieuw te gebruiken.
-        {
-            accExist = null;
-        }
         accExist = new JSONObject();
-        accExist.put("accountExist", accountExist); // dit moet verzonden worden naar de webkit
+        if (accountExist == 1)
+        {
+            accExist.put("page", "code");
+        }
+        else 
+        {
+            accExist.put("page", "finish");
+            accExist.put("failed", 1);
+            accExist.put("message", "fak jou");
+        }
         objSender.sendObject(accExist);
+    }
+    public void sendPinLength(String pinLength)
+    {
+        pinLengthObj = new JSONObject();
+        pinLengthObj.put("pinLength", pinLength);
+        objSender.sendObject(pinLengthObj);
     }
     public void sendPinStatus(boolean pinVerified , String accountState)
     {
-        if (pinStatus != null)
-        {
-            pinStatus = null;
-        }
         pinStatus = new JSONObject();
         if ("LOCK".equals(accountState))
         {
-            pinStatus.put("accLock", true);
-            pinStatus.put("pinVerified", pinVerified);
+            pinStatus.put("page", "finish");
+            pinStatus.put("failed", 1);
+            pinStatus.put("message", "fak jou je acc zit op slot");
         }
-        else if ("OPEN".equals(accountState))
+        else if (("OPEN".equals(accountState) && (pinVerified == true)))
         {
-            pinStatus.put("accLock", false);
-            pinStatus.put("pinVerified", pinVerified);
+            pinStatus.put("page", "select");
         }
-        System.out.println(pinStatus);
+        else
+        {
+            pinStatus.put("page", "finish");
+            pinStatus.put("failed", 1);
+            pinStatus.put("message", "er is iets gebeurd geen idee wat");
+        }
+        objSender.sendObject(pinStatus);
     }
     public void sendBalance(int balance)
     {   
-        if (balanceAmount != null)
-        {
-            balanceAmount = null;
-        }
         balanceAmount = new JSONObject();
-        balanceAmount.put("pinVerified", balanceAmount);
-        System.out.println(balanceAmount);
+        balanceAmount.put("page", "balance");
+        balanceAmount.put("amount", balance);
         objSender.sendObject(balanceAmount);
     }
-    public void sendWithdrawError(boolean withdrawSuccess)
+    public void sendWithdrawError()
     {
         if (withdrawStatus != null)
         {
             withdrawStatus = null;
         }
         withdrawStatus = new JSONObject();
-        withdrawStatus.put("withdrawsuccess", withdrawSuccess );
-        System.out.println(withdrawStatus);
+
+        withdrawStatus.put("page", "money");
+        withdrawStatus.put("message", "fak jou zoveel geld heb je nie");
+        System.out.println(withdrawStatus.toJSONString());
         objSender.sendObject(withdrawStatus);
     }
     public void sendWithdrawAmount(String withdrawAmount)
     {
-        if (wdAmount != null)
-        {
-            wdAmount = null;
-        }
         wdAmount = new JSONObject();
-        wdAmount.put("withdrawAmount", withdrawAmount);
-        System.out.println(wdAmount);
-        objSender.sendObject(wdAmount);
     }
     public void sendReceiptStatus(boolean receiptRequested)
     {
-        if (receiptStatus != null)
-        {
-            receiptStatus = null;
-        }
         receiptStatus = new JSONObject();
         if (receiptRequested == true)
         {
+            receiptStatus.put("page", "finish");
+            receiptStatus.put("message", "je bon wordt geprint");
             receiptStatus.put("receiptRequested", true);
         }
         else if(receiptRequested == false)
         {
-            receiptStatus.put("receiptRequested", true);
+            receiptStatus.put("page", "finish");
+            receiptStatus.put("message", "doei");
+            receiptStatus.put("receiptRequested", false);
         }
         objSender.sendObject(receiptStatus);
     }
-    public void sendCancelRequest(boolean cancelRequested)
+    public void sendCancelRequest()
     {
-        if (cancelReq != null)
-        {
-            cancelReq = null;
-        }
-        cancelReq.put("cancelRequested" , cancelRequested);
+        cancelReq = new JSONObject();
+        cancelReq.put("page" , "finish");
+        cancelReq.put("message", "geannuleerd doei");
         objSender.sendObject(cancelReq);
+    }
+    public void sendClearInput()
+    {
+        clearInput = new JSONObject();
+        clearInput.put("codelength", 0);
+        objSender.sendObject(clearInput);
     }
 }

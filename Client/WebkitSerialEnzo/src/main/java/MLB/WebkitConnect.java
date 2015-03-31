@@ -41,6 +41,7 @@ public class WebkitConnect
     }
     public void sendObject(JSONObject sendObj)
     {
-        client.sendEvent("update", sendObj.toString());
+        System.out.println("hoi");
+        client.sendEvent("update", sendObj.toJSONString());
     }
 }

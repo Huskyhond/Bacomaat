@@ -14,10 +14,7 @@
 	        SQLDataBase db = new SQLDataBase();
 	        Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
 	        db.connectdb(); //CONNECT met DATABASE
-                wk.sendBalance(100);
-                /*wk.sendPinStatus(true, "OPEN");
-                wk.sendReceiptStatus(true);
-                wk.sendWithdrawAmount("30");*/
+                
                 
 	        
 	        //************db methodes, please no touch************//
@@ -108,7 +105,7 @@
 	            		result = "Niet genoeg Saldo!";
 	            		
 	            		//HIER MOET EEN ERROR REQUEST(bijvoorbeeld: "Niet genoeg Saldo" naar webkit sturen)
-                                wk.sendWithdrawError(false);
+                                wk.sendWithdrawError();
 	            		break;
 	            	}
 	            	db.updatedb(withdrawAmount,reknummer);
@@ -135,25 +132,31 @@
 	            	case 06: result = "cancel";
 	            	
 	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
-                        wk.sendCancelRequest(true);
+                        wk.sendCancelRequest();
 	            	break;
 	            	
 	            	case 07: 
 	            	pinLength = new String(serialPort.readBytes(1));
 	            	result = "pin length"+pinLength;
-		            	
+		        wk.sendPinLength(pinLength);
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	            	break;
 	            	
-	            	case 08:
+	            	case 02:
 	            	result = "clear input";
-	            	
+	            	wk.sendClearInput();
 	            	//HIER MOET CLEAR INPUT REQUEST
 	            	break;
 	            	}
 	            	System.out.println("case "+caseFromArduino);
 	            	System.out.println(result+"\n"); //check reply
-
+                        try {
+                            Thread.sleep(1000);
+                        }
+                        catch(InterruptedException e) {
+                            
+                        }
+                        
 	            } 
 	            //***end reading***//
 	            
