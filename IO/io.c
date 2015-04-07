@@ -1,11 +1,10 @@
-//include neccesary headers:
-//The SPI and MiFare header are strictly required.
-//There's no other way of normally (with limited time) implementing MiFare's RFID Implementation without the MFRC522 header.
-//Keypad.h can be found at http://playground.arduino.cc/uploads/Code/keypad.zip
-//SPI.h is packaged with the Arduino IDE 
-//MFRC533.h can be found at https://github.com/miguelbalboa/rfid
-
 /*
+include neccesary headers:
+The SPI and MiFare header are strictly required.
+There's no other way of normally (with limited time) implementing MiFare's RFID Implementation without the MFRC522 header.
+Keypad.h can be found at http://playground.arduino.cc/uploads/Code/keypad.zip
+SPI.h is packaged with the Arduino IDE 
+MFRC533.h can be found at https://github.com/miguelbalboa/rfid
 
 Case explantion
 You can except the following cases:
@@ -19,8 +18,8 @@ You can except the following cases:
 06 = cancel return to idle.
 07 = input length, either 0 to 4 or 0 to 3.
 10 = back to the select withdraw or balance loop. 
-
 */
+
 #include <Keypad.h>
 #include <SPI.h>
 #include <MFRC522.h>
