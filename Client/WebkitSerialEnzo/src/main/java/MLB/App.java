@@ -2,7 +2,7 @@
 	package MLB;
 
 	import jssc.SerialPort;
-	import jssc.SerialPortException;
+import jssc.SerialPortException;
 	public class App {
 
 	    /**
@@ -14,12 +14,7 @@
 	        SQLDataBase db = new SQLDataBase();
 	        Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
 	        db.connectdb(); //CONNECT met DATABASE
-                wk.sendBalance(100);
-                /*wk.sendPinStatus(true, "OPEN");
-                wk.sendReceiptStatus(true);
-                wk.sendWithdrawAmount("30");*/
-                
-	        
+           	        
 	        //************db methodes, please no touch************//
 	        //db.updatedb("10","0200000002");       //verander balance in db d.m.v withdraw amount
 	        //db.getBalance("0200000001");	 	    //RETURNT EEN INT(balance)
@@ -108,9 +103,12 @@
 	            		result = "Niet genoeg Saldo!";
 	            		
 	            		//HIER MOET EEN ERROR REQUEST(bijvoorbeeld: "Niet genoeg Saldo" naar webkit sturen)
-                                wk.sendWithdrawError(false);
+                                wk.sendWithdrawError();
 	            		break;
 	            	}
+	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
+	            	biljet(Integer.parseInt(withdrawAmount)); // DIT IS EEN ARRAY VAN BILJETTEN
+	            	
 	            	db.updatedb(withdrawAmount,reknummer);
 	            	result = "withdraw: " + withdrawAmount;
 	            	
@@ -135,25 +133,31 @@
 	            	case 06: result = "cancel";
 	            	
 	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
-                        wk.sendCancelRequest(true);
+                        wk.sendCancelRequest();
 	            	break;
 	            	
 	            	case 07: 
 	            	pinLength = new String(serialPort.readBytes(1));
 	            	result = "pin length"+pinLength;
-		            	
+	            	wk.sendPinLength(pinLength);
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	            	break;
 	            	
-	            	case 08:
+	            	case 02:
 	            	result = "clear input";
-	            	
+	            	wk.sendClearInput();
 	            	//HIER MOET CLEAR INPUT REQUEST
 	            	break;
 	            	}
 	            	System.out.println("case "+caseFromArduino);
 	            	System.out.println(result+"\n"); //check reply
-
+                        try {
+                            Thread.sleep(1000);
+                        }
+                        catch(InterruptedException e) {
+                            
+                        }
+                        
 	            } 
 	            //***end reading***//
 	            
@@ -163,7 +167,30 @@
 	            System.out.println(ex);
 	        } 
 	        
-	    } 
+	    }
+	    public static int[] biljet(int withdrawAmount)
+        {
+	    	int oldWithdraw = withdrawAmount;
+	    	int withdraw = withdrawAmount;
+	        
+	        int bills[] = {100,50,20,10,5};
+			int outputs[] = {0,0,0,0,0};
+			
+			for(int i =0; i<bills.length; i++)
+				{
+					outputs[i] = withdraw/bills[i];
+					withdraw = withdraw-(outputs[i]*bills[i]);
+					System.out.println("Aantal "+bills[i]+" : " + outputs[i]);				
+				}
+        	
+			if(withdraw>0)
+			{
+				/////////////////HIER message STUREN////////////////////////
+				String message = "Withdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro";
+				System.out.println("Withdraw: "+oldWithdraw+"\nWithdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro");
+			}
+			return outputs;
+        }
 	    
 	}
 
