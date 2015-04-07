@@ -9,6 +9,8 @@ public class Webkit
     JSONObject balanceAmount;
     JSONObject withdrawStatus;
     JSONObject wdAmount;
+    JSONArray stacksOptionsArray;
+    JSONObject stacksOptions;
     JSONObject receiptStatus;
     JSONObject cancelReq;
     JSONObject clearInput;
@@ -19,7 +21,6 @@ public class Webkit
     public Webkit() 
     {
         objSender = new WebkitConnect();
-        objSender.connect();
     }
     
     public void sendAccExist(int accountExist)
@@ -87,6 +88,18 @@ public class Webkit
     public void sendWithdrawAmount(String withdrawAmount)
     {
         wdAmount = new JSONObject();
+    }
+    public void sendMoneyOptions(int[] moneyOptions)
+    {
+        stacksOptionsArray = null;
+        stacksOptionsArray.add(moneyOptions[0]);
+        stacksOptionsArray.add(moneyOptions[1]);
+        stacksOptionsArray.add(moneyOptions[2]);
+        stacksOptionsArray.add(moneyOptions[3]);
+        stacksOptionsArray.add(moneyOptions[4]);
+        //stacksOptions.put("money", new JSONArray(new Object[] (moneyOptions[1],moneyOptions[2], moneyOptions[3], moneyOptions[4], moneyOptions[5]);
+        stacksOptions.put("moneyOptions", stacksOptions);
+        objSender.sendObjectArray(stacksOptions);
     }
     public void sendReceiptStatus(boolean receiptRequested)
     {
