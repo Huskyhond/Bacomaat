@@ -31,7 +31,7 @@
 	        
 	        
 	        //***********OPGESLAGEN VARIABELEN DIE GEBRUIKT WORDEN VOOR DB EN WEBKIT**********//
-	        String reknummer = "0200000002"; //slaat reknummer van arduino hierin op, de string die er nu in zit is maar een placeholder.
+	        String reknummer = "MLBI0200000002"; //slaat reknummer van arduino hierin op, de string die er nu in zit is maar een placeholder.
 	        String withdrawAmount = "000";
 	        int maxWithdrawAmount = 999;
 	        int balance = 0;
@@ -67,13 +67,13 @@
 	            //******Serial to Java read*****//
 	            while(power)
 	            {         
-	            	int caseFromArduino = Integer.parseInt(new String(serialPort.readBytes(2)));
+	            	int caseFromArduino =Integer.parseInt(new String(serialPort.readBytes(2)));
 	            	
 	            	String result = "case 0: no case";
 	            	switch(caseFromArduino)
 	            	{
 	            	case 01: 
-	            	reknummer = new String(serialPort.readBytes(10));
+	            	reknummer = new String(serialPort.readBytes(15));
 	            	accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
 	            	result = "rekeningnummer: "+reknummer; //print rekeningnummer van Arduino
 	            	
@@ -156,15 +156,15 @@
 	            	wk.sendClearInput();
 	            	//HIER MOET CLEAR INPUT REQUEST
 	            	break;
+	            	
+	            	case 10:
+	            	result = "Back input";
+	            	//HIER MOET BACK REQUEST
+	            	break;
+	            		
 	            	}
 	            	System.out.println("case "+caseFromArduino);
 	            	System.out.println(result+"\n"); //check reply
-                        try {
-                            Thread.sleep(1000);
-                        }
-                        catch(InterruptedException e) {
-                            
-                        }
                         
 	            } 
 	            //***end reading***//

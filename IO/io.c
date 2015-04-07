@@ -141,11 +141,7 @@ void loop()
   byte input[4];
   int keyCounter = 0;
   int failedAttempts = 0;
-  for(int x=0; x<3; x++)
-  {
-    amount[x]=0;
-  }
-  run=1;
+  int run = 1;
 
   while(run)
   {
@@ -228,6 +224,7 @@ void loop()
                             runWithdraw = 0;
                             runAuth = 0;
                             run = 0;
+                            run=1;
                             finish();
                             return;
                          break;
