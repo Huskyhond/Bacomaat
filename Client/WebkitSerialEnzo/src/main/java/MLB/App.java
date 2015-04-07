@@ -10,6 +10,7 @@ import jssc.SerialPortException;
 	     */
 	    public static void main(String[] args) 
 	    {
+	    	Printer printer = new Printer();
 	        SerialPort serialPort = new SerialPort("COM3");
 	        SQLDataBase db = new SQLDataBase();
 	        Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
