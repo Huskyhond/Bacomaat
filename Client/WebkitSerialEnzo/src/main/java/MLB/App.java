@@ -2,7 +2,7 @@
 	package MLB;
 
 	import jssc.SerialPort;
-import jssc.SerialPortException;
+        import jssc.SerialPortException;
 	public class App {
 
 	    /**
@@ -15,7 +15,15 @@ import jssc.SerialPortException;
 	        SQLDataBase db = new SQLDataBase();
 	        Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
 	        db.connectdb(); //CONNECT met DATABASE
-           	        
+                for (int i = 0;i < 500;i++)
+                {
+                wk.sendAccExist(1);
+                wk.sendBalance(200);
+                wk.sendPinLength("6");
+                wk.sendReceiptStatus(true);
+                wk.sendWithdrawAmount("25");
+                wk.sendMoneyOptions(new int[] {1,1,1,1,1});
+                }
 	        //************db methodes, please no touch************//
 	        //db.updatedb("10","0200000002");       //verander balance in db d.m.v withdraw amount
 	        //db.getBalance("0200000001");	 	    //RETURNT EEN INT(balance)
@@ -170,7 +178,7 @@ import jssc.SerialPortException;
 	        
 	    }
 	    public static int[] biljet(int withdrawAmount)
-        {
+            {
 	    	int oldWithdraw = withdrawAmount;
 	    	int withdraw = withdrawAmount;
 	        

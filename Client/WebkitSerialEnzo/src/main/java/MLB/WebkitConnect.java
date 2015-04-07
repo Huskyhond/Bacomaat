@@ -15,33 +15,58 @@ import org.json.simple.parser.JSONParser;
 public class WebkitConnect
 {
     public static SocketIOClient client;
+    public static boolean connected;
     
-    JSONParser parser=new JSONParser();
-    
-    public void connect()
+    public WebkitConnect()
     {
-    Configuration config = new Configuration();
-      config.setHostname("localhost");
-      config.setPort(80);
-      SocketIOServer server = new SocketIOServer(config);
-      server.addConnectListener(new ConnectionListener() 
-      {
-         @Override
-         public void onConnect(SocketIOClient clientc) {
+        Configuration config = new Configuration();
+        config.setHostname("localhost");
+        config.setPort(80);
+        SocketIOServer server = new SocketIOServer(config);
+        server.addConnectListener(new ConnectionListener() 
+        {
+            @Override
+            public void onConnect(SocketIOClient clientc) 
+            {
              client = clientc; // Set static connection ( only 1 allowed )
              System.out.println("Connected");
-             client.sendEvent("{" +
+             client.sendEvent("update", "{" +
                             "\"page\": \"code\"" +
-                        "}"); 
-         }
-        
+                        "}");
+             connected = true;
+             
+            }
+            public void onDisConnect(SocketIOClient clientc) 
+            {
+             client = null; // Disconnect
+             System.out.println("Disconnected");
+             connected = false;
+             
+            }
       });
       
       server.start();
     }
     public void sendObject(JSONObject sendObj)
     {
-        System.out.println("hoi");
-        client.sendEvent("update", sendObj.toJSONString());
+        if (connected)
+        {
+            client.sendEvent("update", sendObj.toJSONString());
+        }
+        else 
+        {
+            System.out.println("je bent niet connected kill");
+        }
+    }
+    public void sendObjectArray(JSONObject sendObj)
+    {
+        if (connected)
+        {
+            client.sendEvent("update", sendObj.toJSONString());
+        }
+        else
+        {
+            System.out.println("je bent niet connected kill");
+        }
     }
 }
