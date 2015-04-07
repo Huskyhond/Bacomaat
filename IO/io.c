@@ -1,6 +1,9 @@
 //include neccesary headers:
 //The SPI and MiFare header are strictly required.
 //There's no other way of normally (with limited time) implementing MiFare's RFID Implementation without the MFRC522 header.
+//Keypad.h can be found at http://playground.arduino.cc/uploads/Code/keypad.zip
+//SPI.h is packaged with the Arduino IDE 
+//MFRC533.h can be found at https://github.com/miguelbalboa/rfid
 
 /*
 
