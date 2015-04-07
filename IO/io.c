@@ -14,7 +14,8 @@ You can except the following cases:
 04 = withdraw cash, wait for amount, 3 bytes.
 05 = print ticket, with accountnumber, withdrawn amount, date and time.
 06 = cancel return to idle.
-07 = input length, either 0 to 4 or 0 to 3. 
+07 = input length, either 0 to 4 or 0 to 3.
+10 = back to the select withdraw or balance loop. 
 
 */
 #include <Keypad.h>
@@ -228,7 +229,7 @@ void loop()
                             finish();
                             return;
                          break;
-                         
+
                          case 'B':
                            Serial.println("06");
                            runTicket = 0;       
@@ -273,6 +274,16 @@ void loop()
                     finish();
                     break;
                   
+                    case 'D':
+                      Serial.println("10"); // go back to withdraw or 
+                      runWithdraw = 0;
+                      keyCounter3=0;
+                      for (int i=0; i<3; ++i)
+                      {
+                        amount[i]=0;
+                      }
+                    break;
+
                   case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
                     if(keyCounter3 < 3)
                     {
