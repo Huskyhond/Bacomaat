@@ -77,7 +77,7 @@
 	            	switch(caseFromArduino)
 	            	{
 	            	case 01: 
-	            	reknummer = new String(serialPort.readBytes(15));
+	            	reknummer = new String(serialPort.readBytes(14));
 	            	accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
 	            	
 	            	result = "rekeningnummer: "+reknummer; //print rekeningnummer van Arduino
