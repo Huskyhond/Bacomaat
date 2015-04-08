@@ -17,12 +17,12 @@
 	        db.connectdb(); //CONNECT met DATABASE
                 for (int i = 0;i < 500;i++)
                 {
-                wk.sendAccExist(1);
-                wk.sendBalance(200);
-                wk.sendPinLength("6");
-                wk.sendReceiptStatus(true);
-                wk.sendWithdrawAmount("25");
-                wk.sendMoneyOptions(new int[] {1,1,1,1,1});
+	                wk.sendAccExist(1);
+	                wk.sendBalance(200);
+	                wk.sendPinLength("6");
+	                wk.sendReceiptStatus(true);
+	                wk.sendWithdrawAmount("25");
+	                wk.sendMoneyOptions(new int[] {1,1,1,1,1});
                 }
 	        //************db methodes, please no touch************//
 	        //db.updatedb("10","0200000002");       //verander balance in db d.m.v withdraw amount
@@ -41,6 +41,7 @@
 	        String accountState = "OPEN";
 	        boolean receipt = true;
 	        String pinLength = "";
+	        String transactieID = "";
 
 	       
 	        //*************Serial to Java********************//
@@ -76,6 +77,7 @@
 	            	case 01: 
 	            	reknummer = new String(serialPort.readBytes(15));
 	            	accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
+	            	
 	            	result = "rekeningnummer: "+reknummer; //print rekeningnummer van Arduino
 	            	
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
@@ -127,6 +129,10 @@
 	            	
 	            	case 51: result = "receipt: yes";
 	            	receipt = true;
+	            	if(accountExist > 0)
+	            	{
+	            		printer.setPrinter(reknummer,withdrawAmount,transactieID);
+	            	}
 	            	
 	            	//HIER MEOT JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
                         wk.sendReceiptStatus(receipt);

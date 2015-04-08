@@ -3,7 +3,11 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class Printer 
-{
+{	
+	String reknummer;
+	String withdrawAmount;
+	String transactieID;
+
 	public void print()
 	{
 		
@@ -30,4 +34,13 @@ public class Printer
 
 		
 	}
+	
+	public void setPrinter(String reknummer, String withdrawAmount, String transactieID)
+	{
+		this.reknummer = reknummer;
+		this.withdrawAmount = withdrawAmount;
+		this.transactieID = transactieID;
+
+	}
+
 }
