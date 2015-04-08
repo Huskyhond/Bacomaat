@@ -145,7 +145,48 @@ public class SQLDataBase
 		}
 		return 0;
 	}
-	
+	 
+	public void updateTransaction(String rekeningnummer, String withdrawBalance,String machineID)
+	{	
+		try
+		{	
+			System.out.println("[----updatedb initiated----]");
+			
+			pst = con.prepareStatement("INSERT INTO Transaction(amount,accountNumber,machineID) Values(?,?,?)");
+			pst.setString(1, withdrawBalance);
+			pst.setString(2, rekeningnummer);
+			pst.setString(3, machineID);
+			pst.executeUpdate();
+			System.out.println("Transactie: "+rekeningnummer+"\nWithdraw: "+withdrawBalance+"\nMachineID: "+machineID);
+			
+
+		}
+		catch(Exception ex)
+		{
+			exceptionLog(ex);
+		}
+		System.out.println("[----updatedb done----]\n");
+	}
+	public int getTransactionID()
+	{
+		try
+		{
+			System.out.println("[----getBalance initiated----]");
+			pst = con.prepareStatement("SELECT MAX(transactionID) FROM Transaction");
+			rs = pst.executeQuery();
+			while (rs.next()) 
+			{
+        		System.out.println("[----getBalance done----]\n");
+                return rs.getInt(1);
+            }
+		}
+		catch(Exception ex)
+		{
+			exceptionLog(ex);
+		}
+		System.out.println("[----getBalance done----]\n");
+		return 0;
+	}
 	//EXCEPTION ERROR
 	public void exceptionLog(Exception ex)
 	{

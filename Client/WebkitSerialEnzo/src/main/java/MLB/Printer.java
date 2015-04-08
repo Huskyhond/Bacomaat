@@ -4,9 +4,9 @@ import java.text.SimpleDateFormat;
 
 public class Printer 
 {	
-	String reknummer;
-	String withdrawAmount;
-	String transactieID;
+	private String reknummer;
+	private String withdrawAmount;
+	private String transactieID;
 
 	public void print()
 	{
@@ -19,10 +19,11 @@ public class Printer
 		text[0] = "Welcome to";
 		text[1] = "MLB";
 		text[2] = "Automaat ID: MLB-1";
-		text[3] = "Transactie ID: ";
-		text[4] = "Rekening nummer: ";
-		text[5] = "Withdraw Amount: ";
+		text[3] = "Transactie ID: "+transactieID;
+		text[4] = "Rekening nummer: "+reknummer;
+		text[5] = "Withdraw Amount: "+withdrawAmount;
 		text[6] = formattedDate;
+		
 		/*text[7] = "LMAO";
 		text[8] = "LMAO";
 		text[9] = "LMAO";
@@ -30,9 +31,7 @@ public class Printer
 		text[11] = "LMAO";*/
 
 		LabelWriter labelwriter = new LabelWriter(); 
-		labelwriter.printLabel(text);
-
-		
+		labelwriter.printLabel(text);	
 	}
 	
 	public void setPrinter(String reknummer, String withdrawAmount, String transactieID)

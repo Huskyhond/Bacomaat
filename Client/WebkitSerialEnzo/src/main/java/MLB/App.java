@@ -15,7 +15,7 @@
 	        SQLDataBase db = new SQLDataBase();
 	        Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
 	        db.connectdb(); //CONNECT met DATABASE
-                for (int i = 0;i < 500;i++)
+                /*for (int i = 0;i < 500;i++)
                 {
 	                wk.sendAccExist(1);
 	                wk.sendBalance(200);
@@ -23,12 +23,14 @@
 	                wk.sendReceiptStatus(true);
 	                wk.sendWithdrawAmount("25");
 	                wk.sendMoneyOptions(new int[] {1,1,1,1,1});
-                }
+                }*/
 	        //************db methodes, please no touch************//
 	        //db.updatedb("10","0200000002");       //verander balance in db d.m.v withdraw amount
 	        //db.getBalance("0200000001");	 	    //RETURNT EEN INT(balance)
 	        //db.lock("0200000002");			    //RETURNT EEN STRING(OPEN OF LOCK)
 	        //db.checkAccountnumber("0200000001");	//RETURNT EEN INT(hoeveelheid rekeningnummers in db, dus 0 of meer) 
+	        //db.updateTransaction("200000001","10","1");
+	        //db.getTransactionID();
 	        
 	        
 	        //***********OPGESLAGEN VARIABELEN DIE GEBRUIKT WORDEN VOOR DB EN WEBKIT**********//
@@ -121,6 +123,8 @@
 	            	biljet(Integer.parseInt(withdrawAmount)); // DIT IS EEN ARRAY VAN BILJETTEN
 	            	
 	            	db.updatedb(withdrawAmount,reknummer);
+	            	db.updateTransaction(reknummer, withdrawAmount, "1");
+	            	transactieID = Integer.toString(db.getTransactionID());
 	            	result = "withdraw: " + withdrawAmount;
 	            	
 	            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
@@ -129,12 +133,10 @@
 	            	
 	            	case 51: result = "receipt: yes";
 	            	receipt = true;
-	            	if(accountExist > 0)
-	            	{
-	            		printer.setPrinter(reknummer,withdrawAmount,transactieID);
-	            	}
+	            	printer.setPrinter(reknummer, withdrawAmount, transactieID);
+	            	printer.print();
 	            	
-	            	//HIER MEOT JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
+	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
                         wk.sendReceiptStatus(receipt);
 	            	break;
 	            	
