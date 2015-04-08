@@ -76,10 +76,11 @@
 	            	String result = "case 0: no case";
 	            	switch(caseFromArduino)
 	            	{
-<<<<<<< HEAD
+
 		            	case 01: 
-		            	reknummer = new String(serialPort.readBytes(15));
+		            	reknummer = new String(serialPort.readBytes(14));
 		            	accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
+		            	
 		            	result = "rekeningnummer: "+reknummer; //print rekeningnummer van Arduino
 		            	
 		            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
@@ -123,6 +124,8 @@
 		            	biljet(Integer.parseInt(withdrawAmount)); // DIT IS EEN ARRAY VAN BILJETTEN
 		            	
 		            	db.updatedb(withdrawAmount,reknummer);
+		            	db.updateTransaction(reknummer, withdrawAmount, "1");
+		            	transactieID = Integer.toString(db.getTransactionID());
 		            	result = "withdraw: " + withdrawAmount;
 		            	
 		            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
@@ -131,8 +134,10 @@
 		            	
 		            	case 51: result = "receipt: yes";
 		            	receipt = true;
+		            	printer.setPrinter(reknummer, withdrawAmount, transactieID);
+		            	printer.print();
 		            	
-		            	//HIER MEOT JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
+		            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
 	                        wk.sendReceiptStatus(receipt);
 		            	break;
 		            	
@@ -166,102 +171,6 @@
 		            	result = "Back input";
 		            	//HIER MOET BACK REQUEST
 		            	break;
-=======
-	            	case 01: 
-	            	reknummer = new String(serialPort.readBytes(14));
-	            	accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
-	            	
-	            	result = "rekeningnummer: "+reknummer; //print rekeningnummer van Arduino
-	            	
-	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
-                        wk.sendAccExist(accountExist);
-	            	break;
-	            	
-	            	case 21: result = "pin gelukt!";
-	            	pinVerify = true;
-	            	
-	            	//HIER MOET JE pinVerify NAAR WEBKIT STUREN
-                        wk.sendPinStatus(true,"OPEN");
-	            	break;
-	            	
-	            	case 22: result = "pin gefaalt!"; 
-	            	pinVerify = false;
-	            	accountState = db.lock(reknummer); //checken of deze reknummer over de faallimiet zit, zo ja zal zijn account op LOCK gaan
-	            	
-	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
-                        wk.sendPinStatus(false,"LOCK");
-	            	break;
-	            	
-	            	case 03:  
-	            	balance = db.getBalance(reknummer);
-	            	result = Integer.toString(balance);
-	            	
-	            	//HIER MOET JE balance NAAR WEBKIT STUREN
-                        wk.sendBalance(balance);
-	            	break;
-	            	
-	            	case 04:  
-	            	withdrawAmount = new String(serialPort.readBytes(3));
-	            	if(Integer.parseInt(withdrawAmount) > db.getBalance(reknummer)) //checken of er genoeg saldo is om te pinnen
-	            	{
-	            		result = "Niet genoeg Saldo!";
-	            		
-	            		//HIER MOET EEN ERROR REQUEST(bijvoorbeeld: "Niet genoeg Saldo" naar webkit sturen)
-                                wk.sendWithdrawError();
-	            		break;
-	            	}
-	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-	            	biljet(Integer.parseInt(withdrawAmount)); // DIT IS EEN ARRAY VAN BILJETTEN
-	            	
-	            	db.updatedb(withdrawAmount,reknummer);
-	            	db.updateTransaction(reknummer, withdrawAmount, "1");
-	            	transactieID = Integer.toString(db.getTransactionID());
-	            	result = "withdraw: " + withdrawAmount;
-	            	
-	            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
-                        wk.sendWithdrawAmount(withdrawAmount);
-	            	break;
-	            	
-	            	case 51: result = "receipt: yes";
-	            	receipt = true;
-	            	printer.setPrinter(reknummer, withdrawAmount, transactieID);
-	            	printer.print();
-	            	
-	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
-                        wk.sendReceiptStatus(receipt);
-	            	break;
-	            	
-	            	case 52: result = "receipt: no";
-	            	receipt = false;
-	            	
-	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
-                        wk.sendReceiptStatus(receipt);
-	            	break;
-	            	
-	            	case 06: result = "cancel";
-	            	
-	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
-                        wk.sendCancelRequest();
-	            	break;
-	            	
-	            	case 07: 
-	            	pinLength = new String(serialPort.readBytes(1));
-	            	result = "pin length"+pinLength;
-	            	wk.sendPinLength(pinLength);
-	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
-	            	break;
-	            	
-	            	case 02:
-	            	result = "clear input";
-	            	wk.sendClearInput();
-	            	//HIER MOET CLEAR INPUT REQUEST
-	            	break;
-	            	
-	            	case 10:
-	            	result = "Back input";
-	            	//HIER MOET BACK REQUEST
-	            	break;
->>>>>>> origin/master
 	            		
 	            	}
 	            	System.out.println("case "+caseFromArduino);
