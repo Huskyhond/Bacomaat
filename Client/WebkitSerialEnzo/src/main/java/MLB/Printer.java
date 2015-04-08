@@ -12,13 +12,13 @@ public class Printer
 		String formattedDate = sdf.format(date);
 		
 		String[] text = new String[7];
-		text[0] = "MLB";
-		text[1] = "Automaat ID: MLB-1";
-		text[2] = "Transactie ID: ";
-		text[3] = "Rekening nummer: ";
-		text[4] = "Withdraw Amount: ";
-		text[5] = formattedDate;
-		text[6] = "Welcome to";
+		text[0] = "Welcome to";
+		text[1] = "MLB";
+		text[2] = "Automaat ID: MLB-1";
+		text[3] = "Transactie ID: ";
+		text[4] = "Rekening nummer: ";
+		text[5] = "Withdraw Amount: ";
+		text[6] = formattedDate;
 		/*text[7] = "LMAO";
 		text[8] = "LMAO";
 		text[9] = "LMAO";

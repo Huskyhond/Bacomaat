@@ -24,13 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.PrintService;
 
-/**
- *
- * @author Sam
- * I got the basis for this library here http://fiehnlab.ucdavis.edu/staff/scholz/dev/java/labelwriter but that link no longer exists 
- * It can be used as a stand-alone JAR you add to your code, all you need to do to use it is something like this:
- * labelwriter.printLabel("test0", "test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10", "test11");
- */
 public class LabelWriter {
 
     public static final String PRINTERNAME = "DYMO LabelWriter";
@@ -69,7 +62,8 @@ public class LabelWriter {
                         @Override
                         public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
                                 throws PrinterException {
-                            if (pageIndex < getPageNumbers()) {
+                            if (pageIndex < getPageNumbers()) 
+                            {
                                 Graphics2D g = (Graphics2D) graphics;
                                 g.translate(20, 10);
 
@@ -86,27 +80,27 @@ public class LabelWriter {
                                 } catch (FontFormatException | IOException ex) {
                                     Logger.getLogger(LabelWriter.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-
-                                g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 8));
-                                value = text[6];
-                                g.drawString(value, x, y);
-                                
-                                
                                 g.setFont(font);
-
-                                g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 24));
+                                
+                                //Welcome to
+                                g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 8));
                                 value = text[0];
-                                y= y+20;
+                                g.drawString(value, x, y);               
+                                
+                                //MLB
+                                g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 24));
+                                value = text[1];
+                                y+=20;
                                 g.drawString(value, x, y);
 
-                                //Set printlines
+                                //De rest printen...
                                 y+=10;
-                                for(int i=1;i<6;i++)
+                                for(int i=2;i<text.length;i++)
                                 {
                                 	g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 8));
                                     value = text[i];
                                     y+=10;
-                                    g.drawString("" + value, x, y);
+                                    g.drawString(value, x, y);
                                 }
 
                                 return PAGE_EXISTS;
