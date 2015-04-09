@@ -15,7 +15,8 @@ import org.json.simple.parser.JSONParser;
 public class WebkitConnect
 {
     public static SocketIOClient client;
-    public static boolean connected;
+    static boolean connected;
+    // b
     
     public WebkitConnect()
     {

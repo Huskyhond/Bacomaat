@@ -97,7 +97,6 @@ public class Webkit
         stacksOptionsArray.add(moneyOptions[2]);
         stacksOptionsArray.add(moneyOptions[3]);
         stacksOptionsArray.add(moneyOptions[4]);
-        //stacksOptions.put("money", new JSONArray(new Object[] (moneyOptions[1],moneyOptions[2], moneyOptions[3], moneyOptions[4], moneyOptions[5]);
         stacksOptions.put("moneyOptions", stacksOptions);
         objSender.sendObjectArray(stacksOptions);
     }
