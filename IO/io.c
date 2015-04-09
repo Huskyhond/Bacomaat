@@ -128,7 +128,25 @@ void loop()
     Serial.write(readblockBuffer[c]);
   }
   Serial.println(""); 
+
+  byte accountExists = 0;
+  char verifyBuffer[2];
   
+  if(!Serial.available())
+  {
+    return;
+  }
+  else if(Serial.available())
+  {
+    accountExists = Serial.readBytes(verifyBuffer, 1);
+  }
+  
+  if(accountExists != 1)
+  {
+    Serial.println("06");
+    return;
+  }
+
   //read the pin number from block 6.
   readBlock(6, readblockBuffer);
   byte pin[4];
