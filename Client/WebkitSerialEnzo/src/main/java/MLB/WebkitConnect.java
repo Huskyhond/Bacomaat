@@ -15,7 +15,8 @@ import org.json.simple.parser.JSONParser;
 public class WebkitConnect
 {
     public static SocketIOClient client;
-    public static boolean connected;
+    static boolean connected;
+    // b
     
     public WebkitConnect()
     {
@@ -38,7 +39,7 @@ public class WebkitConnect
             }
             public void onDisConnect(SocketIOClient clientc) 
             {
-             client = null; // Disconnect
+             client = null; //  Disconnect
              System.out.println("Disconnected");
              connected = false;
              

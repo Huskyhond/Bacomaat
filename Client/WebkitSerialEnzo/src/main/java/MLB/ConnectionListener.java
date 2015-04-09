@@ -10,7 +10,7 @@ import com.corundumstudio.socketio.listener.ConnectListener;
 
 /**
  *
- * @author NiekLap
+ * @author    NiekLap
  */
 class ConnectionListener implements ConnectListener {
 
