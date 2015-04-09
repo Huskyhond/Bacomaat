@@ -1,28 +1,22 @@
+package MLB;
 
-	package MLB;
-
-	import jssc.SerialPort;
+import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+	
 	public class App 
 	{
-		final static Printer printer = new Printer();
-        final static SerialPort serialPort = new SerialPort("COM3");
-        final static SQLDataBase db = new SQLDataBase();
 
-	    /**
-	     * @param args the command line arguments
-	     */
 	    public static void main(String[] args) 
 	    {
-	    	final Printer printer = new Printer();
+	    	//final Printer printer = new Printer();
 	        final SerialPort serialPort = new SerialPort("COM3");
-	        final SQLDataBase db = new SQLDataBase();
+	        SQLDataBase db = new SQLDataBase();
 	        //Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
 	       // db.connectdb(); //CONNECT met DATABASE
                 /*for (int i = 0;i < 500;i++)
-                3
+                
 	                wk.sendAccExist(1);
 	                wk.sendBalance(200);
 	                wk.sendPinLength("6");
@@ -47,13 +41,14 @@ import jssc.SerialPortException;
 	        //db.updatedb("25",reknummer);
 	        //System.out.println(db.checkAccountnumber(reknummer));
 	        //db.updateTransaction(reknummer,"10","1");
-	       //  System.out.println(db.getTransactionID());
+	        //System.out.println(db.getTransactionID());
 
 	        
 	        
 	        //*************Serial to Java********************//
                 
-	        try {
+	        try 
+	        {
                     
 	            
 	        	serialPort.openPort();//Open serial port
@@ -76,7 +71,8 @@ import jssc.SerialPortException;
 	            //******Serial to Java read*****//
 	            
 	            
-	            serialPort.addEventListener(new SerialPortEventListener() {
+	            serialPort.addEventListener(new SerialPortEventListener() 
+	            {
 					
 					@Override
 					public void serialEvent(SerialPortEvent event) 
@@ -112,7 +108,7 @@ import jssc.SerialPortException;
 	        
 	    }//einde main methode
 	
-	    public static void switchCase(String caseFromArduino, String restBytes)
+	   /* public static void switchCase(String caseFromArduino, String restBytes)
 	    {
 	    	String reknummer = "";
         	String withdrawAmount = "000";
@@ -124,9 +120,9 @@ import jssc.SerialPortException;
  	        String pinLength = "";
  	        String transactieID = "";
  	        boolean pinVerify = false;
- 	        String readlength = "";
  	        
  	        String result= "";
+ 	        
 	    	switch(caseFromArduino)
         	{
             	case "01":
@@ -144,7 +140,7 @@ import jssc.SerialPortException;
                    // wk.sendAccExist(accountExist);
             	
             	
-            	case "21": result = "pin gelukt!";
+            	/*case "21": result = "pin gelukt!";
             	pinVerify = true;
             	
             	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
@@ -196,8 +192,8 @@ import jssc.SerialPortException;
             	
             	case "05": result = "receipt: yes";
             	receipt = true;
-            	printer.setPrinter(reknummer, withdrawAmount, transactieID);
-            	printer.print();
+            	//printer.setPrinter(reknummer, withdrawAmount, transactieID);
+            	//printer.print();
             	
             	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
                   //  wk.sendReceiptStatus(receipt);
@@ -232,12 +228,12 @@ import jssc.SerialPortException;
             	//HIER MOET BACK REQUEST
             	break;
         		
-        	}//Einde switch
+        	} //Einde switch
 	    	
         	//System.out.println("case "+caseFromArduino);
         	//System.out.println(result+"\n"); //check reply
 	    }
-	        
+	     */   
 	    public static int[] biljet(int withdrawAmount)
             {
 	    	int oldWithdraw = withdrawAmount;
