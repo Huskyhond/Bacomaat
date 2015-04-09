@@ -25,8 +25,8 @@
 	                wk.sendMoneyOptions(new int[] {1,1,1,1,1});
                 }*/
 	        //************db methodes, please no touch************//
-	        //db.updatedb("10","0200000002");       //verander balance in db d.m.v withdraw amount
-	        //db.getBalance("0200000001");	 	    //RETURNT EEN INT(balance)
+	        db.updatedb("10","MLBI0200000002");       //verander balance in db d.m.v withdraw amount
+	        //db.getBalance("MLBI0200000001");	 	    //RETURNT EEN INT(balance)
 	        //db.lock("0200000002");			    //RETURNT EEN STRING(OPEN OF LOCK)
 	        //db.checkAccountnumber("0200000001");	//RETURNT EEN INT(hoeveelheid rekeningnummers in db, dus 0 of meer) 
 	        //db.updateTransaction("200000001","10","1");
@@ -44,6 +44,8 @@
 	        boolean receipt = true;
 	        String pinLength = "";
 	        String transactieID = "";
+	        
+	      //  System.out.println(db.getBalance(reknummer));
 
 	       
 	        //*************Serial to Java********************//
