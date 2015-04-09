@@ -79,12 +79,14 @@
 	            	
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
                         wk.sendAccExist(accountExist);
+                    //En naar de arduino.
+                        serialPort.writeByte(accountExist);
 	            	break;
 	            	
 	            	case 21: result = "pin gelukt!";
 	            	pinVerify = true;
 	            	
-	            	//HIER MOET JE pinVerify NAAR WEBKIT STUREN
+	            	//HIER MOETEN WE? pinVerify NAAR WEBKIT STUREN
                         wk.sendPinStatus(true,"OPEN");
 	            	break;
 	            	
