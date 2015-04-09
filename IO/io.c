@@ -144,6 +144,7 @@ void loop()
   if(accountExists != 1)
   {
     Serial.println("06");
+    finish();
     return;
   }
 
