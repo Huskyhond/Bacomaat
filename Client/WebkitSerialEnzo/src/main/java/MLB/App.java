@@ -87,11 +87,14 @@ import jssc.SerialPortException;
 				            try 
 				            {
 				            	//String read1 = new String(serialPort.readString(1));
-				            	String read2 = new String(serialPort.readString(bytesCount));
-				            	//switchCase(read1,read2);
-				            	//String read = new String(serialPort.readString(bytesCount));
-				            	//System.out.print(read1);
-				            	System.out.print(read2);
+				            	String read = new String(serialPort.readString(bytesCount));
+				            	String caseArduino = read.substring(0,2);
+				            	String restBytes = read.substring(2);
+				            	
+				            	System.out.print(read);
+				            	System.out.print(caseArduino);
+				            	System.out.print(restBytes);
+
 							} 
 				            catch (SerialPortException e) {
 								// TODO Auto-generated catch block
