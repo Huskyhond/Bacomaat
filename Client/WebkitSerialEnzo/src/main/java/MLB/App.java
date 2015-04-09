@@ -20,7 +20,7 @@ import jssc.SerialPortException;
 	        final SerialPort serialPort = new SerialPort("COM3");
 	        final SQLDataBase db = new SQLDataBase();
 	        //Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
-	        db.connectdb(); //CONNECT met DATABASE
+	       // db.connectdb(); //CONNECT met DATABASE
                 /*for (int i = 0;i < 500;i++)
                 3
 	                wk.sendAccExist(1);
