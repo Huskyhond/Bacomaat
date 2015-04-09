@@ -12,6 +12,7 @@ public class SQLDataBase
     PreparedStatement pst = null;
     ResultSet rs = null;
     
+    //moet herschreven worden.
     public void connectdb()
 	{
         String url = "jdbc:mysql://145.24.222.177/banknode";
