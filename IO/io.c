@@ -132,14 +132,7 @@ void loop()
   byte accountExists = 0;
   char verifyBuffer[2];
   
-  if(!Serial.available())
-  {
-    return;
-  }
-  else if(Serial.available())
-  {
-    accountExists = Serial.readBytes(verifyBuffer, 1);
-  }
+  accountExists = Serial.readBytes(verifyBuffer, 1);
   
   if(accountExists != 1)
   {
