@@ -38,7 +38,7 @@ public class WebkitConnect
             }
             public void onDisConnect(SocketIOClient clientc) 
             {
-             client = null; // Disconnect
+             client = null; //  Disconnect
              System.out.println("Disconnected");
              connected = false;
              

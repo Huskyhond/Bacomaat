@@ -90,7 +90,7 @@
 		            	case 21: result = "pin gelukt!";
 		            	pinVerify = true;
 		            	
-		            	//HIER MOET JE pinVerify NAAR WEBKIT STUREN
+		            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
 	                        wk.sendPinStatus(true,"OPEN");
 		            	break;
 		            	
