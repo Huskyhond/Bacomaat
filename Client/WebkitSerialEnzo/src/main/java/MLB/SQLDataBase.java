@@ -30,6 +30,7 @@ public class SQLDataBase
             Logger lgr = Logger.getLogger(SQLDataBase.class.getName());
             lgr.log(Level.SEVERE, ex.getMessage(), ex);
         } 
+        System.out.println("Connected to Database");
 	}
 	
 	public String lock(String rekeningnummer)
@@ -39,7 +40,8 @@ public class SQLDataBase
 		try
 		{	
 			System.out.println("[----lock initiated----]");
-			pst = con.prepareStatement("SELECT failCount FROM Account WHERE accountNumber = "+rekeningnummer);
+			pst = con.prepareStatement("SELECT failCount FROM Account WHERE accountNumber = ?");
+			pst.setString(1, rekeningnummer);
 			rs = pst.executeQuery();
 			
 			int failCount=1;
@@ -52,7 +54,8 @@ public class SQLDataBase
 
 			if(failCount <3)
 			{
-				String updateTableSQL2 = "UPDATE Account SET failCount = "+failCount+", pinLock = \"OPEN\" WHERE accountNumber = " + rekeningnummer;
+				String updateTableSQL2 = "UPDATE Account SET failCount = "+failCount+", pinLock = \"OPEN\" WHERE accountNumber = ?";
+				pst.setString(1, rekeningnummer);
 				pst = con.prepareStatement(updateTableSQL2);
 				pst .executeUpdate();
 
@@ -60,7 +63,8 @@ public class SQLDataBase
 			
 			if(failCount ==3||failCount ==4)
 			{
-				String updateTableSQL = "UPDATE Account SET pinLock = \"LOCK\", failCount = 3 WHERE accountNumber = " + rekeningnummer;
+				String updateTableSQL = "UPDATE Account SET pinLock = \"LOCK\", failCount = 3 WHERE accountNumber = ?";
+				pst.setString(1, rekeningnummer);
 				pst = con.prepareStatement(updateTableSQL);
 				pst .executeUpdate();
 				System.out.println("[----lock done----]\n");
@@ -83,15 +87,17 @@ public class SQLDataBase
 			System.out.println("[----updatedb initiated----]");
 			String newBalance = "0";
 			String oldBalance ="";
-			pst = con.prepareStatement("SELECT balance FROM Account WHERE accountNumber = "+rekeningnummer);
+			pst = con.prepareStatement("SELECT balance FROM Account WHERE accountNumber = ?");
+			pst.setString(1, rekeningnummer);
 			rs = pst.executeQuery();
 			while (rs.next()) 
 			{
 				oldBalance = Integer.toString(rs.getInt(1));
                 newBalance = Integer.toString(rs.getInt(1)-Integer.parseInt(withdrawBalance));
             }
-			pst = con.prepareStatement("UPDATE Account SET balance = ? WHERE accountNumber = "+rekeningnummer);
+			pst = con.prepareStatement("UPDATE Account SET balance = ? WHERE accountNumber = ?");
 			pst.setString(1, newBalance);
+			pst.setString(2, rekeningnummer);
 			pst.executeUpdate();
 			
             System.out.print("rekeningnummer: "+rekeningnummer+"\nold balance: "+oldBalance+"\nnew balance: "+newBalance+"\nwithdraw: "+withdrawBalance+"\n");
@@ -108,7 +114,8 @@ public class SQLDataBase
 		try
 		{
 			System.out.println("[----getBalance initiated----]");
-			pst = con.prepareStatement("SELECT balance FROM Account WHERE accountNumber = "+rekeningnummer);
+			pst = con.prepareStatement("SELECT balance FROM Account WHERE accountNumber = ?");
+			pst.setString(1, rekeningnummer);
 			rs = pst.executeQuery();
 			while (rs.next()) 
 			{
@@ -130,14 +137,15 @@ public class SQLDataBase
 		try
 		{
 			System.out.println("[----checkAccountnumber initiated----]");
-			pst = con.prepareStatement("SELECT count(*) FROM Account where accountNumber = "+rekeningnummer);
+			pst = con.prepareStatement("SELECT count(*) FROM Account where accountNumber = ?");
+			pst.setString(1, rekeningnummer);
 			rs = pst.executeQuery();
 			while (rs.next()) 
 			{
-                        System.out.print("rekeningnummer: "+rekeningnummer+"\nExist in db: "+rs.getInt(1)+"\n");
+                System.out.print("rekeningnummer: "+rekeningnummer+"\nExist in db: "+rs.getInt(1)+"\n");
         		System.out.println("[----checkAccountnumber done----]\n");
         		return rs.getInt(1);
-                }
+            }
 		}
 		catch(Exception ex)
 		{

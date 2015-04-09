@@ -4,5 +4,9 @@
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/jssc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/mysql-connector-java-3.1.14-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/socketio.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
