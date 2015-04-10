@@ -8,28 +8,21 @@ import jssc.SerialPortException;
 	public class App 
 	{
 		final static Printer printer = new Printer();
-        final static SerialPort serialPort = new SerialPort("COM3");
+        final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
+        final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
+
 
 	    /**
 	     * @param args the command line arguments
 	     */
 	    public static void main(String[] args) 
 	    {
-	    	final Printer printer = new Printer();
-	        final SerialPort serialPort = new SerialPort("COM3");
-	        final SQLDataBase db = new SQLDataBase();
-	        //Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
-	       // db.connectdb(); //CONNECT met DATABASE
-                /*for (int i = 0;i < 500;i++)
-                3
-	                wk.sendAccExist(1);
-	                wk.sendBalance(200);
-	                wk.sendPinLength("6");
-	                wk.sendReceiptStatus(true);
-	                wk.sendWithdrawAmount("25");
-	                wk.sendMoneyOptions(new int[] {1,1,1,1,1});
-                }*/
+	    	//final Printer printer = new Printer();
+	        //final SerialPort serialPort = new SerialPort("COM3");
+	        //final SQLDataBase db = new SQLDataBase();
+	        //db.connectdb(); //CONNECT met DATABASE
+    
 	        //************db methodes, please no touch************//
 	        //db.updatedb("10","MLBI0200000002");         //Verander balance in db d.m.v withdraw amount
 	        //db.getBalance("MLBI0200000001");	 	      //RETURNT EEN INT(balance)
@@ -57,25 +50,12 @@ import jssc.SerialPortException;
                     
 	            
 	        	serialPort.openPort();//Open serial port
-	            serialPort.setParams(9600, 8, 1, 0);//Set params.
+	            serialPort.setParams(2000000, 8, 1, 0);//Set params.
 
 	            boolean power = true;
-	            
-	            /*//TODO
-	            case 01: accountExist doorgeven webkit
-	            case 21: pin gelukt doorgeven webkit
-	            case 22: pin faal doorgeven webkit
-						 bij 3x falen zal accountState op "LOCK" gaan, verstuur dit dus ook
-	            case 03: getBalance doorgeven webkit
-	            case 04: withdrawAmount doorgeven webkit
-	            		 ook een error doorgeven als er niet genoeg saldo is om te withdrawen (dit gebeurt in de if van case 04)
-	            case 51 & 52: receipt : Ja of Nee, doorgeven webkit
-	            case 06: cancel request doorgeven webkit
-	            **/
-	            
+
 	            //******Serial to Java read*****//
-	            
-	            
+	                    
 	            serialPort.addEventListener(new SerialPortEventListener() {
 					
 					@Override
@@ -90,10 +70,10 @@ import jssc.SerialPortException;
 				            	String read = new String(serialPort.readString(bytesCount));
 				            	String caseArduino = read.substring(0,2);
 				            	String restBytes = read.substring(2);
-				            	
-				            	System.out.print(read);
-				            	System.out.print(caseArduino);
-				            	System.out.print(restBytes);
+				            	switchCase(caseArduino,restBytes);
+				            //	System.out.println(caseArduino);
+				            //	System.out.println(restBytes);
+				   
 
 							} 
 				            catch (SerialPortException e) {
@@ -118,7 +98,7 @@ import jssc.SerialPortException;
         	String withdrawAmount = "000";
  	        int maxWithdrawAmount = 999;
  	        int balance = 0;
- 	        int accountExist;
+ 	        int accountExist = 0;
  	        String accountState = "OPEN";
  	        boolean receipt = true;
  	        String pinLength = "";
@@ -132,23 +112,22 @@ import jssc.SerialPortException;
             	case "01":
        
 				reknummer = restBytes;
-				//System.out.println(restBytes);
-            	//accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
+            	accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
             	
             	result = "rekeningnummer: "+reknummer; //print rekeningnummer van Arduino	
             	
-            	break;
+            	
             	//serialPort.writeBytes("1".getBytes());
             	
             	//HIER MOET JE accountExist NAAR WEBKIT STUREN
-                   // wk.sendAccExist(accountExist);
-            	
+                  wk.sendAccExist(accountExist);
+            	break;
             	
             	case "21": result = "pin gelukt!";
             	pinVerify = true;
             	
             	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-                  //  wk.sendPinStatus(true,"OPEN");
+                   wk.sendPinStatus(true,"OPEN");
             	break;
             	
             	case "22": result = "pin gefaalt!"; 
@@ -156,7 +135,7 @@ import jssc.SerialPortException;
             	accountState = db.lock(reknummer); //checken of deze reknummer over de faallimiet zit, zo ja zal zijn account op LOCK gaan
             	
             	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
-                   // wk.sendPinStatus(false,"LOCK");
+                    wk.sendPinStatus(false,"LOCK");
             	break;
             	
             	case "03":  
@@ -164,22 +143,18 @@ import jssc.SerialPortException;
             	result = Integer.toString(balance);
             	
             	//HIER MOET JE balance NAAR WEBKIT STUREN
-                  //  wk.sendBalance(balance);
+                    wk.sendBalance(balance);
             	break;
             	
             	case "04":  
-            	try {
-					withdrawAmount = new String(serialPort.readBytes(3));
-				} catch (SerialPortException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+            	withdrawAmount = restBytes;
+            	
             	if(Integer.parseInt(withdrawAmount) > db.getBalance(reknummer)) //checken of er genoeg saldo is om te pinnen
             	{
             		result = "Niet genoeg Saldo!";
             		
             		//HIER MOET EEN ERROR REQUEST(bijvoorbeeld: "Niet genoeg Saldo" naar webkit sturen)
-                       //     wk.sendWithdrawError();
+                           wk.sendWithdrawError();
             		break;
             	}
             	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
@@ -191,7 +166,7 @@ import jssc.SerialPortException;
             	result = "withdraw: " + withdrawAmount;
             	
             	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
-                   // wk.sendWithdrawAmount(withdrawAmount);
+                    wk.sendWithdrawAmount(withdrawAmount);
             	break;
             	
             	case "05": result = "receipt: yes";
@@ -200,42 +175,38 @@ import jssc.SerialPortException;
             	printer.print();
             	
             	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
-                  //  wk.sendReceiptStatus(receipt);
+                    wk.sendReceiptStatus(receipt);
             	break;
             
             	case "06": result = "cancel";
             	
             	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
-                 //   wk.sendCancelRequest();
+                   wk.sendCancelRequest();
             	break;
             	
             	case "07": 
-            	try {
-					pinLength = new String(serialPort.readBytes(1));
-				} catch (SerialPortException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+            	pinLength = restBytes;
             	result = "pin length"+pinLength;
             	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
-            	//wk.sendPinLength(pinLength);
+            		wk.sendPinLength(pinLength);
             	break;
             	
             	case "02":
             	result = "clear input";
             	//HIER MOET CLEAR INPUT REQUEST
-            	//wk.sendClearInput();
+            		wk.sendClearInput();
             	break;
             	
             	case "10":
             	result = "Back input";
             	//HIER MOET BACK REQUEST
+            	
             	break;
         		
         	}//Einde switch
 	    	
-        	//System.out.println("case "+caseFromArduino);
-        	//System.out.println(result+"\n"); //check reply
+        	System.out.println("case "+caseFromArduino);
+        	System.out.println(result+"\n"); //check reply
 	    }
 	        
 	    public static int[] biljet(int withdrawAmount)
