@@ -1,67 +1,61 @@
-#include <KeyboardController.h>
-#include <ctype.h>
-
-// Initialize USB Controller
-USBHost usb;
-
+int incomingByte = 0;   // for incoming serial data
 int counter = 0;
+byte numbers[10] = {48,49,50,51,52,53,54,55,56,57};
 
-// Attach Keyboard controller to USB
-KeyboardController keyboard(usb);
-
-void setup(){
-  Serial.begin(9600);
+int findInArray(int byteNr) {
+  for(int i = 0; i < 10; i++) {
+    if(numbers[i] == byteNr) {
+      return i;
+    }
+  }
+  return -1;
 }
 
-void loop(){
-  usb.Task();
+void setup() {
+        Serial.begin(9600);     // opens serial port, sets data rate to 9600 bps
 }
 
+void loop() {
 
+        // send data only when you receive data:
+        if (Serial.available() > 0) {
+                // read the incoming byte:
+                incomingByte = Serial.read();
 
-int numbers_only(const char *s)
-{
-  while (*s) {
-      if (isdigit(*s++) == 0) return 0;
-  }
-  return 1;
-}
-
-void keyPressed() {
-  Serial.print("Pressed:  ");
-  Serial.print(keyboard.getKey());
-  if(keyboard.getKey() == "s") { // Scan initialised
-   
-    Serial.println("01");
-    Serial.println("MLBI0200000002"); // Bank id voor debugging
-    Serial.println("21");
-  }
-  else if(numbers_only(keyboard.getKey())) { // 0 tot 10 gedrukt
-    counter++;
-    int getal = strtol(keyboard.getKey());
-
-  }
-  else if(keyboard.getKey() == "r") { // Reset input
-    Serial.println("02");
-    counter = 0;
-  }
-  else if(keyboard.getKey() == "g") { // Get balance
-    Serial.println("03");
-  }
-  else if(keyboard.getKey() == "w") { // Withdraw
-    Serial.println("04");
-  }
-  else if(keyboard.getKey() == "p") { // Print ticket
-    Serial.println("05"); 
-  }
-  else if(keyboard.getKey() == "c") { // Cancel return to idle
-    Serial.println("06");
-  }
-  else if(keyboard.getKey() == "i") { // Keycount opsturen
-    Serial.println("07");
-    Serial.println(counter); // Keycount
-  }
-  else if(keyboard.getKey() == "b") { // Back
-    Serial.println("10");
-  }
+                // say what you got:
+                if(incomingByte == 115) { // Scan initialised / s
+                 
+                  Serial.println("01");
+                  Serial.println("MLBI0200000002"); // Bank id voor debugging
+                  Serial.println("21");
+                }
+                else if(incomingByte >= 48 && incomingByte <= 57) { // 0 tot 10 gedrukt
+                  counter++;
+                  int getal = findInArray(incomingByte);
+              
+                }
+                else if(incomingByte == 114) { // Reset input / r
+                  Serial.println("02");
+                  counter = 0;
+                }
+                else if(incomingByte == 103) { // Get balance / g
+                  Serial.println("03");
+                }
+                else if(incomingByte == 119) { // Withdraw / w
+                  Serial.println("04");
+                }
+                else if(incomingByte == 112) { // Print ticket / p
+                  Serial.println("05"); 
+                }
+                else if(incomingByte == 99) { // Cancel return to idle / c
+                  Serial.println("06");
+                }
+                else if(incomingByte == 105) { // Keycount opsturen / i
+                  Serial.println("07");
+                  Serial.println(counter); // Keycount
+                }
+                else if(incomingByte == 98) { // Back / b
+                  Serial.println("10");
+                }
+        }
 }
