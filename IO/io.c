@@ -129,18 +129,26 @@ void loop()
   }
   Serial.println(""); 
 
-  byte accountExists = 0;
-  char verifyBuffer[2];
+  char accountExists = 0;
+  int state = 1;
   
-  accountExists = Serial.readBytes(verifyBuffer, 1);
-  
-  if(accountExists != 1)
+  while(state) // wait for serial data
   {
-    Serial.println("06");
-    finish();
-    return;
+    if(Serial.available() > 0) // check for serial data
+    {
+      accountExists = Serial.read(); // fill the byte
+      state = 0; //reset state we've got what we need
+    }
   }
-
+  
+  if(accountExists != '2') // check if we havent been returned a 2 exactly.
+  {
+    Serial.println("06"); // print cancel
+    accountExists = 0; // clear the identifying variable
+    finish(); // finish aka, get ready to read another card.
+    return; // return and start over.
+  }
+  
   //read the pin number from block 6.
   readBlock(6, readblockBuffer);
   byte pin[4];
