@@ -22,9 +22,10 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/jssc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/mysql-connector-java-3.1.14-bin.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/GitHub/Bacomaat/Client/WebkitSerialEnzo/socketio.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/Github/Bacomaat/Client/WebkitSerialEnzo/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/Github/Bacomaat/Client/WebkitSerialEnzo/jssc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/Github/Bacomaat/Client/WebkitSerialEnzo/mysql-connector-java-3.1.14-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/Github/Bacomaat/Client/WebkitSerialEnzo/socketio.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Chinji/Documents/Github/Bacomaat/Client/WebkitSerialEnzo/json-20141113.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

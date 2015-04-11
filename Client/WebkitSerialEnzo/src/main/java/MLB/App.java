@@ -2,6 +2,9 @@
 	package MLB;
 
 	import jssc.SerialPort;
+
+import org.json.*;
+
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
@@ -18,9 +21,6 @@ import jssc.SerialPortException;
 	     */
 	    public static void main(String[] args) 
 	    {
-	    	//final Printer printer = new Printer();
-	        //final SerialPort serialPort = new SerialPort("COM3");
-	        //final SQLDataBase db = new SQLDataBase();
 	        //db.connectdb(); //CONNECT met DATABASE
     
 	        //************db methodes, please no touch************//
@@ -42,6 +42,12 @@ import jssc.SerialPortException;
 	        //db.updateTransaction(reknummer,"10","1");
 	       //  System.out.println(db.getTransactionID());
 
+	    	//*********Attempt at JSON parsing*********//
+	    	String str = "{ \"name\": \"Alice\", \"age\": 20 }";
+	    	JSONObject obj = new JSONObject(str);
+	    	String n = obj.getString("name");
+	    	int a = obj.getInt("age");
+	    	System.out.println(n + " " + a);
 	        
 	        
 	        //*************Serial to Java********************//
