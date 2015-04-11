@@ -67,18 +67,11 @@ public class Main {
         return response.toString();
 
     }
-    
+   /*
     public static void main(String args[]) {
-        
-      /*
-        
-        Gun verdeel zo veel mogelijk code.
-        httpsGet mag naar een andere class
-        GSON parsing ook, etc denk er even over na.
-       
-        */
-     
-      /** -- VOORBEELD HTTPS REQUEST NAAR SERVER + PARSEN NAAR JAVA! */
+
+    
+      //** -- VOORBEELD HTTPS REQUEST NAAR SERVER + PARSEN NAAR JAVA! ///
         try {
         String html = httpsGet("https://145.24.222.177/balance/200000001");
 
@@ -89,9 +82,9 @@ public class Main {
           System.out.println(e.getMessage());
       }
         
-      /** -- EINDE VOORBEELD */
+     ///** -- EINDE VOORBEELD ///
       
-      /** -- START SOCKET IO SERVER */
+      ///** -- START SOCKET IO SERVER 
       Configuration config = new Configuration();
       config.setHostname("localhost");
       config.setPort(80);
@@ -110,6 +103,7 @@ public class Main {
       });
       
       server.start();
-      /** -- EINDE SOCKET IO SERVER */
+      //** -- EINDE SOCKET IO SERVER 
     }
+    */
 }

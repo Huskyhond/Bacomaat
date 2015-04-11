@@ -14,6 +14,7 @@ import jssc.SerialPortException;
         final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
+        final static Main main = new Main();
 
 
 	    /**
@@ -42,7 +43,32 @@ import jssc.SerialPortException;
 	        //db.updateTransaction(reknummer,"10","1");
 	       //  System.out.println(db.getTransactionID());
 
-	    	//*********Attempt at JSON parsing*********//
+	    	
+	    	
+	    	/** -- START SOCKET IO SERVER */
+	        Configuration config = new Configuration();
+	        config.setHostname("localhost");
+	        config.setPort(80);
+	        SocketIOServer server = new SocketIOServer(config);
+
+	        server.addConnectListener(new ConnectionListener() {
+	           @Override
+	           public void onConnect(SocketIOClient clientc) {
+	               client = clientc; // Set static connection ( only 1 allowed )
+	               System.out.println("Connected");
+	               client.sendEvent("update", "{"
+	                                          + "\"page\": \"code\""
+	                                        + "}");
+	           }
+	          
+	        });
+	        
+	        server.start();
+	        /** -- EINDE SOCKET IO SERVER */
+	        
+	      //*********Attempt at JSON parsing*********//
+	    	main.httpsGet("https://145.24.222.177/balance/200000001");
+	    	
 	    	String str = "{ \"name\": \"Alice\", \"age\": 20 }";
 	    	JSONObject obj = new JSONObject(str);
 	    	String n = obj.getString("name");
