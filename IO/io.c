@@ -93,8 +93,7 @@ int finish()
 
 void setup()
 {
- //Baud rate 28800 bits per second, 8 data bits, Parity E = even, 1 stop bit.
- Serial.begin(28800, SERIAL_8E1);
+ Serial.begin(115200, SERIAL_8E1); //Baud rate 115200 bits per second, 8 data bits, Parity E = even, 1 stop bit.
  SPI.begin();
  finish();
  for (byte i = 0; i < 6; i++)
