@@ -112,7 +112,7 @@ import jssc.SerialPortException;
             	case "01":
        
 				reknummer = restBytes;
-            	accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
+            	//accountExist = db.checkAccountnumber(reknummer); //checken of reknummer bestaat in db
             	
             	result = "rekeningnummer: "+reknummer; //print rekeningnummer van Arduino	
             	
@@ -120,7 +120,7 @@ import jssc.SerialPortException;
             	//serialPort.writeBytes("1".getBytes());
             	
             	//HIER MOET JE accountExist NAAR WEBKIT STUREN
-                  wk.sendAccExist(accountExist);
+                 wk.sendAccExist(accountExist);
             	break;
             	
             	case "21": result = "pin gelukt!";
