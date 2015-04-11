@@ -1,4 +1,64 @@
 body {
 	font-family: "Verdana", Geneva, sans-serif;
 	margin-top: 30px;
+	color: white;
+}
+
+#logo {
+	text-align: center;
+}
+
+.main {
+	background-color: #ff8700;
+	width: 700px;
+	height: 400px;
+	font-size: 20px;
+	margin:0 auto;
+	border-radius: 10px;
+	box-shadow: 0px 5px 5px #888;
+}
+
+.main h1 {
+	padding-top: 20px;
+	font-size: 40px;
+	text-align: center;
+	padding-bottom: 30px;
+	border-bottom: 2px solid white;
+}
+
+.main div {
+	text-align: center;
+	font-size: 24px;
+}
+
+.row {
+	margin-top: 20px;
+}
+
+.row div {
+  display: inline-block;
+}
+
+.row .row_left {
+	margin-right: 200px;
+}
+
+.row .row_right {
+	margin-left: 200px;
+}
+
+.input {
+
+	width: 100px;
+	height: 30px;
+	background-color: white;
+	margin: 0 auto;
+	border-radius: 10px;
+	color: black;
+	font-weight: normal;
+	font-style: italic;
+	text-align: left !important;
+	padding-left: 5px;
+	margin-top: 10px;
+	margin-bottom: 40px;
 }
