@@ -12,7 +12,7 @@ int findInArray(int byteNr) {
 }
 
 void setup() {
-        Serial.begin(9600);     // opens serial port, sets data rate to 9600 bps
+        Serial.begin(115200, SERIAL_8E1);     // opens serial port, sets data rate to 115200 bps
 }
 
 void loop() {
