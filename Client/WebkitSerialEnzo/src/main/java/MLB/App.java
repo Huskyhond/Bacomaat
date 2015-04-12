@@ -1,22 +1,24 @@
 
 	package MLB;
 
-	import com.corundumstudio.socketio.SocketIOClient;
-	import jssc.SerialPort;
+	//import com.corundumstudio.socketio.SocketIOClient;
+	import org.json.JSONObject;
 
-import org.json.*;
+import jssc.SerialPort;
 
-import jssc.SerialPortEvent;
+	//import org.json.*;
+
+	import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+	
 	public class App 
 	{
 		final static Printer printer = new Printer();
         final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
-        final static Main main = new Main();
-        public static SocketIOClient client;
+        final static JsonGet Jget = new JsonGet();
 
 
 	    /**
@@ -24,6 +26,28 @@ import jssc.SerialPortException;
 	     */
 	    public static void main(String[] args) 
 	    {
+	    	
+	    	try
+	    	{
+	   	        String str = Jget.httpsGet("https://145.24.222.177/balance/MLBI0200000001?token=Dk49D9dka13D9f03S9dj1D9da01Akd03");
+	   	    	JSONObject obj = new JSONObject(str);
+	   	    	int bankid = obj.getInt("bankid");
+	   	    	String pasid = obj.getString("pasid");
+	   	    	int saldo = obj.getInt("saldo");
+	   	    	int failCount = obj.getInt("failCount");
+	   	    	int dailyLimit = obj.getInt("dailyLimit");
+
+	   	    	System.out.println("bankid: "+bankid);
+	   	    	System.out.println("pasid: "+pasid);
+	   	    	System.out.println("saldo: "+saldo);
+	   	    	System.out.println("failCount: "+failCount);
+	   	    	System.out.println("dailyLimit: "+dailyLimit);
+
+	       }
+	       catch(Exception e)
+	       {
+	       	System.out.println(e.getMessage());
+	       }
 	        //db.connectdb(); //CONNECT met DATABASE
     
 	        //************db methodes, please no touch************//
@@ -48,11 +72,11 @@ import jssc.SerialPortException;
 	        
 	      //*********Attempt at JSON parsing*********//
 	    	
-	    	String str = "{ \"name\": \"Alice\", \"age\": 20 }";
-	    	JSONObject obj = new JSONObject(str);
-	    	String n = obj.getString("name");
-	    	int a = obj.getInt("age");
-	    	System.out.println(n + " " + a);
+	    	//String str = "{ \"name\": \"Alice\", \"age\": 20 }";
+	    	//JSONObject obj = new JSONObject(str);
+	    	//String n = obj.getString("name");
+	    	//int a = obj.getInt("age");
+	    	//System.out.println(n + " " + a);
 	        
 	        
 	        //*************Serial to Java********************//
@@ -81,7 +105,7 @@ import jssc.SerialPortException;
 				            	String read = new String(serialPort.readString(bytesCount));
 				            	String caseArduino = read.substring(0,2);
 				            	String restBytes = read.substring(2);
-				            	switchCase(caseArduino,restBytes);
+				            	//switchCase(caseArduino,restBytes);
 				            //	System.out.println(caseArduino);
 				            //	System.out.println(restBytes);
 				   

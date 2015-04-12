@@ -3,12 +3,16 @@ package MLB;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
+
+import org.json.JSONObject;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,12 +26,12 @@ import javax.net.ssl.SSLSession;
  */
 
 
-public class Main 
+public class JsonGet 
 {
     
     public static SocketIOClient client;
     
-    private String httpsGet(String url) throws Exception {
+    public String httpsGet(String url) throws Exception {
         String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0";
         URL obj = new URL(url);
         
@@ -72,9 +76,9 @@ public class Main
     public void connect() {
 
     
-      //** -- VOORBEELD HTTPS REQUEST NAAR SERVER + PARSEN NAAR JAVA! ///
+     /*// -- VOORBEELD HTTPS REQUEST NAAR SERVER + PARSEN NAAR JAVA! ///
         try {
-        String html = httpsGet("https://145.24.222.177/balance/200000001");
+        String html = httpsGet("https://145.24.222.177/balance/MLBI0200000001?token=Dk49D9dka13D9f03S9dj1D9da01Akd03");
 
         //^ BEKIJK DE ServerJson classe
        
@@ -83,8 +87,9 @@ public class Main
           System.out.println(e.getMessage());
       }
         
-     ///** -- EINDE VOORBEELD ///
-      
+     *//// -- EINDE VOORBEELD ///
+     
+    	
       ///** -- START SOCKET IO SERVER 
       Configuration config = new Configuration();
       config.setHostname("localhost");
@@ -104,7 +109,7 @@ public class Main
       });
       
       server.start();
-      //** -- EINDE SOCKET IO SERVER 
+      //** -- EINDE SOCKET IO SERVER   
     }
     
 }
