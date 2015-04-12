@@ -18,7 +18,7 @@ import jssc.SerialPortException;
         final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
-        final static JsonGet Jget = new JsonGet();
+        final static JsonGet Jget = new JsonGet(printer);
 
 
 	    /**
@@ -26,17 +26,14 @@ import jssc.SerialPortException;
 	     */
 	    public static void main(String[] args) 
 	    {
-	    	String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
-	    	String withdrawAmount="10";
+	    	//String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
+	    	//String withdrawAmount="10";
 	    	
 	    	//***********JsonGet methodes***********//
 	    	//Jget.getBalance(rekeningnummer);
 	    	//Jget.withdraw(rekeningnummer,withdrawAmount);
 	    	//Jget.pinFail(rekeningnummer);
 	    	//Jget.pinSucces(rekeningnummer);
-	    	
-	    	
-	        //******************TESTINGS************************//
 	    	//Jget.test();
 
 	        
@@ -101,13 +98,15 @@ import jssc.SerialPortException;
  	        int accountExist = 0;
  	        boolean receipt = true;
  	        String pinLength = "";
- 	        boolean pinVerify = false;
- 	        String readlength = "";
  	        
  	        String result= "";
+ 	      
+ 	        /**TODO
+ 	        accountExist
+ 	        **/
 	    	switch(caseFromArduino)
         	{
-            	case "01":
+            	case "01": //pinpas word hier gescant
        
 					rekeningnummer = restBytes;
 	            	result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
@@ -118,25 +117,23 @@ import jssc.SerialPortException;
 	                 wk.sendAccExist(accountExist);
 	            	break;
             	
-            	case "21": 
+            	case "21": //pin verify Succes
             		result = "pin gelukt!";
-	            	pinVerify = true;
 	            	Jget.pinSucces(rekeningnummer);
 	            	
 	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
 	                wk.sendPinStatus(true,"OPEN");
 	                break;
             	
-            	case "22": 
+            	case "22": //pin verify Fail
             		result = "pin gefaalt!"; 
-	            	pinVerify = false;
 	            	Jget.pinFail(rekeningnummer);
 	            	
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
 	                wk.sendPinStatus(false,"LOCK");
 	            	break;
             	
-            	case "03":  
+            	case "03": //Get balance
             		balance = Jget.getBalance(rekeningnummer);
             		result = Integer.toString(balance);
             	
@@ -144,7 +141,7 @@ import jssc.SerialPortException;
                     wk.sendBalance(balance);
                     break;
             	
-            	case "04":  
+            	case "04": //Withdraw some amount
 	            	withdrawAmount = restBytes;
 	            	Jget.withdraw(rekeningnummer, withdrawAmount);
 	            	
@@ -157,35 +154,35 @@ import jssc.SerialPortException;
 	                wk.sendWithdrawAmount(withdrawAmount);
 	            	break;
             	
-            	case "05": 
+            	case "05": //bon printen
             		result = "receipt: yes";
 	            	receipt = true;
-	            	//printer hier
+	            	printer.print();
 	            	
 	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
 	                wk.sendReceiptStatus(receipt);
 	            	break;
             
-            	case "06": 
+            	case "06": //cancel
             		result = "cancel";
 	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
 	            	wk.sendCancelRequest();
 	            	break;
             	
-            	case "07": 
+            	case "07": //pinLength naar niek
 	            	pinLength = restBytes;
 	            	result = "pin length"+pinLength;
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	        		wk.sendPinLength(pinLength);
 	            	break;
 	            	
-            	case "02":
+            	case "02": //clear pin input
 	            	result = "clear input";
 	            	//HIER MOET CLEAR INPUT REQUEST
 	        		wk.sendClearInput();
 	            	break;
             	
-            	case "10":
+            	case "10": //back request
 	            	result = "Back input";
 	            	//HIER MOET BACK REQUEST
 	            	break;

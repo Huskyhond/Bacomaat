@@ -35,6 +35,12 @@ public class JsonGet
 {
     
     public static SocketIOClient client;
+    private Printer printer;
+    
+    public JsonGet(Printer printer)
+    {
+    	this.printer = printer;
+    }
     
     private String httpsGet(String url) throws Exception {
         String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0";
@@ -123,6 +129,9 @@ public class JsonGet
 	    	int amount = obj2.getInt("amount");
 	    	int machineid = obj2.getInt("machineID");
 	    	String date = obj1.getString("date");
+	    	
+   	    	printer.setPrinter(accountNumber, Integer.toString(amount), Integer.toString(transactionid),date);
+
 		    
 		    System.out.println("transactionid: "+transactionid);
 		    System.out.println("accountNumber: "+ accountNumber);
