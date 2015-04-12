@@ -30,6 +30,7 @@ import jssc.SerialPortException;
 	    	//String withdrawAmount="10";
 	    	
 	    	//***********JsonGet methodes***********//
+	    	//Jget.checkAccount(rekeningnummer);
 	    	//Jget.getBalance(rekeningnummer);
 	    	//Jget.withdraw(rekeningnummer,withdrawAmount);
 	    	//Jget.pinFail(rekeningnummer);
@@ -95,24 +96,27 @@ import jssc.SerialPortException;
 	    	String rekeningnummer = "";
         	String withdrawAmount = "000";
  	        int balance = 0;
- 	        int accountExist = 0;
- 	        boolean receipt = true;
+ 	        boolean accountExist = false;
+ 	        boolean receipt = false;
  	        String pinLength = "";
  	        
  	        String result= "";
  	      
  	        /**TODO
- 	        accountExist
+ 	        wk.sendAccExist naar boolean veranderen!
  	        **/
 	    	switch(caseFromArduino)
         	{
             	case "01": //pinpas word hier gescant
        
 					rekeningnummer = restBytes;
+					accountExist = Jget.checkAccount(rekeningnummer);
 	            	result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
-	       	
-	            	//serialPort.writeBytes("1".getBytes());
 	            	
+	            	if(accountExist == false)
+	            	{
+	            		serialPort.writeBytes("1".getBytes());
+	            	}
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
 	                 wk.sendAccExist(accountExist);
 	            	break;

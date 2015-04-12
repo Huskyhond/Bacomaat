@@ -86,7 +86,28 @@ public class JsonGet
     
     private String token = "?token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
     private String url = "https://145.24.222.177";
-   
+    
+    public boolean checkAccount(String rekeningnummer)
+    {
+    	try
+    	{
+   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
+   	    	JSONObject obj = new JSONObject(https);
+   	    	String message = obj.getString("message");
+   	    	int error = obj.getInt("error");
+   	 
+   	    	System.out.println("error: "+error);
+   	    	System.out.println("message: "+message);
+   	    	return false; 	    	
+       }
+       catch(Exception e)
+       {
+       	System.out.println("account bestaat");
+       }
+    	return true;
+    }
+    
+    
     public int getBalance(String rekeningnummer)//return saldo
     {
     	try
