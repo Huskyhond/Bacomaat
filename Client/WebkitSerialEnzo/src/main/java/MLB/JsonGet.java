@@ -80,8 +80,8 @@ public class JsonGet
     {
     	try
     	{
-   	        String str = httpsGet(url+"/balance/"+rekeningnummer+token);
-   	    	JSONObject obj = new JSONObject(str);
+   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
+   	    	JSONObject obj = new JSONObject(https);
    	    	int bankid = obj.getInt("bankid");
    	    	String pasid = obj.getString("pasid");
    	    	int saldo = obj.getInt("saldo");
@@ -99,6 +99,43 @@ public class JsonGet
        {
        	System.out.println(e.getMessage());
        }
+    }
+    
+    public void withdraw(String rekeningnummer, String withdrawAmount)
+    {
+    	try
+    	{
+	    	String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+withdrawAmount+"&"+token);
+	    	JSONObject obj = new JSONObject(https);
+		    int transactionid = obj.getInt("id");
+		    int amount = obj.getInt("amount");
+		    int machineid = obj.getInt("machineID");
+		    String date = obj.getString("date");
+		    
+		    System.out.println("transactionid: "+transactionid);
+	    	System.out.println("amount: "+amount);
+	    	System.out.println("machineid: "+machineid);
+	    	System.out.println("date: "+date);
+    	}
+    	catch(Exception e)
+    	{
+           	System.out.println(e.getMessage());
+    	}
+    }
+    
+    public void pinFail(String rekeningnummer)
+    {
+    	String https = httpsGet(url+"/account/"+rekeningnummer+"/failed"+token);
+    	JSONObject obj = new JSONObject(https);
+    	int failCount = obj.getInt("failCount");
+    	
+    	System.out.println("failCount: "+failCount);
+    	
+    }
+    
+    public void pinSucces(String rekeningnummer)
+    {
+    	String https = httpsGet(url+"/account/"+rekeningnummer+"/passed"+token);
     }
     
 }
