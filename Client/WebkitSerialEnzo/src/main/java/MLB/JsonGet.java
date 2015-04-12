@@ -13,6 +13,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
 import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.simple.JSONValue;
+import org.json.*;
+import org.json.simple.parser.*;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -76,7 +81,7 @@ public class JsonGet
     private String token = "?token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
     private String url = "https://145.24.222.177";
    
-    public void getBalance(String rekeningnummer)
+    public int getBalance(String rekeningnummer)//return saldo
     {
     	try
     	{
@@ -93,26 +98,34 @@ public class JsonGet
    	    	System.out.println("saldo: "+saldo);
    	    	System.out.println("failCount: "+failCount);
    	    	System.out.println("dailyLimit: "+dailyLimit);
+   	    	
+   	    	return saldo;
 
        }
        catch(Exception e)
        {
        	System.out.println(e.getMessage());
        }
+    	return 0;
     }
     
-    public void withdraw(String rekeningnummer, String withdrawAmount)
+    public void withdraw(String rekeningnummer, String withdrawAmount)//return transid,accountnumber,amount,machineid,date naar PRINTER
     {
+    	String token = "&token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
     	try
     	{
-	    	String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+withdrawAmount+"&"+token);
-	    	JSONObject obj = new JSONObject(https);
-		    int transactionid = obj.getInt("id");
-		    int amount = obj.getInt("amount");
-		    int machineid = obj.getInt("machineID");
-		    String date = obj.getString("date");
+    		String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+withdrawAmount+token);
+	    	JSONObject obj1 = new JSONObject(https);
+	    	JSONObject obj2 = obj1.getJSONObject("transaction");
+	    	
+	    	int transactionid = obj2.getInt("id");
+	    	String accountNumber = obj2.getString("accountNumber");
+	    	int amount = obj2.getInt("amount");
+	    	int machineid = obj2.getInt("machineID");
+	    	String date = obj1.getString("date");
 		    
 		    System.out.println("transactionid: "+transactionid);
+		    System.out.println("accountNumber: "+ accountNumber);
 	    	System.out.println("amount: "+amount);
 	    	System.out.println("machineid: "+machineid);
 	    	System.out.println("date: "+date);
@@ -123,19 +136,59 @@ public class JsonGet
     	}
     }
     
-    public void pinFail(String rekeningnummer)
+    public void pinFail(String rekeningnummer)//return failCount
     {
+    	try
+    	{
     	String https = httpsGet(url+"/account/"+rekeningnummer+"/failed"+token);
     	JSONObject obj = new JSONObject(https);
     	int failCount = obj.getInt("failCount");
     	
     	System.out.println("failCount: "+failCount);
-    	
+    	}
+    	catch(Exception e)
+    	{
+           	System.out.println(e.getMessage());
+    	}
     }
     
     public void pinSucces(String rekeningnummer)
     {
-    	String https = httpsGet(url+"/account/"+rekeningnummer+"/passed"+token);
+    	try
+    	{
+        	String https = httpsGet(url+"/account/"+rekeningnummer+"/passed"+token);
+    		
+    	}
+    	catch(Exception e)
+    	{
+           	System.out.println(e.getMessage());
+    	}
+    }
+    
+    public void test()
+    {
+    	try
+    	{
+	    	String https = httpsGet("https://145.24.222.177/balance/MLBI0200000002?changeBalance=1&token=Dk49D9dka13D9f03S9dj1D9da01Akd03");
+	    	JSONObject obj1 = new JSONObject(https);
+	    	JSONObject obj2 = obj1.getJSONObject("transaction");
+	    	int id = obj2.getInt("id");
+	    	String accountNumber = obj2.getString("accountNumber");
+	    	int amount = obj2.getInt("amount");
+	    	int machineid = obj2.getInt("machineID");
+	    	
+	    	System.out.println("id: "+id);
+	    	System.out.println("accountNumber: "+accountNumber);
+	    	System.out.println("amount: "+amount);
+	    	System.out.println("machineid: "+machineid);
+
+	
+
+    	}
+    	catch(Exception e)
+    	{
+           	System.out.println(e.getMessage());
+    	}
     }
     
 }
