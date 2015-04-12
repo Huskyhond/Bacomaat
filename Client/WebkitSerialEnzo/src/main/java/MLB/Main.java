@@ -22,11 +22,12 @@ import javax.net.ssl.SSLSession;
  */
 
 
-public class Main {
+public class Main 
+{
     
     public static SocketIOClient client;
     
-    private static String httpsGet(String url) throws Exception {
+    private String httpsGet(String url) throws Exception {
         String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0";
         URL obj = new URL(url);
         
@@ -67,8 +68,8 @@ public class Main {
         return response.toString();
 
     }
-   /*
-    public static void main(String args[]) {
+   
+    public void connect() {
 
     
       //** -- VOORBEELD HTTPS REQUEST NAAR SERVER + PARSEN NAAR JAVA! ///
@@ -105,5 +106,5 @@ public class Main {
       server.start();
       //** -- EINDE SOCKET IO SERVER 
     }
-    */
+    
 }
