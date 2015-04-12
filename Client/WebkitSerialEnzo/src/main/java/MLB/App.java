@@ -115,8 +115,16 @@ import jssc.SerialPortException;
 	            	
 	            	if(accountExist == false)
 	            	{
+	            		try
+	            		{
 	            		serialPort.writeBytes("1".getBytes());
-	            	}
+	            		
+	            		}
+	            		catch(Exception e)
+	            		{
+	            			System.out.println("writeByte error!");
+	            		}
+            		}
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
 	                 wk.sendAccExist(accountExist);
 	            	break;
