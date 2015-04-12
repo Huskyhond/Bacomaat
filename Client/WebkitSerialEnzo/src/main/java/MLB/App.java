@@ -14,7 +14,7 @@ import jssc.SerialPortException;
 	
 	public class App 
 	{
-		final static Printer printer = new Printer();
+            final static Printer printer = new Printer();
         final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT

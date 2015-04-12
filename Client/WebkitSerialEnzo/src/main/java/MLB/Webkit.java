@@ -23,10 +23,10 @@ public class Webkit
         objSender =  new WebkitConnect();
     }
     
-    public void sendAccExist(int accountExist)
+    public void sendAccExist(boolean accountExist)
     {
         accExist = new JSONObject();
-        if (accountExist == 1)
+        if (accountExist)
         {
             accExist.put("page", "code");
         }
@@ -40,10 +40,12 @@ public class Webkit
     }
     public void sendPinLength(String pinLength)
     {
+        int codeLength = Integer.parseInt(pinLength.replaceAll("[^\\d.]", ""));
         pinLengthObj = new JSONObject();
-        pinLengthObj.put("pinLength", pinLength);
+        pinLengthObj.put("page", "code");
+        pinLengthObj.put("codelength", codeLength);
         objSender.sendObject(pinLengthObj);
-    }
+}
     public void sendPinStatus(boolean pinVerified , String accountState)
     {
         pinStatus = new JSONObject();
