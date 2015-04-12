@@ -26,30 +26,9 @@ import jssc.SerialPortException;
 	     */
 	    public static void main(String[] args) 
 	    {
+	    
+	    	Jget.getBalance();
 	    	
-	    	try
-	    	{
-	   	        String str = Jget.httpsGet("https://145.24.222.177/balance/MLBI0200000001?token=Dk49D9dka13D9f03S9dj1D9da01Akd03");
-	   	    	JSONObject obj = new JSONObject(str);
-	   	    	int bankid = obj.getInt("bankid");
-	   	    	String pasid = obj.getString("pasid");
-	   	    	int saldo = obj.getInt("saldo");
-	   	    	int failCount = obj.getInt("failCount");
-	   	    	int dailyLimit = obj.getInt("dailyLimit");
-
-	   	    	System.out.println("bankid: "+bankid);
-	   	    	System.out.println("pasid: "+pasid);
-	   	    	System.out.println("saldo: "+saldo);
-	   	    	System.out.println("failCount: "+failCount);
-	   	    	System.out.println("dailyLimit: "+dailyLimit);
-
-	       }
-	       catch(Exception e)
-	       {
-	       	System.out.println(e.getMessage());
-	       }
-	        //db.connectdb(); //CONNECT met DATABASE
-    
 	        //************db methodes, please no touch************//
 	        //db.updatedb("10","MLBI0200000002");         //Verander balance in db d.m.v withdraw amount
 	        //db.getBalance("MLBI0200000001");	 	      //RETURNT EEN INT(balance)

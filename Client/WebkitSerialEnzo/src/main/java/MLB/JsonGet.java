@@ -31,7 +31,7 @@ public class JsonGet
     
     public static SocketIOClient client;
     
-    public String httpsGet(String url) throws Exception {
+    private String httpsGet(String url) throws Exception {
         String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0";
         URL obj = new URL(url);
         
@@ -72,44 +72,33 @@ public class JsonGet
         return response.toString();
 
     }
-   
-    public void connect() {
-
     
-     /*// -- VOORBEELD HTTPS REQUEST NAAR SERVER + PARSEN NAAR JAVA! ///
-        try {
-        String html = httpsGet("https://145.24.222.177/balance/MLBI0200000001?token=Dk49D9dka13D9f03S9dj1D9da01Akd03");
+    private String token = "?token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
+    private String url = "https://145.24.222.177";
+   
+    public void getBalance(String rekeningnummer)
+    {
+    	try
+    	{
+   	        String str = httpsGet(url+"/balance/"+rekeningnummer+token);
+   	    	JSONObject obj = new JSONObject(str);
+   	    	int bankid = obj.getInt("bankid");
+   	    	String pasid = obj.getString("pasid");
+   	    	int saldo = obj.getInt("saldo");
+   	    	int failCount = obj.getInt("failCount");
+   	    	int dailyLimit = obj.getInt("dailyLimit");
 
-        //^ BEKIJK DE ServerJson classe
-       
-      }
-      catch(Exception e) {
-          System.out.println(e.getMessage());
-      }
-        
-     *//// -- EINDE VOORBEELD ///
-     
-    	
-      ///** -- START SOCKET IO SERVER 
-      Configuration config = new Configuration();
-      config.setHostname("localhost");
-      config.setPort(80);
-      SocketIOServer server = new SocketIOServer(config);
+   	    	System.out.println("bankid: "+bankid);
+   	    	System.out.println("pasid: "+pasid);
+   	    	System.out.println("saldo: "+saldo);
+   	    	System.out.println("failCount: "+failCount);
+   	    	System.out.println("dailyLimit: "+dailyLimit);
 
-      server.addConnectListener(new ConnectionListener() {
-         @Override
-         public void onConnect(SocketIOClient clientc) {
-             client = clientc; // Set static connection ( only 1 allowed )
-             System.out.println("Connected");
-             client.sendEvent("update", "{"
-                                        + "\"page\": \"code\""
-                                      + "}");
-         }
-        
-      });
-      
-      server.start();
-      //** -- EINDE SOCKET IO SERVER   
+       }
+       catch(Exception e)
+       {
+       	System.out.println(e.getMessage());
+       }
     }
     
 }
