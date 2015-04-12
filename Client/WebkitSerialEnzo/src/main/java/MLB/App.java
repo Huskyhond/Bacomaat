@@ -4,13 +4,13 @@
 	//import com.corundumstudio.socketio.SocketIOClient;
 	import org.json.JSONObject;
 
-        import jssc.SerialPort;
+import jssc.SerialPort;
 
 	//import org.json.*;
 
 	import jssc.SerialPortEvent;
-        import jssc.SerialPortEventListener;
-        import jssc.SerialPortException;
+import jssc.SerialPortEventListener;
+import jssc.SerialPortException;
 	
 	public class App 
 	{
