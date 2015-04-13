@@ -14,7 +14,7 @@ import jssc.SerialPortException;
 	
 	public class App 
 	{
-            final static Printer printer = new Printer();
+        final static Printer printer = new Printer();
         final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
@@ -26,12 +26,12 @@ import jssc.SerialPortException;
 	     */
 	    public static void main(String[] args) 
 	    {
-	    	//String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
+	    	String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
 	    	//String withdrawAmount="10";
 	    	
 	    	//***********JsonGet methodes***********//
 	    	//Jget.checkAccount(rekeningnummer);
-	    	//Jget.getBalance(rekeningnummer);
+	    	Jget.getBalance(rekeningnummer);
 	    	//Jget.withdraw(rekeningnummer,withdrawAmount);
 	    	//Jget.pinFail(rekeningnummer);
 	    	//Jget.pinSucces(rekeningnummer);
@@ -103,7 +103,8 @@ import jssc.SerialPortException;
  	        String result= "";
  	      
  	        /**TODO
- 	        wk.sendAccExist naar boolean veranderen!
+			open en lock hoeft niet meer
+			back request
  	        **/
 	    	switch(caseFromArduino)
         	{
@@ -158,7 +159,7 @@ import jssc.SerialPortException;
 	            	Jget.withdraw(rekeningnummer, withdrawAmount);
 	            	
 	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-	            	biljet(Integer.parseInt(withdrawAmount)); // DIT IS EEN ARRAY VAN BILJETTEN
+	            	wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
 	
 	            	result = "withdraw: " + withdrawAmount;
 	            	
