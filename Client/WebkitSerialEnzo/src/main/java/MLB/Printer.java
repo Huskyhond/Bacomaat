@@ -12,14 +12,15 @@ public class Printer
 	{
 		
 		
-		String[] text = new String[7];
+		String[] text = new String[8];
 		text[0] = "Welcome to";
 		text[1] = "MLB";
 		text[2] = "Automaat ID: MLB-1";
 		text[3] = "Transactie ID: "+transactieID;
-		text[4] = "Rekening nummer: "+reknummer;
-		text[5] = "Withdraw Amount: "+withdrawAmount;
-		text[6] = date;
+		text[4] = "Rekening nummer: ";
+		text[5] = ""+reknummer;
+		text[6] = "Withdraw Amount: "+withdrawAmount;
+		text[7] = date;
 		
 		/*text[7] = "LMAO";
 		text[8] = "LMAO";
@@ -37,6 +38,7 @@ public class Printer
 		this.withdrawAmount = withdrawAmount;
 		this.transactieID = transactieID;
 		this.date = date;
+		System.out.println("Setting up printer");
 
 	}
 

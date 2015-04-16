@@ -34,12 +34,12 @@ import org.json.simple.parser.*;
 public class JsonGet 
 {
     
-    public static SocketIOClient client;
+    public SocketIOClient client;
     private Printer printer;
     
-    public JsonGet(Printer printer)
+    public JsonGet(Printer _printer)
     {
-    	this.printer = printer;
+    	printer = _printer;
     }
     
     private String httpsGet(String url) throws Exception {
@@ -138,7 +138,9 @@ public class JsonGet
     
     public void withdraw(String rekeningnummer, String withdrawAmount)//return transid,accountnumber,amount,machineid,date naar PRINTER
     {
-    	String token = "&token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
+    	System.out.println("JsonGet: withdraw:"+withdrawAmount);
+    	String token = withdrawAmount+"&token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
+
     	try
     	{
     		String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+withdrawAmount+token);

@@ -19,7 +19,13 @@ import jssc.SerialPortException;
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
         final static JsonGet Jget = new JsonGet(printer);
-
+        
+        static String rekeningnummer = "MLBI0200000001";
+    	static String withdrawAmount ="100";
+	    static int balance = 0;
+        static boolean accountExist = false;
+        static boolean receipt = false;
+        static String pinLength = "";
 
 	    /**
 	     * @param args the command line arguments
@@ -27,15 +33,16 @@ import jssc.SerialPortException;
 	    public static void main(String[] args) 
 	    {
 	    	String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
-	    	//String withdrawAmount="10";
+	    	String withdrawAmount="10";
 	    	
 	    	//***********JsonGet methodes***********//
 	    	//Jget.checkAccount(rekeningnummer);
-	    	Jget.getBalance(rekeningnummer);
+	    	//Jget.getBalance(rekeningnummer);
 	    	//Jget.withdraw(rekeningnummer,withdrawAmount);
 	    	//Jget.pinFail(rekeningnummer);
 	    	//Jget.pinSucces(rekeningnummer);
 	    	//Jget.test();
+	    	//printer.print();
 
 	        
 	    	//*********Attempt at JSON parsing*********//
@@ -93,12 +100,6 @@ import jssc.SerialPortException;
 	
 	    public static void switchCase(String caseFromArduino, String restBytes)
 	    {
-	    	String rekeningnummer = "";
-        	String withdrawAmount = "000";
- 	        int balance = 0;
- 	        boolean accountExist = false;
- 	        boolean receipt = false;
- 	        String pinLength = "";
  	        
  	        String result= "";
  	      
@@ -156,15 +157,16 @@ import jssc.SerialPortException;
             	
             	case "04": //Withdraw some amount
 	            	withdrawAmount = restBytes;
+	            	System.out.println(rekeningnummer+"\n"+withdrawAmount);
 	            	Jget.withdraw(rekeningnummer, withdrawAmount);
 	            	
 	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-	            	wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
-	
+	            	//wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
+	            	//printer.setPrinter(rekeningnummer, withdrawAmount, "1", "16-4-2015");
 	            	result = "withdraw: " + withdrawAmount;
 	            	
 	            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
-	                wk.sendWithdrawAmount(withdrawAmount);
+	               // wk.sendWithdrawAmount(withdrawAmount);
 	            	break;
             	
             	case "05": //bon printen

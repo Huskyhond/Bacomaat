@@ -75,10 +75,12 @@ public class LabelWriter {
                                 InputStream ttf = this.getClass().getResourceAsStream("3of9.TTF");
 
                                 Font font = null;
-                                try {
+                                try 
+                                {
                                     font = Font.createFont(Font.TRUETYPE_FONT, ttf);
                                 } catch (FontFormatException | IOException ex) {
-                                    Logger.getLogger(LabelWriter.class.getName()).log(Level.SEVERE, null, ex);
+                                    //Logger.getLogger(LabelWriter.class.getName()).log(Level.SEVERE, null, ex);
+                                	System.out.println("font error?");
                                 }
                                 g.setFont(font);
                                 
@@ -100,7 +102,7 @@ public class LabelWriter {
                                 	g.setFont(new Font(g.getFont().getFontName(), g.getFont().getStyle(), 8));
                                     value = text[i];
                                     y+=10;
-                                    g.drawString(value, x, y);
+                                    g.drawString(""+value, x, y);
                                 }
 
                                 return PAGE_EXISTS;
