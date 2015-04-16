@@ -118,7 +118,7 @@ void loop()
     return;
   }
   
-  Serial.println("01"); //tell java to wake from idle with code: 1.
+  Serial.print("01"); //tell java to wake from idle with code: 1.
   //read the accountnumber from block 2. 
   readBlock(2, readblockBuffer);
   byte accountNumber[16];
@@ -127,9 +127,9 @@ void loop()
     accountNumber[c]=readblockBuffer[c];
     Serial.write(readblockBuffer[c]);
   }
-  Serial.println(""); 
+  Serial.print(""); 
 
-  char accountExists = 0;
+  int accountExists;
   int state = 1;
   
   while(state) // wait for serial data
@@ -141,9 +141,9 @@ void loop()
     }
   }
   
-  if(accountExists != '2') // check if we havent been returned a 2 exactly.
+  if(accountExists != 50) // check if we havent been returned a 2 exactly.
   {
-    Serial.println("06"); // print cancel
+    Serial.print("06"); // print cancel
     accountExists = 0; // clear the identifying variable
     finish(); // finish aka, get ready to read another card.
     return; // return and start over.
@@ -185,11 +185,11 @@ void loop()
             if(pin[x] != input[x])
             {
               Serial.println("20");//fase 2, verification
-              for(int x=0; x<16; x++)
+              /*for(int x=0; x<16; x++)
               {
                 Serial.write(accountNumber[x]);
-              }
-              Serial.println("");
+              }*/
+              //Serial.println("");
               run = 0;
               goto loop;
             }
@@ -210,7 +210,7 @@ void loop()
             break;
             
             case 'B':
-              Serial.println("04");//withdraw
+              Serial.print("04");//withdraw
               byte amount[3];
               keyCounter3=0;
               runWithdraw=1;
@@ -228,7 +228,7 @@ void loop()
                       {
                         Serial.write(amount[x]);
                       }
-                      Serial.println("");
+                      Serial.print("");
                       int runTicket=1;
                       while(runTicket)
                       {
@@ -311,8 +311,8 @@ void loop()
                     {
                       amount[keyCounter3]=keypress;
                       keyCounter3++;
-                      Serial.println("07");//case 7 for keycount 
-                      Serial.println(keyCounter3);
+                      Serial.print("07");//case 7 for keycount 
+                      Serial.print(keyCounter3);
                     }
                   break;
                     
@@ -360,8 +360,8 @@ void loop()
         {
           input[keyCounter]=keypress;
           keyCounter++;
-          Serial.println("07");//case 7 for keycount 
-          Serial.println(keyCounter);
+          Serial.print("07");//case 7 for keycount 
+          Serial.print(keyCounter);
         }
       break;  
     }    
