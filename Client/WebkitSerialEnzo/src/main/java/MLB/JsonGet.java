@@ -110,6 +110,7 @@ public class JsonGet
     
     public int getBalance(String rekeningnummer)//return saldo
     {
+    	System.out.println(rekeningnummer);
     	try
     	{
    	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);

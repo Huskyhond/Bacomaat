@@ -2,7 +2,6 @@
 	package MLB;
 
 	//import com.corundumstudio.socketio.SocketIOClient;
-	import org.json.JSONObject;
 
 import jssc.SerialPort;
 
@@ -15,7 +14,7 @@ import jssc.SerialPortException;
 	public class App 
 	{
         final static Printer printer = new Printer();
-        final static SerialPort serialPort = new SerialPort("COM4");
+        final static SerialPort serialPort = new SerialPort("COM3");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
         final static JsonGet Jget = new JsonGet(printer);
@@ -32,8 +31,8 @@ import jssc.SerialPortException;
 	     */
 	    public static void main(String[] args) 
 	    {
-	    	String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
-	    	String withdrawAmount="10";
+	    	//String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
+	    	//String withdrawAmount="10";
 	    	
 	    	//***********JsonGet methodes***********//
 	    	//Jget.checkAccount(rekeningnummer);
@@ -57,11 +56,17 @@ import jssc.SerialPortException;
 	        //*************Serial to Java********************//
                 
 	        try {
-                          
+	        	for(int i=0;i<2;i++)
+	            {
+	            	serialPort.openPort();//Open serial port
+	            	serialPort.setParams(2000000, 8, 1, 2);//Set params.
+	            	serialPort.closePort();
+	            }
 	        	serialPort.openPort();//Open serial port
-	            serialPort.setParams(2000000, 8, 1, 0);//Set params.
+	            serialPort.setParams(2000000, 8, 1, 2);//Set params.
 
-	            //******Serial to Java read*****//                  
+	            //******Serial to Java read*****//
+	            System.out.println("Serial Ready");
 	            serialPort.addEventListener(new SerialPortEventListener() {
 					
 					@Override
@@ -74,12 +79,48 @@ import jssc.SerialPortException;
 				            {
 				            	//String read1 = new String(serialPort.readString(1));
 				            	String read = new String(serialPort.readString(bytesCount));
-				            	String caseArduino = read.substring(0,2);
-				            	String restBytes = read.substring(2);
-				            	switchCase(caseArduino,restBytes);
+				            	System.out.print(read);
+				            	try
+				            	{
+					            	String sub = read.substring(0,2);
+					            	int a = Integer.parseInt(sub);
+					            	if(a==1)
+					            	{
+					            		System.out.println("waiting for reknr...");
+				            			String read1 = new String(serialPort.readString(14));
+				            			System.out.println("read1: "+read1);
+				            			switchCase(a,read1);
+				            			serialPort.writeInt(50);
+					            		
+					            	}
+					            	else if(a==14)
+					            	{
+					            		System.out.println("waiting for withdrawAmount...");
+				            			String read1 = new String(serialPort.readString(3));
+				            			System.out.println("read1: "+read1);
+				            			switchCase(a,read1);
+					            	}
+					            	else if(a==7)
+					            	{
+					            		System.out.println("waiting for length...");
+				            			String read1 = new String(serialPort.readString(1));
+				            			System.out.println("read1: "+read1);
+				            			switchCase(a,read1);
+					            	}
+					            	else
+					            	{
+					            		switchCase2(a);
+					            	}
+					         
+				            	}
+				            	catch(Exception e)
+				            	{
+				            		
+				            	}
+				            
 				            //	System.out.println(caseArduino);
 				            //	System.out.println(restBytes);
-				   
+			               
 
 							} 
 				            catch (SerialPortException e) {
@@ -97,8 +138,71 @@ import jssc.SerialPortException;
 	        } 
 	        
 	    }//einde main methode
+	    public static void switchCase2(int caseFromArduino)
+	    {
+ 	        String result= "";
+
+	    	switch(caseFromArduino)
+	    	{
+		    	case 20: //pin verify Succes
+	        		result = "pin gelukt!";
+	            	Jget.pinSucces(rekeningnummer);
+	            	
+	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
+	                wk.sendPinStatus(true,"OPEN");
+	                break;
+	        	
+	        	case 21: //pin verify Fail
+	        		result = "pin gefaalt!"; 
+	            	Jget.pinFail(rekeningnummer);
+	            	
+	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
+	                wk.sendPinStatus(false,"LOCK");
+	            	break;
+	        	
+	        	case 3: //Get balance
+	        		balance = Jget.getBalance(rekeningnummer);
+	        		result = Integer.toString(balance);
+	        	
+	        		//HIER MOET JE balance NAAR WEBKIT STUREN
+	                wk.sendBalance(balance);
+	                break;
+	        	
+	        	case 4: //Withdraw some amount
+	        		result = "withdraw";
+	            	//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
+	            	break;
 	
-	    public static void switchCase(String caseFromArduino, String restBytes)
+	        	case 5: //bon printen
+	        		result = "receipt: yes";
+	            	receipt = true;
+	            	printer.print();
+	            	
+	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
+	                wk.sendReceiptStatus(receipt);
+	            	break;
+	        
+	        	case 6: //cancel
+	        		result = "cancel";
+	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
+	            	wk.sendCancelRequest();
+	            	break;
+	        	case 2: //clear pin input
+	            	result = "clear input";
+	            	//HIER MOET CLEAR INPUT REQUEST
+	        		wk.sendClearInput();
+	            	break;
+	        	
+	        	case 10: //back request
+	            	result = "Back input";
+	            	//HIER MOET BACK REQUEST
+	            	break;
+	    	}
+	    	System.out.println("case "+caseFromArduino);
+        	System.out.println(result+"\n"); //check reply
+	    }
+	
+	    public static void switchCase(int caseFromArduino, String restBytes)
 	    {
  	        
  	        String result= "";
@@ -109,98 +213,38 @@ import jssc.SerialPortException;
  	        **/
 	    	switch(caseFromArduino)
         	{
-            	case "01": //pinpas word hier gescant
+            	case 1: //pinpas word hier gescant
        
 					rekeningnummer = restBytes;
 					accountExist = Jget.checkAccount(rekeningnummer);
 	            	result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
-	            	
-	            	if(accountExist == false)
-	            	{
-	            		try
-	            		{
-	            		serialPort.writeBytes("1".getBytes());
-	            		
-	            		}
-	            		catch(Exception e)
-	            		{
-	            			System.out.println("writeByte error!");
-	            		}
-            		}
+	        
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
 	                 wk.sendAccExist(accountExist);
 	            	break;
             	
-            	case "21": //pin verify Succes
-            		result = "pin gelukt!";
-	            	Jget.pinSucces(rekeningnummer);
-	            	
-	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-	                wk.sendPinStatus(true,"OPEN");
-	                break;
             	
-            	case "22": //pin verify Fail
-            		result = "pin gefaalt!"; 
-	            	Jget.pinFail(rekeningnummer);
-	            	
-	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
-	                wk.sendPinStatus(false,"LOCK");
-	            	break;
-            	
-            	case "03": //Get balance
-            		balance = Jget.getBalance(rekeningnummer);
-            		result = Integer.toString(balance);
-            	
-            		//HIER MOET JE balance NAAR WEBKIT STUREN
-                    wk.sendBalance(balance);
-                    break;
-            	
-            	case "04": //Withdraw some amount
-	            	withdrawAmount = restBytes;
+            	case 14:
+            		withdrawAmount = restBytes;
 	            	System.out.println(rekeningnummer+"\n"+withdrawAmount);
 	            	Jget.withdraw(rekeningnummer, withdrawAmount);
 	            	
 	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-	            	//wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
+	            	wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
 	            	result = "withdraw: " + withdrawAmount;
 	            	
 	            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
 	                wk.sendWithdrawAmount(withdrawAmount);
-	            	break;
+            		break;
             	
-            	case "05": //bon printen
-            		result = "receipt: yes";
-	            	receipt = true;
-	            	printer.print();
-	            	
-	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
-	                wk.sendReceiptStatus(receipt);
-	            	break;
-            
-            	case "06": //cancel
-            		result = "cancel";
-	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
-	            	wk.sendCancelRequest();
-	            	break;
             	
-            	case "07": //pinLength naar niek
+            	case 7: //pinLength naar niek
 	            	pinLength = restBytes;
 	            	result = "pin length"+pinLength;
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	        		wk.sendPinLength(pinLength);
 	            	break;
 	            	
-            	case "02": //clear pin input
-	            	result = "clear input";
-	            	//HIER MOET CLEAR INPUT REQUEST
-	        		wk.sendClearInput();
-	            	break;
-            	
-            	case "10": //back request
-	            	result = "Back input";
-	            	//HIER MOET BACK REQUEST
-	            	break;
-        		
         	}//Einde switch
 	    	
         	System.out.println("case "+caseFromArduino);
@@ -225,7 +269,7 @@ import jssc.SerialPortException;
 			if(withdraw>0)
 			{
 				/////////////////HIER message STUREN////////////////////////
-				String message = "Withdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro";
+				//String message = "Withdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro";
 				System.out.println("Withdraw: "+oldWithdraw+"\nWithdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro");
 			}
 			return outputs;
