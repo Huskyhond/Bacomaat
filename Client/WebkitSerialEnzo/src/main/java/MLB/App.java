@@ -14,7 +14,7 @@ import jssc.SerialPortException;
 	public class App 
 	{
         final static Printer printer = new Printer();
-        final static SerialPort serialPort = new SerialPort("COM3");
+        final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
         final static JsonGet Jget = new JsonGet(printer);
@@ -79,10 +79,12 @@ import jssc.SerialPortException;
 				            {
 				            	//String read1 = new String(serialPort.readString(1));
 				            	String read = new String(serialPort.readString(bytesCount));
-				            	System.out.print(read);
+				            	System.out.println("READ: "+read);
 				            	try
 				            	{
 					            	String sub = read.substring(0,2);
+					            	String sub2 = read.substring(2);
+
 					            	int a = Integer.parseInt(sub);
 					            	if(a==1)
 					            	{
@@ -102,10 +104,7 @@ import jssc.SerialPortException;
 					            	}
 					            	else if(a==7)
 					            	{
-					            		System.out.println("waiting for length...");
-				            			String read1 = new String(serialPort.readString(1));
-				            			System.out.println("read1: "+read1);
-				            			switchCase(a,read1);
+				            			switchCase(a,sub2);
 					            	}
 					            	else
 					            	{
@@ -115,7 +114,7 @@ import jssc.SerialPortException;
 				            	}
 				            	catch(Exception e)
 				            	{
-				            		
+				            		System.out.println("Error in eventlistener"); 
 				            	}
 				            
 				            //	System.out.println(caseArduino);
