@@ -17,7 +17,8 @@ You can except the following cases:
 05 = print ticket, with accountnumber, withdrawn amount, date and time.
 06 = cancel return to idle.
 07 = input length, either 0 to 4 or 0 to 3.
-10 = back to the select withdraw or balance loop. 
+10 = back to the select withdraw or balance loop.
+14 = balance to withdraw
 */
 
 #include <Keypad.h>
@@ -29,11 +30,11 @@ const byte rows = 4;
 const byte columns = 4;
 
 //Define the slave select and reset pins
-#define SS 10
-#define MOSI 11
-#define MISO 12
-#define SCK 13
-#define RST 5 
+#define SS 10 // 10 GREY -> SDA on RFID-RC522
+#define MOSI 11 // 11 BLUE -> MOSI on RFID-RC522
+#define MISO 12 //12 GREEN -> MISO on RFID-RC522
+#define SCK 13 // 13 PURPLE -> SCK on RFID-RC522
+#define RST 5 //5 RED -> RST on RFID-RC522
 
 #define block2 2
 #define block3 3
@@ -54,9 +55,9 @@ char keys[rows][columns] =
   {'7','8','9','C'},
   {'*','0','#','D'}
 };
-
-byte rowPins[rows] = {A0, A1, A2, A3};
-byte colPins[columns] = {9, 8, 7, 6};
+//Wiring scheme specifies front facing keypad.
+byte rowPins[rows] = {A0, A1, A2, A3}; //A0 = BLACK -> 1, A1 = WHITE -> 2, A2 = PURPLE -> 3, A3 = GREY -> 4.
+byte colPins[columns] = {9, 8, 7, 6}; //9 = ORANGE -> 5, 8 = YELLOW -> 6, 7 = GREEN -> 7,  6 = BLUE -> 8.
 
 //A readbuffer is required to read data from a MiFare card.
 //MIFARE_Read requires a minimum buffersize of 18 bytes to read 16 bytes.
@@ -224,6 +225,7 @@ void loop()
                     if(keyCounter3 >= 3 || keyCounter3 >= 2)
                     {
                       keyCounter3=0;
+                      Serial.print("14");//balance to withdraw
                       for(int x=0; x<3; x++)
                       {
                         Serial.write(amount[x]);
