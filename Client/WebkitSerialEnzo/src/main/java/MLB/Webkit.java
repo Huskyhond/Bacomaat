@@ -93,13 +93,14 @@ public class Webkit
     }
     public void sendMoneyOptions(int[] moneyOptions)
     {
-        stacksOptionsArray = null;
+        stacksOptionsArray = new JSONArray();
+        stacksOptions = new JSONObject();
         stacksOptionsArray.add(moneyOptions[0]);
         stacksOptionsArray.add(moneyOptions[1]);
         stacksOptionsArray.add(moneyOptions[2]);
         stacksOptionsArray.add(moneyOptions[3]);
         stacksOptionsArray.add(moneyOptions[4]);
-        stacksOptions.put("moneyOptions", stacksOptions);
+        stacksOptions.put("moneyOptions", stacksOptionsArray);
         objSender.sendObjectArray(stacksOptions);
     }
     public void sendReceiptStatus(boolean receiptRequested)
