@@ -143,7 +143,7 @@ public class JsonGet
 
     	try
     	{
-    		String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+withdrawAmount+token);
+    		String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+token);
 	    	JSONObject obj1 = new JSONObject(https);
 	    	JSONObject obj2 = obj1.getJSONObject("transaction");
 	    	
