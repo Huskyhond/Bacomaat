@@ -161,12 +161,11 @@ import jssc.SerialPortException;
 	            	Jget.withdraw(rekeningnummer, withdrawAmount);
 	            	
 	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-	            	//wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
-	            	//printer.setPrinter(rekeningnummer, withdrawAmount, "1", "16-4-2015");
+	            	wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
 	            	result = "withdraw: " + withdrawAmount;
 	            	
 	            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
-	               // wk.sendWithdrawAmount(withdrawAmount);
+	                wk.sendWithdrawAmount(withdrawAmount);
 	            	break;
             	
             	case "05": //bon printen
