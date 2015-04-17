@@ -79,10 +79,12 @@ import jssc.SerialPortException;
 				            {
 				            	//String read1 = new String(serialPort.readString(1));
 				            	String read = new String(serialPort.readString(bytesCount));
-				            	System.out.print(read);
+				            	System.out.println("READ: "+read);
 				            	try
 				            	{
 					            	String sub = read.substring(0,2);
+					            	String sub2 = read.substring(2);
+
 					            	int a = Integer.parseInt(sub);
 					            	if(a==1)
 					            	{
@@ -90,22 +92,15 @@ import jssc.SerialPortException;
 				            			String read1 = new String(serialPort.readString(14));
 				            			System.out.println("read1: "+read1);
 				            			switchCase(a,read1);
-				            			serialPort.writeInt(50);
 					            		
 					            	}
 					            	else if(a==14)
 					            	{
-					            		System.out.println("waiting for withdrawAmount...");
-				            			String read1 = new String(serialPort.readString(3));
-				            			System.out.println("read1: "+read1);
-				            			switchCase(a,read1);
+				            			switchCase(a,sub2);
 					            	}
 					            	else if(a==7)
 					            	{
-					            		System.out.println("waiting for length...");
-				            			String read1 = new String(serialPort.readString(1));
-				            			System.out.println("read1: "+read1);
-				            			switchCase(a,read1);
+				            			switchCase(a,sub2);
 					            	}
 					            	else
 					            	{
@@ -115,7 +110,7 @@ import jssc.SerialPortException;
 				            	}
 				            	catch(Exception e)
 				            	{
-				            		
+				            		System.out.println("Error in eventlistener"); 
 				            	}
 				            
 				            //	System.out.println(caseArduino);
@@ -144,7 +139,7 @@ import jssc.SerialPortException;
 
 	    	switch(caseFromArduino)
 	    	{
-		    	case 20: //pin verify Succes
+		    	case 21: //pin verify Succes
 	        		result = "pin gelukt!";
 	            	Jget.pinSucces(rekeningnummer);
 	            	
@@ -152,7 +147,7 @@ import jssc.SerialPortException;
 	                wk.sendPinStatus(true,"OPEN");
 	                break;
 	        	
-	        	case 21: //pin verify Fail
+	        	case 20: //pin verify Fail
 	        		result = "pin gefaalt!"; 
 	            	Jget.pinFail(rekeningnummer);
 	            	
@@ -180,6 +175,7 @@ import jssc.SerialPortException;
 	            	
 	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
 	                wk.sendReceiptStatus(receipt);
+	                receipt = false;
 	            	break;
 	        
 	        	case 6: //cancel
@@ -194,7 +190,7 @@ import jssc.SerialPortException;
 	            	break;
 	        	
 	        	case 10: //back request
-	            	result = "Back input";
+	            	result = "Back to Home screen";
 	            	//HIER MOET BACK REQUEST
 	            	break;
 	    	}
@@ -217,10 +213,29 @@ import jssc.SerialPortException;
        
 					rekeningnummer = restBytes;
 					accountExist = Jget.checkAccount(rekeningnummer);
+					try
+					{
+						if(accountExist == true)
+						{
+	            			serialPort.writeInt(50); // dit schrijft een 2
+	
+						}
+						else
+						{
+							serialPort.writeInt(49); // dit schrijft een 1
+						}
+					}
+					catch(Exception e)
+					{
+						System.out.println("Writing to serialPort: Failed");
+					}
+					System.out.println(accountExist);
+
 	            	result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
 	        
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
 	                 wk.sendAccExist(accountExist);
+	                 accountExist = false;
 	            	break;
             	
             	

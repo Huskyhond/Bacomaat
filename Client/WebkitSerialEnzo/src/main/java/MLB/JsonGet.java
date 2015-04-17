@@ -89,22 +89,21 @@ public class JsonGet
     
     public boolean checkAccount(String rekeningnummer)
     {
+    	
     	try
     	{
    	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
    	    	JSONObject obj = new JSONObject(https);
-   	    	String message = obj.getString("message");
-   	    	int error = obj.getInt("error");
-   	 
-   	    	System.out.println("error: "+error);
-   	    	System.out.println("message: "+message);
-   	    	return false; 	    	
+   	    	int bankid = obj.getInt("bankid");   
+    		System.out.println("banknr Exists_"+ "id: "+bankid);
+   	    	return true; 	    	
+   	    	
        }
        catch(Exception e)
        {
-       	System.out.println("account bestaat");
+    	   System.out.println("banknr unknown");
+    	   return false;
        }
-    	return true;
     }
     
     
