@@ -92,7 +92,6 @@ import jssc.SerialPortException;
 				            			String read1 = new String(serialPort.readString(14));
 				            			System.out.println("read1: "+read1);
 				            			switchCase(a,read1);
-				            			serialPort.writeInt(50);
 					            		
 					            	}
 					            	else if(a==14)
@@ -176,6 +175,7 @@ import jssc.SerialPortException;
 	            	
 	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
 	                wk.sendReceiptStatus(receipt);
+	                receipt = false;
 	            	break;
 	        
 	        	case 6: //cancel
@@ -190,7 +190,7 @@ import jssc.SerialPortException;
 	            	break;
 	        	
 	        	case 10: //back request
-	            	result = "Back input";
+	            	result = "Back to Home screen";
 	            	//HIER MOET BACK REQUEST
 	            	break;
 	    	}
@@ -213,10 +213,29 @@ import jssc.SerialPortException;
        
 					rekeningnummer = restBytes;
 					accountExist = Jget.checkAccount(rekeningnummer);
+					try
+					{
+						if(accountExist == true)
+						{
+	            			serialPort.writeInt(50); // dit schrijft een 2
+	
+						}
+						else
+						{
+							serialPort.writeInt(49); // dit schrijft een 1
+						}
+					}
+					catch(Exception e)
+					{
+						System.out.println("Writing to serialPort: Failed");
+					}
+					System.out.println(accountExist);
+
 	            	result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
 	        
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
 	                 wk.sendAccExist(accountExist);
+	                 accountExist = false;
 	            	break;
             	
             	
