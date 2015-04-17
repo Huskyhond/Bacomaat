@@ -26,6 +26,7 @@ import jssc.SerialPortException;
         static boolean receipt = false;
         static String pinLength = "";
         static int failCount;
+        static String withdrawDigit = "";
 
 	    /**
 	     * @param args the command line arguments
@@ -102,6 +103,10 @@ import jssc.SerialPortException;
 					            	else if(a==7)
 					            	{
 				            			switchCase(a,sub2);
+					            	}
+					            	else if(a==9)
+					            	{
+					            		switchCase(a,sub2);
 					            	}
 					            	else
 					            	{
@@ -312,6 +317,13 @@ import jssc.SerialPortException;
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	        		wk.sendPinLength(pinLength);
 	            	break;
+            	case 9: //withdraw digit naar niek
+            		withdrawDigit = restBytes;
+            		result = "withdrawDigit: "+withdrawDigit;
+            		//HIER MOET withdrawDigit naar niek
+            		
+            		break;
+            		
 	            	
         	}//Einde switch
 	    	
