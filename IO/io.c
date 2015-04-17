@@ -128,7 +128,7 @@ void loop()
     accountNumber[c]=readblockBuffer[c];
     Serial.write(readblockBuffer[c]);
   }
-  Serial.print(""); 
+  
 
   int accountExists;
   int state = 1;
@@ -309,12 +309,10 @@ void loop()
                     break;
 
                   case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': case '0':
-                    if(keyCounter3 < 3)
+                    if(keyCounter3 < 3 || keyCounter3 < 2 || keyCounter3 < 1)
                     {
                       amount[keyCounter3]=keypress;
                       keyCounter3++;
-                      Serial.print("07");//case 7 for keycount 
-                      Serial.print(keyCounter3);
                     }
                   break;
                     
