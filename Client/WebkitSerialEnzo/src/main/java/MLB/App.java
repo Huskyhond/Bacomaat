@@ -142,16 +142,8 @@ import jssc.SerialPortException;
 	    	{
 		    	case 21: //pin verify Succes
 	        		result = "pin gelukt!";
-	            	Jget.pinSucces(rekeningnummer);
-	            	
-	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-	                wk.sendPinStatus(true);
-	                break;
-	        	
-	        	case 20: //pin verify Fail
-	        		result = "pin gefaalt!"; 
-	            	failCount = Jget.pinFail(rekeningnummer);
-	            	if(failCount>2)
+	        		failCount = Jget.pinFail(rekeningnummer);
+	            	if(failCount>3)//als de arduino niet verder mag
 	            	{
 	            		try
 	            		{
@@ -162,8 +154,52 @@ import jssc.SerialPortException;
 	            		{
 							System.out.println("Writing to serialPort: Failed");
 	            		}
+	            		//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED	
+	            	}
+	            	else//als hij wel verder mag
+	            	{
+	            		try
+	            		{
+						serialPort.writeInt(50); // dit schrijft een 2
+						Jget.pinSucces(rekeningnummer);
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
+	            	}
+	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
+	                wk.sendPinStatus(true);
+	                break;
+	        	
+	        	case 20: //pin verify Fail
+	        		result = "pin gefaalt!"; 
+	            	failCount = Jget.pinFail(rekeningnummer);
+	            	if(failCount>3)//als de arduino niet verder mag
+	            	{
+	            		try
+	            		{
+						serialPort.writeInt(49); // dit schrijft een 1
+						Jget.pinSucces(rekeningnummer);
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
 	            		//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED
 	            		
+	            	}
+	            	else//als hij wel verder mag.
+	            	{
+	            		try
+	            		{
+						serialPort.writeInt(50); // dit schrijft een 2
+	            	
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
 	            	}
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
 	                wk.sendFailCount(failCount);
@@ -232,10 +268,10 @@ import jssc.SerialPortException;
 					accountExist = Jget.checkAccount(rekeningnummer);
 					try
 					{
-						if(accountExist == true && Jget.pinFail(rekeningnummer)<3)
+						if(accountExist == true)
 						{
 	            			serialPort.writeInt(50); // dit schrijft een 2
-	
+	            			//&& Jget.pinFail(rekeningnummer)<3
 						}
 						else
 						{
