@@ -8,8 +8,6 @@ import org.json.simple.parser.JSONParser;
 
 
 /**
- * Nu doet iet het weer. Ik zie trouwens dat jij projects niet import en ook geen maven gebruikt, dit gaat telkens fout qua dependancies btw
- * Dusehh.. Hopelijk doet dit het dalijk, als ie klaar is met updaten.
  * @author Gun
  */
 public class WebkitConnect
@@ -31,9 +29,6 @@ public class WebkitConnect
             {
              client = clientc; // Set static connection ( only 1 allowed )
              System.out.println("Connected");
-             client.sendEvent("update", "{" +
-                            "\"page\": \"code\"" +
-                        "}");
              connected = true;
              
             }
