@@ -14,7 +14,7 @@ import jssc.SerialPortException;
 	public class App 
 	{
         final static Printer printer = new Printer();
-        final static SerialPort serialPort = new SerialPort("COM4");
+        final static SerialPort serialPort = new SerialPort("COM3");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
         final static JsonGet Jget = new JsonGet(printer);
@@ -97,10 +97,7 @@ import jssc.SerialPortException;
 					            	}
 					            	else if(a==14)
 					            	{
-					            		System.out.println("waiting for withdrawAmount...");
-				            			String read1 = new String(serialPort.readString(3));
-				            			System.out.println("read1: "+read1);
-				            			switchCase(a,read1);
+				            			switchCase(a,sub2);
 					            	}
 					            	else if(a==7)
 					            	{
@@ -143,7 +140,7 @@ import jssc.SerialPortException;
 
 	    	switch(caseFromArduino)
 	    	{
-		    	case 20: //pin verify Succes
+		    	case 21: //pin verify Succes
 	        		result = "pin gelukt!";
 	            	Jget.pinSucces(rekeningnummer);
 	            	
@@ -151,7 +148,7 @@ import jssc.SerialPortException;
 	                wk.sendPinStatus(true,"OPEN");
 	                break;
 	        	
-	        	case 21: //pin verify Fail
+	        	case 20: //pin verify Fail
 	        		result = "pin gefaalt!"; 
 	            	Jget.pinFail(rekeningnummer);
 	            	
