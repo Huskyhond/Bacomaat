@@ -21,7 +21,7 @@ import jssc.SerialPortException;
         
         static String rekeningnummer = "MLBI0200000001";
     	static String withdrawAmount ="100";
-	    static int balance = 0;
+	static int balance = 0;
         static boolean accountExist = false;
         static boolean receipt = false;
         static String pinLength = "";
@@ -144,28 +144,29 @@ import jssc.SerialPortException;
 	            	Jget.pinSucces(rekeningnummer);
 	            	
 	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-	                wk.sendPinStatus(true,"OPEN");
+	                wk.sendPinStatus(true);
 	                break;
 	        	
 	        	case 20: //pin verify Fail
-	        		result = "pin gefaalt!"; 
+                        result = "pin gefaalt!"; 
 	            	Jget.pinFail(rekeningnummer);
 	            	
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
-	                wk.sendPinStatus(false,"LOCK");
+	                wk.sendPinStatus(false);
 	            	break;
 	        	
 	        	case 3: //Get balance
-	        		balance = Jget.getBalance(rekeningnummer);
-	        		result = Integer.toString(balance);
+	        	balance = Jget.getBalance(rekeningnummer);
+	        	result = Integer.toString(balance);
 	        	
-	        		//HIER MOET JE balance NAAR WEBKIT STUREN
+	        	//HIER MOET JE balance NAAR WEBKIT STUREN
 	                wk.sendBalance(balance);
 	                break;
 	        	
 	        	case 4: //Withdraw some amount
-	        		result = "withdraw";
+	        	result = "withdraw";
 	            	//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
+                        wk.sendWithdrawRequest();
 	            	break;
 	
 	        	case 5: //bon printen
@@ -179,19 +180,20 @@ import jssc.SerialPortException;
 	            	break;
 	        
 	        	case 6: //cancel
-	        		result = "cancel";
+	        	result = "cancel";
 	            	//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
 	            	wk.sendCancelRequest();
 	            	break;
 	        	case 2: //clear pin input
 	            	result = "clear input";
 	            	//HIER MOET CLEAR INPUT REQUEST
-	        		wk.sendClearInput();
+	        	wk.sendClearInput();
 	            	break;
 	        	
 	        	case 10: //back request
 	            	result = "Back to Home screen";
 	            	//HIER MOET BACK REQUEST
+                        wk.sendBackRequest();
 	            	break;
 	    	}
 	    	System.out.println("case "+caseFromArduino);
@@ -257,7 +259,7 @@ import jssc.SerialPortException;
 	            	pinLength = restBytes;
 	            	result = "pin length"+pinLength;
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
-	        		wk.sendPinLength(pinLength);
+	        	wk.sendPinLength(pinLength);
 	            	break;
 	            	
         	}//Einde switch
