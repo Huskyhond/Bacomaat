@@ -151,7 +151,20 @@ import jssc.SerialPortException;
 	        	case 20: //pin verify Fail
 	        		result = "pin gefaalt!"; 
 	            	failCount = Jget.pinFail(rekeningnummer);
+	            	if(failCount>2)
+	            	{
+	            		try
+	            		{
+						serialPort.writeInt(49); // dit schrijft een 1
 	            	
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
+	            		//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED
+	            		
+	            	}
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
 	                wk.sendFailCount(failCount);
 	            	break;
@@ -219,7 +232,7 @@ import jssc.SerialPortException;
 					accountExist = Jget.checkAccount(rekeningnummer);
 					try
 					{
-						if(accountExist == true)
+						if(accountExist == true && Jget.pinFail(rekeningnummer)<3)
 						{
 	            			serialPort.writeInt(50); // dit schrijft een 2
 	
