@@ -150,7 +150,7 @@ import jssc.SerialPortException;
 	        	
 	        	case 20: //pin verify Fail
 	        		result = "pin gefaalt!"; 
-	            	failCount = Jget.pinFail(rekeningnummer);
+	            	Jget.pinFail(rekeningnummer);
 	            	
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
 	                wk.sendPinStatus(false,"LOCK");

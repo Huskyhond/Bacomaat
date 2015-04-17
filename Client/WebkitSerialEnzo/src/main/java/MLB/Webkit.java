@@ -15,6 +15,8 @@ public class Webkit
     JSONObject cancelReq;
     JSONObject clearInput;
     JSONObject pinLengthObj;
+    JSONObject backRequest;
+    JSONObject withdrawRequest;
     
     WebkitConnect objSender;
     
@@ -34,7 +36,7 @@ public class Webkit
         {
             accExist.put("page", "finish");
             accExist.put("failed", 1);
-            accExist.put("message", "fak jou");
+            accExist.put("message", "fak jou je account bestaat niet");
         }
         objSender.sendObject(accExist);
     }
@@ -46,24 +48,17 @@ public class Webkit
         pinLengthObj.put("codelength", codeLength);
         objSender.sendObject(pinLengthObj);
 }
-    public void sendPinStatus(boolean pinVerified , String accountState)
+    public void sendPinStatus(boolean pinVerified)
     {
         pinStatus = new JSONObject();
-        if ("LOCK".equals(accountState))
-        {
-            pinStatus.put("page", "finish");
-            pinStatus.put("failed", 1);
-            pinStatus.put("message", "fak jou je acc zit op slot");
-        }
-        else if (("OPEN".equals(accountState) && (pinVerified == true)))
+        if (pinVerified)
         {
             pinStatus.put("page", "select");
         }
-        else
+        else if (!pinVerified)
         {
-            pinStatus.put("page", "finish");
+            pinStatus.put("page", "code");
             pinStatus.put("failed", 1);
-            pinStatus.put("message", "er is iets gebeurd geen idee wat");
         }
         objSender.sendObject(pinStatus);
     }
@@ -130,7 +125,20 @@ public class Webkit
     public void sendClearInput()
     {
         clearInput = new JSONObject();
+        clearInput.put("page", "code");
         clearInput.put("codelength", 0);
         objSender.sendObject(clearInput);
+    }
+    public void sendBackRequest()
+    {
+        backRequest = new JSONObject();
+        backRequest.put("page", "select");
+        objSender.sendObject(backRequest);
+    }
+    public void sendWithdrawRequest()
+    {
+        withdrawRequest = new JSONObject();
+        withdrawRequest.put("page", "withdraw");
+        objSender.sendObject(withdrawRequest);
     }
 }
