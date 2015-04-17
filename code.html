@@ -1,0 +1,38 @@
+<html><head>
+    <title>Major League Banking</title>
+    <link rel="stylesheet" href="./css/main.css">
+  </head>
+  <body>
+    <div class="main">
+      <h1>Voer uw code in!</h1>
+      <div id="code"></div>
+    </div>
+  
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/listener.js"></script>
+  <script>
+    global.currentPage = "code";
+    function printCode(codelength) {
+      var code = "";
+      
+      for(i = 0; i < codelength; i++) {
+        code += "*";
+      }
+
+      $("#code").html(code);
+    }
+    global.socket.on("update", function(data) {
+      data = JSON.parse(data);
+      console.log(data);
+      if(data.codelength) {
+        printCode(data.codelength);
+      }
+      else {
+        printCode(0);
+      }
+    });
+     
+    printCode(getUrlVars()["codelength"]);
+
+  </script>
+</body></html>

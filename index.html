@@ -1,0 +1,23 @@
+<script src="lib/jquery.min.js"></script>
+<script src="src/server.js"></script>
+<script src="src/client.js"></script>
+<script>
+$(document).ready(function() {
+});
+function readBalance(nr) { 
+        client.getBalance(nr, function(data, error) {
+          if(error || !data) {
+	    //Error caused in get request
+          }
+          else if(data.error) {
+            //Error found in reply.
+            $('body').html("Error: " + data.message);
+          }
+	  else {
+            $('body').html("Bank id: " + data.bankid + "<br />" +
+ 		           "Pas id: " + data.pasid + "<br />" +
+                           "Saldo: " + data.saldo + "<br />");
+          }
+        });
+}
+</script>
