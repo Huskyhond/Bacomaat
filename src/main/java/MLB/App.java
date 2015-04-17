@@ -14,7 +14,7 @@ import jssc.SerialPortException;
 	public class App 
 	{
         final static Printer printer = new Printer();
-        final static SerialPort serialPort = new SerialPort("COM3");
+        final static SerialPort serialPort = new SerialPort("COM4");
         final static SQLDataBase db = new SQLDataBase();
         final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
         final static JsonGet Jget = new JsonGet(printer);
@@ -149,7 +149,7 @@ import jssc.SerialPortException;
 	                break;
 	        	
 	        	case 20: //pin verify Fail
-	        		result = "pin gefaalt!"; 
+                        result = "pin gefaalt!"; 
 	            	failCount = Jget.pinFail(rekeningnummer);
 	            	
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
@@ -157,8 +157,8 @@ import jssc.SerialPortException;
 	            	break;
 	        	
 	        	case 3: //Get balance
-	        		balance = Jget.getBalance(rekeningnummer);
-	        		result = Integer.toString(balance);
+	        	balance = Jget.getBalance(rekeningnummer);
+	        	result = Integer.toString(balance);
 	        	
 	        		//HIER MOET JE balance NAAR WEBKIT STUREN
 	                wk.sendBalance(balance);
@@ -178,7 +178,6 @@ import jssc.SerialPortException;
 	            	
 	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
 	                receipt = false;
-                        wk.sendReceiptStatus(receipt);
 	            	break;
 	        
 	        	case 6: //cancel

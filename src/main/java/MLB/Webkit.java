@@ -56,17 +56,17 @@ public class Webkit
         {
             pinStatus.put("page", "select");
         }
-        else if (!pinVerified)
+        else
         {
-            pinStatus.put("page", "code");
-            pinStatus.put("failed", 1);
+            
         }
         objSender.sendObject(pinStatus);
     }
     public void sendFailCount(int failcount)
     {
         failCountObj = new JSONObject();
-        failCountObj.put("kebab", failcount);
+        failCountObj.put("page", "code");
+        failCountObj.put("failCount", failcount);
         objSender.sendObject(failCountObj);
             
     }
@@ -93,6 +93,9 @@ public class Webkit
     public void sendWithdrawAmount(String withdrawAmount)
     {
         wdAmount = new JSONObject();
+        wdAmount.put("page", "money");
+        wdAmount.put("amount", withdrawAmount);
+        objSender.sendObject(wdAmount);
     }
     public void sendMoneyOptions(int[] moneyOptions)
     {
@@ -146,7 +149,7 @@ public class Webkit
     public void sendWithdrawRequest()
     {
         withdrawRequest = new JSONObject();
-        withdrawRequest.put("page", "withdraw");
+        withdrawRequest.put("page", "money");
         objSender.sendObject(withdrawRequest);
     }
 }
