@@ -25,6 +25,7 @@ import jssc.SerialPortException;
         static boolean accountExist = false;
         static boolean receipt = false;
         static String pinLength = "";
+        static int failCount;
 
 	    /**
 	     * @param args the command line arguments
@@ -149,7 +150,7 @@ import jssc.SerialPortException;
 	        	
 	        	case 20: //pin verify Fail
 	        		result = "pin gefaalt!"; 
-	            	Jget.pinFail(rekeningnummer);
+	            	failCount = Jget.pinFail(rekeningnummer);
 	            	
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
 	                wk.sendPinStatus(false,"LOCK");

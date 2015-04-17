@@ -168,20 +168,22 @@ public class JsonGet
     	}
     }
     
-    public void pinFail(String rekeningnummer)//return failCount
+    public int pinFail(String rekeningnummer)//return failCount
     {
+    	int failCount=0;
     	try
     	{
-    	String https = httpsGet(url+"/account/"+rekeningnummer+"/failed"+token);
-    	JSONObject obj = new JSONObject(https);
-    	int failCount = obj.getInt("failCount");
-    	
-    	System.out.println("failCount: "+failCount);
+	    	String https = httpsGet(url+"/account/"+rekeningnummer+"/failed"+token);
+	    	JSONObject obj = new JSONObject(https);
+	    	failCount = obj.getInt("failCount");
+	    	
+	    	System.out.println("failCount: "+failCount);
     	}
     	catch(Exception e)
     	{
            	System.out.println(e.getMessage());
     	}
+    	return failCount;
     }
     
     public void pinSucces(String rekeningnummer)
