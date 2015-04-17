@@ -145,7 +145,7 @@ import jssc.SerialPortException;
 	            	Jget.pinSucces(rekeningnummer);
 	            	
 	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-	                wk.sendPinStatus(true,"OPEN");
+	                wk.sendPinStatus(true);
 	                break;
 	        	
 	        	case 20: //pin verify Fail
@@ -153,7 +153,7 @@ import jssc.SerialPortException;
 	            	failCount = Jget.pinFail(rekeningnummer);
 	            	
 	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
-	                wk.sendPinStatus(false,"LOCK");
+	                wk.sendFailCount(failCount);
 	            	break;
 	        	
 	        	case 3: //Get balance
@@ -167,16 +167,18 @@ import jssc.SerialPortException;
 	        	case 4: //Withdraw some amount
 	        		result = "withdraw";
 	            	//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
+                        wk.sendWithdrawRequest();
 	            	break;
 	
 	        	case 5: //bon printen
 	        		result = "receipt: yes";
 	            	receipt = true;
+                        wk.sendReceiptStatus(receipt);
 	            	printer.print();
 	            	
 	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
-	                wk.sendReceiptStatus(receipt);
 	                receipt = false;
+                        wk.sendReceiptStatus(receipt);
 	            	break;
 	        
 	        	case 6: //cancel
@@ -193,6 +195,7 @@ import jssc.SerialPortException;
 	        	case 10: //back request
 	            	result = "Back to Home screen";
 	            	//HIER MOET BACK REQUEST
+                        wk.sendBackRequest();
 	            	break;
 	    	}
 	    	System.out.println("case "+caseFromArduino);
