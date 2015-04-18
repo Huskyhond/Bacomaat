@@ -125,7 +125,6 @@ import jssc.SerialPortException;
 
 							} 
 				            catch (SerialPortException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 				        }
@@ -261,11 +260,7 @@ import jssc.SerialPortException;
 	    {
  	        
  	        String result= "";
- 	      
- 	        /**TODO
-			open en lock hoeft niet meer
-			back request
- 	        **/
+ 
 	    	switch(caseFromArduino)
         	{
             	case 1: //pinpas word hier gescant
@@ -293,8 +288,7 @@ import jssc.SerialPortException;
 	            	result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
 	        
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
-	                 wk.sendAccExist(accountExist);
-	                 accountExist = false;
+	                wk.sendAccExist(accountExist);
 	            	break;
             	
             	
