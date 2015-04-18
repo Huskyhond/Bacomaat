@@ -26,6 +26,7 @@ import jssc.SerialPortException;
         static boolean receipt = false;
         static String pinLength = "";
         static int failCount;
+        static String withdrawDigit = "";
 
 	    /**
 	     * @param args the command line arguments
@@ -103,6 +104,10 @@ import jssc.SerialPortException;
 					            	{
 				            			switchCase(a,sub2);
 					            	}
+					            	else if(a==9)
+					            	{
+					            		switchCase(a,sub2);
+					            	}
 					            	else
 					            	{
 					            		switchCase2(a);
@@ -120,7 +125,6 @@ import jssc.SerialPortException;
 
 							} 
 				            catch (SerialPortException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 				        }
@@ -142,18 +146,69 @@ import jssc.SerialPortException;
 	    	{
 		    	case 21: //pin verify Succes
 	        		result = "pin gelukt!";
-	            	Jget.pinSucces(rekeningnummer);
+	        		failCount = Jget.pinFail(rekeningnummer);
+	            	if(failCount>3)//als de arduino niet verder mag
+	            	{
+	            		try
+	            		{
+	            			System.out.println("locked");
+	            			serialPort.writeInt(49); // dit schrijft een 1
 	            	
-	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-	                wk.sendPinStatus(true,"OPEN");
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
+	            		//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED	
+	            	}
+	            	else//als hij wel verder mag
+	            	{
+	            		try
+	            		{
+	            			serialPort.writeInt(50); // dit schrijft een 2
+	            			Jget.pinSucces(rekeningnummer);
+	            			// HIER MOET JE pinVerify NAAR WEBKIT STUREN
+	    	                wk.sendPinStatus(true);
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
+	            	}
+	            	
 	                break;
 	        	
 	        	case 20: //pin verify Fail
 	        		result = "pin gefaalt!"; 
-	            	Jget.pinFail(rekeningnummer);
+	            	failCount = Jget.pinFail(rekeningnummer);
+	            	if(failCount>2)//als de arduino niet verder mag
+	            	{
+	            		try
+	            		{
+	            			serialPort.writeInt(49); // dit schrijft een 1
+							System.out.println("locked");
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
+	            		//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED
+	            		
+	            	}
+	            	else//als hij wel verder mag.
+	            	{
+	            		try
+	            		{
+	            			serialPort.writeInt(50); // dit schrijft een 2
 	            	
-	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
-	                wk.sendPinStatus(false,"LOCK");
+	            		}
+	            		catch(Exception e)
+	            		{
+							System.out.println("Writing to serialPort: Failed");
+	            		}
+	            	}
+	            	//HIER MOET JE failcount NAAR NIEK
+	                wk.sendFailCount(failCount);
 	            	break;
 	        	
 	        	case 3: //Get balance
@@ -167,15 +222,16 @@ import jssc.SerialPortException;
 	        	case 4: //Withdraw some amount
 	        		result = "withdraw";
 	            	//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
+                    wk.sendWithdrawRequest();
 	            	break;
 	
 	        	case 5: //bon printen
 	        		result = "receipt: yes";
 	            	receipt = true;
+                    wk.sendReceiptStatus(receipt);
 	            	printer.print();
 	            	
 	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
-	                wk.sendReceiptStatus(receipt);
 	                receipt = false;
 	            	break;
 	        
@@ -193,6 +249,7 @@ import jssc.SerialPortException;
 	        	case 10: //back request
 	            	result = "Back to Home screen";
 	            	//HIER MOET BACK REQUEST
+                    wk.sendBackRequest();
 	            	break;
 	    	}
 	    	System.out.println("case "+caseFromArduino);
@@ -203,11 +260,7 @@ import jssc.SerialPortException;
 	    {
  	        
  	        String result= "";
- 	      
- 	        /**TODO
-			open en lock hoeft niet meer
-			back request
- 	        **/
+ 
 	    	switch(caseFromArduino)
         	{
             	case 1: //pinpas word hier gescant
@@ -219,7 +272,7 @@ import jssc.SerialPortException;
 						if(accountExist == true)
 						{
 	            			serialPort.writeInt(50); // dit schrijft een 2
-	
+	            			//&& Jget.pinFail(rekeningnummer)<3
 						}
 						else
 						{
@@ -235,8 +288,7 @@ import jssc.SerialPortException;
 	            	result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
 	        
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
-	                 wk.sendAccExist(accountExist);
-	                 accountExist = false;
+	                wk.sendAccExist(accountExist);
 	            	break;
             	
             	
@@ -260,6 +312,13 @@ import jssc.SerialPortException;
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	        		wk.sendPinLength(pinLength);
 	            	break;
+            	case 9: //withdraw digit naar niek
+            		withdrawDigit = restBytes;
+            		result = "withdrawDigit: "+withdrawDigit;
+            		//HIER MOET withdrawDigit naar niek
+            		
+            		break;
+            		
 	            	
         	}//Einde switch
 	    	

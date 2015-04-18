@@ -6,6 +6,7 @@ public class Webkit
 {
     JSONObject accExist;
     JSONObject pinStatus;
+    JSONObject failCountObj;
     JSONObject balanceAmount;
     JSONObject withdrawStatus;
     JSONObject wdAmount;
@@ -61,6 +62,13 @@ public class Webkit
             pinStatus.put("failed", 1);
         }
         objSender.sendObject(pinStatus);
+    }
+    public void sendFailCount(int failcount)
+    {
+        failCountObj = new JSONObject();
+        failCountObj.put("kebab", failcount);
+        objSender.sendObject(failCountObj);
+            
     }
     public void sendBalance(int balance)
     {   
