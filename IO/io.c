@@ -17,9 +17,9 @@ You can except the following cases:
 05 = print ticket, with accountnumber, withdrawn amount, date and time.
 06 = cancel return to idle.
 07 = input length, either 0 to 4 or 0 to 3.
+09 = withdraw digit which was typed.
 10 = back to the select withdraw or balance loop.
-14 = balance to withdraw per digit.
-15 = withdraw amount confirmation.
+14 = balance to withdraw (a confirmation).
 */
 
 #include <Keypad.h>
@@ -166,6 +166,8 @@ void loop()
   byte input[4];
   int keyCounter = 0;
   int failedAttempts = 0;
+  int failCheck = 0;
+  int stateFailCount = 0;
   int run = 1;
 
   while(run)
@@ -180,7 +182,7 @@ void loop()
           goto loop;
         }
         if(keyCounter >= 4)
-        {
+        { 
           keyCounter=0;
           for(int x=0; x<=3; x++)
           {
@@ -192,12 +194,52 @@ void loop()
                 Serial.write(accountNumber[x]);
               }*/
               //Serial.println("");
+              
+              stateFailCount = 1;
+              failCheck = 0;
+              while(stateFailCount) // wait for serial data
+              {
+                if(Serial.available() > 0) // check for serial data
+                {
+                  failCheck = Serial.read(); // fill the byte
+                  stateFailCount = 0; //reset state we've got what we need
+                }
+              }
+              
+              if(failCheck != 50) // check if we havent been returned a 2 exactly.
+              {
+                Serial.print("06"); // print cancel
+                failCheck = 0; // clear the identifying variable
+                finish(); // finish aka, get ready to read another card.
+                return; // return and start over.
+              }
+              
               run = 0;
               goto loop;
             }
           }
         }
         Serial.println("21");//fase 2, verification
+        
+        stateFailCount = 1;
+        failCheck = 0;
+        while(stateFailCount) // wait for serial data
+        {
+          if(Serial.available() > 0) // check for serial data
+          {
+            failCheck = Serial.read(); // fill the byte
+            stateFailCount = 0; //reset state we've got what we need
+          }
+        }
+        
+        if(failCheck != 50) // check if we havent been returned a 2 exactly.
+        {
+          Serial.print("06"); // print cancel
+          failCheck = 0; // clear the identifying variable
+          finish(); // finish aka, get ready to read another card.
+          return; // return and start over.
+        }
+        
         runAuth=1;
         
         //Start the authorized loop.
@@ -226,7 +268,7 @@ void loop()
                     if(keyCounter3 >= 3 || keyCounter3 >= 2)
                     {
                       keyCounter3=0;
-                      Serial.print("15");//balance to withdraw
+                      Serial.print("14");//balance to withdraw
                       for(int x=0; x<3; x++)
                       {
                         Serial.write(amount[x]);
@@ -313,8 +355,9 @@ void loop()
                     if(keyCounter3 < 3 || keyCounter3 < 2 || keyCounter3 < 1)
                     {
                       amount[keyCounter3]=keypress;
-                      Serial.print("14"+amount[keyCounter3]);
                       keyCounter3++;
+                      Serial.print("09"+amount[keyCounter3]);
+                      Serial.print("07"+keyCounter3);
                     }
                   break;
                     
