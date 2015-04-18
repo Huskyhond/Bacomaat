@@ -152,7 +152,8 @@ import jssc.SerialPortException;
 	            	{
 	            		try
 	            		{
-						serialPort.writeInt(49); // dit schrijft een 1
+	            			System.out.println("locked");
+	            			serialPort.writeInt(49); // dit schrijft een 1
 	            	
 	            		}
 	            		catch(Exception e)
@@ -165,27 +166,28 @@ import jssc.SerialPortException;
 	            	{
 	            		try
 	            		{
-						serialPort.writeInt(50); // dit schrijft een 2
-						Jget.pinSucces(rekeningnummer);
+	            			serialPort.writeInt(50); // dit schrijft een 2
+	            			Jget.pinSucces(rekeningnummer);
+	            			// HIER MOET JE pinVerify NAAR WEBKIT STUREN
+	    	                wk.sendPinStatus(true);
 	            		}
 	            		catch(Exception e)
 	            		{
 							System.out.println("Writing to serialPort: Failed");
 	            		}
 	            	}
-	            	// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-	                wk.sendPinStatus(true);
+	            	
 	                break;
 	        	
 	        	case 20: //pin verify Fail
 	        		result = "pin gefaalt!"; 
 	            	failCount = Jget.pinFail(rekeningnummer);
-	            	if(failCount>3)//als de arduino niet verder mag
+	            	if(failCount>2)//als de arduino niet verder mag
 	            	{
 	            		try
 	            		{
-						serialPort.writeInt(49); // dit schrijft een 1
-						Jget.pinSucces(rekeningnummer);
+	            			serialPort.writeInt(49); // dit schrijft een 1
+							System.out.println("locked");
 	            		}
 	            		catch(Exception e)
 	            		{
@@ -198,7 +200,7 @@ import jssc.SerialPortException;
 	            	{
 	            		try
 	            		{
-						serialPort.writeInt(50); // dit schrijft een 2
+	            			serialPort.writeInt(50); // dit schrijft een 2
 	            	
 	            		}
 	            		catch(Exception e)
@@ -206,7 +208,7 @@ import jssc.SerialPortException;
 							System.out.println("Writing to serialPort: Failed");
 	            		}
 	            	}
-	            	//HIER MOET JE pinVerify EN accountState NAAR WEBKIT STUREN
+	            	//HIER MOET JE failcount NAAR NIEK
 	                wk.sendFailCount(failCount);
 	            	break;
 	        	
@@ -221,18 +223,17 @@ import jssc.SerialPortException;
 	        	case 4: //Withdraw some amount
 	        		result = "withdraw";
 	            	//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
-                        wk.sendWithdrawRequest();
+                    wk.sendWithdrawRequest();
 	            	break;
 	
 	        	case 5: //bon printen
 	        		result = "receipt: yes";
 	            	receipt = true;
-                        wk.sendReceiptStatus(receipt);
+                    wk.sendReceiptStatus(receipt);
 	            	printer.print();
 	            	
 	            	//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
 	                receipt = false;
-                        wk.sendReceiptStatus(receipt);
 	            	break;
 	        
 	        	case 6: //cancel
@@ -249,7 +250,7 @@ import jssc.SerialPortException;
 	        	case 10: //back request
 	            	result = "Back to Home screen";
 	            	//HIER MOET BACK REQUEST
-                        wk.sendBackRequest();
+                    wk.sendBackRequest();
 	            	break;
 	    	}
 	    	System.out.println("case "+caseFromArduino);

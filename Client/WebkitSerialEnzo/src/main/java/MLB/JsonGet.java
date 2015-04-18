@@ -101,7 +101,7 @@ public class JsonGet
        }
        catch(Exception e)
        {
-    	   System.out.println("banknr unknown");
+    	   System.out.println("banknr unknown or failcount > 2");
     	   return false;
        }
     }
