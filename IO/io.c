@@ -18,7 +18,8 @@ You can except the following cases:
 06 = cancel return to idle.
 07 = input length, either 0 to 4 or 0 to 3.
 10 = back to the select withdraw or balance loop.
-14 = balance to withdraw
+14 = balance to withdraw per digit.
+15 = withdraw amount confirmation.
 */
 
 #include <Keypad.h>
@@ -225,7 +226,7 @@ void loop()
                     if(keyCounter3 >= 3 || keyCounter3 >= 2)
                     {
                       keyCounter3=0;
-                      Serial.print("14");//balance to withdraw
+                      Serial.print("15");//balance to withdraw
                       for(int x=0; x<3; x++)
                       {
                         Serial.write(amount[x]);
@@ -312,6 +313,7 @@ void loop()
                     if(keyCounter3 < 3 || keyCounter3 < 2 || keyCounter3 < 1)
                     {
                       amount[keyCounter3]=keypress;
+                      Serial.print("14"+amount[keyCounter3]);
                       keyCounter3++;
                     }
                   break;
