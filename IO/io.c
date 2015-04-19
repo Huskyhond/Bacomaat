@@ -355,9 +355,9 @@ void loop()
                     if(keyCounter3 < 3 || keyCounter3 < 2 || keyCounter3 < 1)
                     {
                       amount[keyCounter3]=keypress;
-                      keyCounter3++;
                       Serial.print("09");
                       Serial.write(amount[keyCounter3]);
+                      keyCounter3++;
                     }
                   break;
                     
