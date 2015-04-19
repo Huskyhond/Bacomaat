@@ -356,7 +356,8 @@ void loop()
                     {
                       amount[keyCounter3]=keypress;
                       keyCounter3++;
-                      Serial.print("09"+amount[keyCounter3]);
+                      Serial.write("09");
+                      Serial.write(amount[keyCounter3]);
                     }
                   break;
                     
