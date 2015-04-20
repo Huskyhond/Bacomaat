@@ -20,13 +20,15 @@ import jssc.SerialPortException;
         final static JsonGet Jget = new JsonGet(printer);
         
         static String rekeningnummer = "MLBI0200000001";
-    	static String withdrawAmount ="100";
+    	static String withdrawAmount ="";
 	    static int balance = 0;
         static boolean accountExist = false;
         static boolean receipt = false;
         static String pinLength = "";
         static int failCount;
         static String withdrawDigit = "";
+        static int[] withdrawArray = {0,0,0};
+        static int withdrawDigitCount=0;
 
 	    /**
 	     * @param args the command line arguments
@@ -96,19 +98,14 @@ import jssc.SerialPortException;
 				            			switchCase(a,read1);
 					            		
 					            	}
-					            	else if(a==14)
-					            	{
-				            			switchCase(a,sub2);
-					            	}
 					            	else if(a==7)
 					            	{
 				            			switchCase(a,sub2);
 					            	}
 					            	else if(a==9)
 					            	{
-					            		//System.out.println("waiting for Digit...");
-				            			//String read1 = new String(serialPort.readString(1));
-				            			//System.out.println("read1: "+read1);
+					            		withdrawArray[withdrawDigitCount] = Integer.parseInt(sub2);
+					            		withdrawDigitCount++;
 					            		switchCase(a,sub2);
 					            	}
 					            	else
@@ -224,6 +221,7 @@ import jssc.SerialPortException;
 	        	
 	        	case 4: //Withdraw some amount
 	        		result = "withdraw";
+	        		resetWithdraw();
 	            	//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
                     wk.sendWithdrawRequest();
 	            	break;
@@ -245,6 +243,7 @@ import jssc.SerialPortException;
 	            	break;
 	        	case 2: //clear pin input
 	            	result = "clear input";
+	            	resetWithdraw();
 	            	//HIER MOET CLEAR INPUT REQUEST
 	        		wk.sendClearInput();
 	            	break;
@@ -254,6 +253,22 @@ import jssc.SerialPortException;
 	            	//HIER MOET BACK REQUEST
                     wk.sendBackRequest();
 	            	break;
+	        	
+	        	case 14:
+	        		for(int r=0;r<withdrawDigitCount;r++)
+	        		{
+	        			withdrawAmount = withdrawAmount + withdrawArray[r];
+	        		}
+            		System.out.println(rekeningnummer+"\n"+withdrawAmount);
+	            	Jget.withdraw(rekeningnummer, withdrawAmount);
+	            	
+	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
+	            	wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
+	            	result = "withdraw: " + withdrawAmount;
+	            	
+	            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
+	                wk.sendWithdrawAmount(withdrawAmount);
+            		break;
 	    	}
 	    	System.out.println("case "+caseFromArduino);
         	System.out.println(result+"\n"); //check reply
@@ -293,28 +308,14 @@ import jssc.SerialPortException;
 	            	//HIER MOET JE accountExist NAAR WEBKIT STUREN
 	                wk.sendAccExist(accountExist);
 	            	break;
-            	
-            	
-            	case 14:
-            		withdrawAmount = restBytes;
-	            	System.out.println(rekeningnummer+"\n"+withdrawAmount);
-	            	Jget.withdraw(rekeningnummer, withdrawAmount);
 	            	
-	            	////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-	            	wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
-	            	result = "withdraw: " + withdrawAmount;
-	            	
-	            	//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
-	                wk.sendWithdrawAmount(withdrawAmount);
-            		break;
-            	
-            	
             	case 7: //pinLength naar niek
 	            	pinLength = restBytes;
 	            	result = "pin length"+pinLength;
 	            	//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
 	        		wk.sendPinLength(pinLength);
 	            	break;
+	            	
             	case 9: //withdraw digit naar niek
             		withdrawDigit = restBytes;
             		result = "withdrawDigit: "+withdrawDigit;
@@ -352,6 +353,16 @@ import jssc.SerialPortException;
 			}
 			return outputs;
         }
+	    
+	    public static void resetWithdraw()
+	    {
+	    	for(int r=0;r<3;r++)
+        	{
+        		withdrawArray[r] = 0;
+        	}
+        	withdrawAmount = "";
+        	withdrawDigitCount=0;
+	    }
 	    
 	}
 
