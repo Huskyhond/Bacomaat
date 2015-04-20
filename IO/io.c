@@ -269,10 +269,12 @@ void loop()
                     {
                       keyCounter3=0;
                       Serial.print("14");//balance to withdraw
+                      /*
                       for(int x=0; x<3; x++)
                       {
                         Serial.write(amount[x]);
                       }
+                      */
                       Serial.print("");
                       int runTicket=1;
                       while(runTicket)
