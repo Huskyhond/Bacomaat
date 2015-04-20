@@ -106,6 +106,9 @@ import jssc.SerialPortException;
 					            	}
 					            	else if(a==9)
 					            	{
+					            		//System.out.println("waiting for Digit...");
+				            			//String read1 = new String(serialPort.readString(1));
+				            			//System.out.println("read1: "+read1);
 					            		switchCase(a,sub2);
 					            	}
 					            	else
