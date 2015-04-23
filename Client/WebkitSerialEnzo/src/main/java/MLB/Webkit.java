@@ -6,10 +6,12 @@ public class Webkit
 {
     JSONObject accExist;
     JSONObject pinStatus;
+    JSONObject accStatus;
     JSONObject failCountObj;
     JSONObject balanceAmount;
     JSONObject withdrawStatus;
     JSONObject wdAmount;
+	JSONObject wdDigit;
     JSONArray stacksOptionsArray;
     JSONObject stacksOptions;
     JSONObject receiptStatus;
@@ -41,6 +43,19 @@ public class Webkit
         }
         objSender.sendObject(accExist);
     }
+    public void sendAccStatus(boolean accountStatus)
+    {
+        accStatus = new JSONObject();
+        if (accountStatus)
+        {
+            accStatus.put("status", true);
+        }
+        else
+        {
+            accStatus.put("status", false);
+        }
+        objSender.sendObject(accStatus);
+    }
     public void sendPinLength(String pinLength)
     {
         int codeLength = Integer.parseInt(pinLength.replaceAll("[^\\d.]", ""));
@@ -56,17 +71,17 @@ public class Webkit
         {
             pinStatus.put("page", "select");
         }
-        else if (!pinVerified)
+        else
         {
-            pinStatus.put("page", "code");
-            pinStatus.put("failed", 1);
+            
         }
         objSender.sendObject(pinStatus);
     }
     public void sendFailCount(int failcount)
     {
         failCountObj = new JSONObject();
-        failCountObj.put("kebab", failcount);
+        failCountObj.put("page", "code");
+        failCountObj.put("failCount", failcount);
         objSender.sendObject(failCountObj);
             
     }
@@ -93,6 +108,15 @@ public class Webkit
     public void sendWithdrawAmount(String withdrawAmount)
     {
         wdAmount = new JSONObject();
+        wdAmount.put("page", "money");
+        wdAmount.put("amount", withdrawAmount);
+        objSender.sendObject(wdAmount);
+    }
+    public void sendWithdrawDigit(String withdrawDigit)
+    {
+		wdDigit = new JSONObject();
+		wdDigit.put("digit", withdrawDigit);
+		objSender.sendObject(wdDigit);
     }
     public void sendMoneyOptions(int[] moneyOptions)
     {
@@ -146,7 +170,7 @@ public class Webkit
     public void sendWithdrawRequest()
     {
         withdrawRequest = new JSONObject();
-        withdrawRequest.put("page", "withdraw");
+        withdrawRequest.put("page", "money");
         objSender.sendObject(withdrawRequest);
     }
 }
