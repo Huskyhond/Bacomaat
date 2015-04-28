@@ -14,7 +14,7 @@ import jssc.SerialPortException;
 public class App 
 {
 	final static Printer printer = new Printer();
-	final static SerialPort serialPort = new SerialPort("COM4");
+	final static SerialPort serialPort = new SerialPort("COM3");
 	final static SQLDataBase db = new SQLDataBase();
 	final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
 	final static JsonGet Jget = new JsonGet(printer);
@@ -29,6 +29,7 @@ public class App
 	static String withdrawDigit = "";
 	static int[] withdrawArray = {0,0,0};
 	static int withdrawDigitCount=0;
+	static String afgerond="";
 	
 	/**
 		* @param args the command line arguments
@@ -247,7 +248,7 @@ public class App
 			case 2: //clear pin input
 			result = "clear input";
 			resetWithdraw();
-			//HIER MOET CLEAR INPUT REQUEST
+			//HIER MOET CLEAR INPUT REQUESTz
 			wk.sendClearPinInput();
 			break;
 			
@@ -263,10 +264,11 @@ public class App
 				withdrawAmount = withdrawAmount + withdrawArray[r];
 			}
 			System.out.println(rekeningnummer+"\n"+withdrawAmount);
-			Jget.withdraw(rekeningnummer, withdrawAmount);
+			wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
+			System.out.println("HIER:"+afgerond);
+			Jget.withdraw(rekeningnummer, afgerond);
 			
 			////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
-			wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
 			result = "withdraw: " + withdrawAmount;
 			
 			//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
@@ -348,6 +350,7 @@ public class App
 		{
 			/////////////////HIER message STUREN////////////////////////
 			//String message = "Withdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro";
+			afgerond = ""+(oldWithdraw - withdraw);
 			System.out.println("Withdraw: "+oldWithdraw+"\nWithdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro");
 		}
 		return outputs;
