@@ -270,8 +270,27 @@ public class App
 			wk.sendWithdrawAmount(afgerond);//Naar niek afgerond bedrag
 
 			//Wachten op bevestiging voor withdrawen
-			Jget.withdraw(rekeningnummer, afgerond);
+			int confirm=0;
+			try
+			{
+				String read1 = new String(serialPort.readString(1));//1=Ja, 2=Nee
+				System.out.println("readConfirmation: "+read1);
+				confirm = Integer.parseInt(read1);
+				
+			}
+			catch(Exception e)
+			{
+				System.out.println("Error in waiting for confirmation..");
+			}
 			
+			if(confirm == 1)
+			{
+				Jget.withdraw(rekeningnummer, afgerond);
+			}	
+			else
+			{
+				//Hier terug naar withdraw page
+			}
 			result = "withdraw: " + withdrawAmount;
 			
 			break;
