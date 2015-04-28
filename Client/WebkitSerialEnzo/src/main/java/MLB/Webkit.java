@@ -16,7 +16,8 @@ public class Webkit
     JSONObject stacksOptions;
     JSONObject receiptStatus;
     JSONObject cancelReq;
-    JSONObject clearInput;
+    JSONObject clearPinInput;
+	JSONObject clearWDInput;
     JSONObject pinLengthObj;
     JSONObject backRequest;
     JSONObject withdrawRequest;
@@ -115,6 +116,7 @@ public class Webkit
     public void sendWithdrawDigit(String withdrawDigit)
     {
 		wdDigit = new JSONObject();
+		wdDigit.put("page", "money");
 		wdDigit.put("digit", withdrawDigit);
 		objSender.sendObject(wdDigit);
     }
@@ -154,13 +156,19 @@ public class Webkit
         cancelReq.put("message", "geannuleerd doei");
         objSender.sendObject(cancelReq);
     }
-    public void sendClearInput()
+    public void sendClearPinInput()
     {
-        clearInput = new JSONObject();
-        clearInput.put("page", "code");
-        clearInput.put("codelength", 0);
-        objSender.sendObject(clearInput);
+        clearPinInput = new JSONObject();
+        clearPinInput.put("page", "code");
+        clearPinInput.put("codelength", 0);
+        objSender.sendObject(clearPinInput);
     }
+	public void sendClearWithdrawInput()
+	{
+		clearWDInput = new JSONObject();
+		clearWDInput.put("page","withdraw");
+		objSender.sendObject(clearWDInput);
+	}
     public void sendBackRequest()
     {
         backRequest = new JSONObject();
