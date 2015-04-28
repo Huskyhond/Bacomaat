@@ -109,7 +109,7 @@ public class Webkit
     public void sendWithdrawAmount(String withdrawAmount)
     {
         wdAmount = new JSONObject();
-        wdAmount.put("page", "receipt");
+        wdAmount.put("page", "confirm");
         wdAmount.put("amount", withdrawAmount);
         objSender.sendObject(wdAmount);
     }
