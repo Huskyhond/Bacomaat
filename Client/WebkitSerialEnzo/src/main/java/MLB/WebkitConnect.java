@@ -43,6 +43,11 @@ public class WebkitConnect
       
       server.start();
     }
+    
+    public void clearMoney() {
+        client.sendEvent("clear");
+    }
+    
     public void sendObject(JSONObject sendObj)
     {
         if (connected)

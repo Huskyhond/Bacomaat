@@ -18,7 +18,7 @@ public class Printer
 		text[2] = "Automaat ID: MLB-1";
 		text[3] = "Transactie ID: "+transactieID;
 		text[4] = "Rekening nummer: ";
-		text[5] = ""+reknummer;
+		text[5] = "xxxxxxxxxx"+reknummer;
 		text[6] = "Withdraw Amount: "+withdrawAmount;
 		text[7] = date;
 		
@@ -34,7 +34,7 @@ public class Printer
 	
 	public void setPrinter(String reknummer, String withdrawAmount, String transactieID, String date)
 	{
-		this.reknummer = reknummer;
+		this.reknummer = reknummer.substring(10);
 		this.withdrawAmount = withdrawAmount;
 		this.transactieID = transactieID;
 		this.date = date;

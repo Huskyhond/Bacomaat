@@ -117,7 +117,7 @@ public class App
 							}
 							catch(Exception e)
 							{
-								System.out.println("Error in eventlistener"); 
+								//System.out.println("Error in eventlistener"); 
 							}
 							
 							//	System.out.println(caseArduino);
@@ -248,7 +248,7 @@ public class App
 			result = "clear input";
 			resetWithdraw();
 			//HIER MOET CLEAR INPUT REQUEST
-			wk.sendClearInput();
+			wk.sendClearPinInput();
 			break;
 			
 			case 10: //back request
