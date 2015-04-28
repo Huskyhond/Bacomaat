@@ -153,30 +153,22 @@ public class Webkit
     {
         cancelReq = new JSONObject();
         cancelReq.put("page" , "finish");
-        cancelReq.put("message", "Bedankt en tot ziens!");
+        cancelReq.put("message", "Bedankt en tot ziens");
         objSender.sendObject(cancelReq);
     }
     public void sendClearPinInput()
     {
         clearPinInput = new JSONObject();
-<<<<<<< HEAD
         //clearPinInput.put("page", "code");
         clearPinInput.put("codelength", 0);
         objSender.clearMoney();
-=======
-        clearPinInput.put("page", "code");
-        clearPinInput.put("codelength", 0);
->>>>>>> origin/master
         objSender.sendObject(clearPinInput);
     }
 	public void sendClearWithdrawInput()
 	{
 		clearWDInput = new JSONObject();
 		clearWDInput.put("page","withdraw");
-<<<<<<< HEAD
 		objSender.clearMoney();
-=======
->>>>>>> origin/master
 		objSender.sendObject(clearWDInput);
 	}
     public void sendBackRequest()
