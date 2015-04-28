@@ -264,15 +264,16 @@ public class App
 				withdrawAmount = withdrawAmount + withdrawArray[r];
 			}
 			System.out.println(rekeningnummer+"\n"+withdrawAmount);
+			
+			//in biljet word withdraw afgerond
 			wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
-			System.out.println("HIER:"+afgerond);
+			wk.sendWithdrawAmount(afgerond);//Naar niek afgerond bedrag
+
+			//Wachten op bevestiging voor withdrawen
 			Jget.withdraw(rekeningnummer, afgerond);
 			
-			////////////////////////////HIER ARRAY STUREN//////////////////////////////////////
 			result = "withdraw: " + withdrawAmount;
 			
-			//HIER MOET JE withdrawAmount NAAR WEBKIT STUREN
-			wk.sendWithdrawAmount(withdrawAmount);
 			break;
 		}
 		System.out.println("case "+caseFromArduino);
