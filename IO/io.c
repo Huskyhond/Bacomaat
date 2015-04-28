@@ -168,6 +168,7 @@ void loop()
   int failedAttempts = 0;
   int failCheck = 0;
   int stateFailCount = 0;
+  int verifyAmount = 0;
   int run = 1;
 
   while(run)
@@ -270,26 +271,31 @@ void loop()
                     {
                       keyCounter3=0;
                       Serial.print("14");//balance to withdraw
-                      Serial.print("");
+                      //Serial.print("");
 
                       //wait for user verification of rounded amount.
                       //A is yes withdraw, B is no, don't withdraw return to the withdraw screen/fase/loop.
                       delay(1000);
-                      int verifyAmount = 1;
+                      verifyAmount = 1;
+
                       while(verifyAmount)
                       {
+                        keypress = keyPad.getKey();
                         switch(keypress)
                         {
                           case 'A':
-                            Serial.print(2);
+                            Serial.print("2");
                             verifyAmount = 0;
                           break;
 
                           case 'B':
-                            Serial.print(1);
+                            Serial.print("1");
                             verifyAmount = 0;
-                            keyCounter3 = 0;
-                            return;
+                            //keyCounter3 = 0;
+                          break;
+
+                          default:
+                           //do nothing.
                           break;
                         }
                       }
