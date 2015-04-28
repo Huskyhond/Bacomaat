@@ -44,8 +44,12 @@
   <script src="./js/listener.js"></script>
   <script>
     global.currentPage = "money";
+    var digit = "";
     socket.on("update", function(data) { 
-
+      if(data.digit) {
+        digit = digit + JSON.parse(data.digit);
+        $("#money").html(digit);
+      }
     });
 
     socket.emit("money");
