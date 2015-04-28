@@ -109,7 +109,7 @@ public class Webkit
     public void sendWithdrawAmount(String withdrawAmount)
     {
         wdAmount = new JSONObject();
-        wdAmount.put("page", "receipt");
+        wdAmount.put("page", "confirm");
         wdAmount.put("amount", withdrawAmount);
         objSender.sendObject(wdAmount);
     }
@@ -182,5 +182,20 @@ public class Webkit
         withdrawRequest = new JSONObject();
         withdrawRequest.put("page", "money");
         objSender.sendObject(withdrawRequest);
+    }
+    public void toReceipt()
+    {
+    	JSONObject j = new JSONObject();
+    	j.put("page","receipt");
+    	objSender.sendObject(j);
+    }
+    public void invalidSaldo()
+    {
+    	JSONObject s = new JSONObject();
+    	s.put("page","confirm");
+    	s.put("error",10);
+    	s.put("message","Niet genoeg saldo.");
+    	objSender.sendObject(s);
+
     }
 }
