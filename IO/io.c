@@ -258,6 +258,7 @@ void loop()
               byte amount[3];
               keyCounter3=0;
               runWithdraw=1;
+              withdraw:
               while(runWithdraw)
               {
                 char keypress = keyPad.getKey();
@@ -269,13 +270,49 @@ void loop()
                     {
                       keyCounter3=0;
                       Serial.print("14");//balance to withdraw
-                      /*
-                      for(int x=0; x<3; x++)
-                      {
-                        Serial.write(amount[x]);
-                      }
-                      */
                       Serial.print("");
+
+                      //wait for user verification of rounded amount.
+                      //A is yes withdraw, B is no, don't withdraw return to the withdraw screen/fase/loop.
+                      delay(1000);
+                      int verifyAmount = 1;
+                      while(verifyAmount)
+                      {
+                        switch(keypress)
+                        {
+                          case 'A':
+                            Serial.print(2);
+                            verifyAmount = 0;
+                          break;
+
+                          case 'B':
+                            Serial.print(1);
+                            verifyAmount = 0;
+                            keyCounter3 = 0;
+                            return;
+                          break;
+                        }
+                      }
+
+                      int state = 1;
+                      int enoughBalance = 0;
+                      while(state) // wait for serial data
+                      {
+                        if(Serial.available() > 0) // check for serial data
+                        {
+                          enoughBalance = Serial.read(); // fill the byte
+                          state = 0; //reset state we've got what we need
+                        }
+                      }
+                      if(enoughBalance != 50) // check if we havent been returned a 2 exactly.
+                      {
+                        Serial.print("04"); // print fase withdraw.
+                        enoughBalance = 0; // clear the identifying variable.
+                        runWithdraw = 1;
+                        goto withdraw;
+                        return; // return to the withdraw screen.
+                      }
+                      
                       int runTicket=1;
                       while(runTicket)
                       {
