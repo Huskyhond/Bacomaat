@@ -59,6 +59,11 @@
       }
     });
 
+    socket.on("clear", function(data) {
+      digit = " ";
+      $("#money .input").html(digit);
+    });
+
     socket.emit("money");
     socket.on("money", function(data) {
       var str = "";
