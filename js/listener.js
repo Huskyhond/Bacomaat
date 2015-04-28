@@ -33,6 +33,10 @@ socket.on("update", function(data) {
     	var message = (data.message ? data.message : "");
     	location.href = "finish.html?message=" + message;
     }
+    else if(data.page == "balance" && global.currentPage != "balance") {
+      var amount = (data.amount ? data.amount : "");
+      location.href = "balance.html?amount=" + amount;
+    }
 
   }
 });

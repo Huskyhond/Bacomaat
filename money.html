@@ -45,9 +45,11 @@
   <script>
     global.currentPage = "money";
     var digit = "";
-    socket.on("update", function(data) { 
+    socket.on("update", function(data) {
+      data = JSON.parse(data); 
+      console.log(data);
       if(data.digit) {
-        digit = digit + JSON.parse(data.digit);
+        digit = digit + data.digit;
         $("#money").html(digit);
       }
     });

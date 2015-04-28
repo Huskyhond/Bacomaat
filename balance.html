@@ -1,0 +1,24 @@
+<html><head>
+    <title>Major League Banking</title>
+    <link rel="stylesheet" href="./css/main.css">
+  </head>
+  <body>
+    <div id="logo"><img src="img/Logo.png" width="200"/></div>
+    <div class="main">
+      <h1>Uw huidige saldo!</h3>
+      <div>&nbsp;&nbsp;&nbsp;Major League Banking, where the money comes to you!</div>
+    </div>
+
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/listener.js"></script>
+  <script>
+    
+    if(getUrlVars()["balance"]) {
+      $(".main div").html("<h2>&euro; " + decodeURI(getUrlVars()["balance"]) + "</h2>");
+    }
+    setTimeout(function() {
+      location.href = "scan.html";
+    }, 5000);
+    global.currentPage = "balance";
+  </script>
+</body></html>
