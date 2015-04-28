@@ -224,7 +224,7 @@ public class App
 			break;
 			
 			case 4: //Withdraw some amount
-			result = "withdraw";
+			result = "Entering withdraw page";
 			resetWithdraw();
 			//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
 			wk.sendWithdrawRequest();
@@ -271,9 +271,11 @@ public class App
 
 			//Wachten op bevestiging voor withdrawen
 			int confirm=0;
+		
 			try
 			{
-				String read1 = new String(serialPort.readString(1));//1=Ja, 2=Nee
+				System.out.println("wachten op response");
+				String read1 = new String(serialPort.readString(1));//1=Nee, 2=Ja
 				System.out.println("readConfirmation: "+read1);
 				confirm = Integer.parseInt(read1);
 				
@@ -283,19 +285,48 @@ public class App
 				System.out.println("Error in waiting for confirmation..");
 			}
 			
-			if(confirm == 1)
+			if(confirm == 2)//doorgaan met afgerond bedrag
 			{
-				Jget.withdraw(rekeningnummer, afgerond);
+				//Hier checken of er genoeg saldo is
+				boolean check = Jget.checkWithdraw(rekeningnummer, afgerond);
+				if(check == true) //Er is genoeg saldo
+				{
+					Jget.withdraw(rekeningnummer, afgerond);
+					try
+					{
+						serialPort.writeInt(50); // dit schrijft een 2, Ja dus
+					}
+					catch(Exception e)
+					{
+						System.out.println("Error in serialWrite");
+					}
+					//Hier naar bon page
+					wk.toReceipt();
+				}
+				else//niet genoeg saldo
+				{
+					withdrawAmount = "";
+					try
+					{
+						serialPort.writeInt(49); // dit schrijft een 1, Nee dus
+					}
+					catch(Exception e)
+					{
+						System.out.println("Error in serialWrite");	
+					}
+					//Hier terug naar withdraw page
+					wk.invalidSaldo();
+				}
+			
 			}	
-			else
+			else //niet doorgaan. Niet satisfied met afgerond bedrag
 			{
 				//Hier terug naar withdraw page
 			}
-			result = "withdraw: " + withdrawAmount;
-			
+			result = "withdraw: " + withdrawAmount;		
 			break;
 		}
-		System.out.println("case "+caseFromArduino);
+		System.out.println("EINDE VAN CASE "+caseFromArduino);
 		System.out.println(result+"\n"); //check reply
 	}
 	
@@ -365,14 +396,14 @@ public class App
 			withdraw = withdraw-(outputs[i]*bills[i]);
 			System.out.println("Aantal "+bills[i]+" : " + outputs[i]);				
 		}
-		
-		if(withdraw>0)
+		afgerond = ""+(oldWithdraw - withdraw);
+
+		/*if(withdraw>0)
 		{
 			/////////////////HIER message STUREN////////////////////////
 			//String message = "Withdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro";
-			afgerond = ""+(oldWithdraw - withdraw);
 			System.out.println("Withdraw: "+oldWithdraw+"\nWithdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro");
-		}
+		}*/
 		return outputs;
 	}
 	
