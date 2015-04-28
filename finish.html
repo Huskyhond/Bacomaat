@@ -15,7 +15,7 @@
     global.currentPage = "finish";
     if(getUrlVars()["message"]) {
       $(".main div").html(decodeURI(getUrlVars()["message"]));
-      $(".main h1").html("Er is een fout opgetreden!");
+      //$(".main h1").html("Er is een fout opgetreden!");
     }
     setTimeout(function() {
       location.href = "scan.html";

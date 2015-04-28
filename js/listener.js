@@ -35,7 +35,7 @@ socket.on("update", function(data) {
     }
     else if(data.page == "balance" && global.currentPage != "balance") {
       var amount = (data.amount ? data.amount : "");
-      location.href = "balance.html?amount=" + amount;
+      location.href = "balance.html?balance=" + amount;
     }
 
   }

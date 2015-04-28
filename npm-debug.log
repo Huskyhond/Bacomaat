@@ -1,89 +1,23 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'D:\\Program Files (x86)\\nodejs\\\\node.exe',
-1 verbose cli   'D:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
-1 verbose cli   'install',
-1 verbose cli   'socket-io.client' ]
+1 verbose cli [ 'C:\\Program Files (x86)\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'build',
+1 verbose cli   'package.json' ]
 2 info using npm@2.7.4
 3 info using node@v0.12.2
-4 verbose node symlink D:\Program Files (x86)\nodejs\\node.exe
-5 warn package.json Hoi@1.0.0 No repository field.
-6 silly cache add args [ 'socket-io.client', null ]
-7 verbose cache add spec socket-io.client
-8 silly cache add parsed spec { raw: 'socket-io.client',
-8 silly cache add   scope: null,
-8 silly cache add   name: 'socket-io.client',
-8 silly cache add   rawSpec: '',
-8 silly cache add   spec: '*',
-8 silly cache add   type: 'range' }
-9 verbose addNamed socket-io.client@*
-10 silly addNamed semver.valid null
-11 silly addNamed semver.validRange *
-12 silly addNameRange { name: 'socket-io.client', range: '*', hasData: false }
-13 silly mapToRegistry name socket-io.client
-14 silly mapToRegistry using default registry
-15 silly mapToRegistry registry https://registry.npmjs.org/
-16 silly mapToRegistry uri https://registry.npmjs.org/socket-io.client
-17 verbose addNameRange registry:https://registry.npmjs.org/socket-io.client not in flight; fetching
-18 verbose request uri https://registry.npmjs.org/socket-io.client
-19 verbose request no auth needed
-20 info attempt registry request try #1 at 14:55:13
-21 verbose request id d75ef43dfe155148
-22 http request GET https://registry.npmjs.org/socket-io.client
-23 http 404 https://registry.npmjs.org/socket-io.client
-24 verbose headers { date: 'Fri, 17 Apr 2015 12:55:16 GMT',
-24 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-24 verbose headers   'content-type': 'application/json',
-24 verbose headers   'cache-control': 'max-age=0',
-24 verbose headers   'content-length': '51',
-24 verbose headers   'accept-ranges': 'bytes',
-24 verbose headers   via: '1.1 varnish',
-24 verbose headers   age: '0',
-24 verbose headers   'x-served-by': 'cache-ams4138-AMS',
-24 verbose headers   'x-cache': 'MISS',
-24 verbose headers   'x-cache-hits': '0',
-24 verbose headers   'x-timer': 'S1429275315.836638,VS0,VE394',
-24 verbose headers   'keep-alive': 'timeout=10, max=50',
-24 verbose headers   connection: 'Keep-Alive' }
-25 silly get cb [ 404,
-25 silly get   { date: 'Fri, 17 Apr 2015 12:55:16 GMT',
-25 silly get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
-25 silly get     'content-type': 'application/json',
-25 silly get     'cache-control': 'max-age=0',
-25 silly get     'content-length': '51',
-25 silly get     'accept-ranges': 'bytes',
-25 silly get     via: '1.1 varnish',
-25 silly get     age: '0',
-25 silly get     'x-served-by': 'cache-ams4138-AMS',
-25 silly get     'x-cache': 'MISS',
-25 silly get     'x-cache-hits': '0',
-25 silly get     'x-timer': 'S1429275315.836638,VS0,VE394',
-25 silly get     'keep-alive': 'timeout=10, max=50',
-25 silly get     connection: 'Keep-Alive' } ]
-26 verbose stack Error: 404 Not Found: socket-io.client
-26 verbose stack     at CachingRegistryClient.<anonymous> (D:\Program Files (x86)\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:245:14)
-26 verbose stack     at Request._callback (D:\Program Files (x86)\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:170:14)
-26 verbose stack     at Request.self.callback (D:\Program Files (x86)\nodejs\node_modules\npm\node_modules\request\request.js:344:22)
-26 verbose stack     at Request.emit (events.js:110:17)
-26 verbose stack     at Request.<anonymous> (D:\Program Files (x86)\nodejs\node_modules\npm\node_modules\request\request.js:1239:14)
-26 verbose stack     at Request.emit (events.js:129:20)
-26 verbose stack     at IncomingMessage.<anonymous> (D:\Program Files (x86)\nodejs\node_modules\npm\node_modules\request\request.js:1187:12)
-26 verbose stack     at IncomingMessage.emit (events.js:129:20)
-26 verbose stack     at _stream_readable.js:908:16
-26 verbose stack     at process._tickCallback (node.js:355:11)
-27 verbose statusCode 404
-28 verbose pkgid socket-io.client
-29 verbose cwd D:\Users\NiekLap\Documents\School HBO\Project 3\ProgramV5\Client\Webkit
-30 error Windows_NT 6.3.9600
-31 error argv "D:\\Program Files (x86)\\nodejs\\\\node.exe" "D:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "socket-io.client"
-32 error node v0.12.2
-33 error npm  v2.7.4
-34 error code E404
-35 error 404 Not Found: socket-io.client
-35 error 404
-35 error 404 'socket-io.client' is not in the npm registry.
-35 error 404 You should bug the author to publish it (or use the name yourself!)
-35 error 404 It was specified as a dependency of 'Hoi'
-35 error 404
-35 error 404 Note that you can also install from a
-35 error 404 tarball, folder, http url, or git url.
-36 verbose exit [ 1, true ]
+4 verbose node symlink C:\Program Files (x86)\nodejs\\node.exe
+5 info build C:\Users\Gun\Documents\GitHub\NieksShit\package.json
+6 verbose stack Error: ENOENT, open 'C:\Users\Gun\Documents\GitHub\NieksShit\package.json\package.json'
+6 verbose stack     at Error (native)
+7 verbose cwd C:\Users\Gun\Documents\GitHub\NieksShit
+8 error Windows_NT 6.3.9600
+9 error argv "C:\\Program Files (x86)\\nodejs\\\\node.exe" "C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "build" "package.json"
+10 error node v0.12.2
+11 error npm  v2.7.4
+12 error path C:\Users\Gun\Documents\GitHub\NieksShit\package.json\package.json
+13 error code ENOENT
+14 error errno -4058
+15 error enoent ENOENT, open 'C:\Users\Gun\Documents\GitHub\NieksShit\package.json\package.json'
+15 error enoent This is most likely not a problem with npm itself
+15 error enoent and is related to npm not being able to find a file.
+16 verbose exit [ -4058, true ]
