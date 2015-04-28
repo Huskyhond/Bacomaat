@@ -6,15 +6,18 @@ public class Webkit
 {
     JSONObject accExist;
     JSONObject pinStatus;
+    JSONObject accStatus;
     JSONObject failCountObj;
     JSONObject balanceAmount;
     JSONObject withdrawStatus;
     JSONObject wdAmount;
+	JSONObject wdDigit;
     JSONArray stacksOptionsArray;
     JSONObject stacksOptions;
     JSONObject receiptStatus;
     JSONObject cancelReq;
-    JSONObject clearInput;
+    JSONObject clearPinInput;
+	JSONObject clearWDInput;
     JSONObject pinLengthObj;
     JSONObject backRequest;
     JSONObject withdrawRequest;
@@ -41,6 +44,19 @@ public class Webkit
         }
         objSender.sendObject(accExist);
     }
+    public void sendAccStatus(boolean accountStatus)
+    {
+        accStatus = new JSONObject();
+        if (accountStatus)
+        {
+            accStatus.put("status", true);
+        }
+        else
+        {
+            accStatus.put("status", false);
+        }
+        objSender.sendObject(accStatus);
+    }
     public void sendPinLength(String pinLength)
     {
         int codeLength = Integer.parseInt(pinLength.replaceAll("[^\\d.]", ""));
@@ -56,17 +72,17 @@ public class Webkit
         {
             pinStatus.put("page", "select");
         }
-        else if (!pinVerified)
+        else
         {
-            pinStatus.put("page", "code");
-            pinStatus.put("failed", 1);
+            
         }
         objSender.sendObject(pinStatus);
     }
     public void sendFailCount(int failcount)
     {
         failCountObj = new JSONObject();
-        failCountObj.put("kebab", failcount);
+        failCountObj.put("page", "code");
+        failCountObj.put("failCount", failcount);
         objSender.sendObject(failCountObj);
             
     }
@@ -86,13 +102,23 @@ public class Webkit
         withdrawStatus = new JSONObject();
 
         withdrawStatus.put("page", "money");
-        withdrawStatus.put("message", "fak jou zoveel geld heb je nie");
+        withdrawStatus.put("message", "Niet genoeg saldo");
         System.out.println(withdrawStatus.toJSONString());
         objSender.sendObject(withdrawStatus);
     }
     public void sendWithdrawAmount(String withdrawAmount)
     {
         wdAmount = new JSONObject();
+        wdAmount.put("page", "receipt");
+        wdAmount.put("amount", withdrawAmount);
+        objSender.sendObject(wdAmount);
+    }
+    public void sendWithdrawDigit(String withdrawDigit)
+    {
+		wdDigit = new JSONObject();
+		wdDigit.put("page", "money");
+		wdDigit.put("digit", withdrawDigit);
+		objSender.sendObject(wdDigit);
     }
     public void sendMoneyOptions(int[] moneyOptions)
     {
@@ -112,13 +138,13 @@ public class Webkit
         if (receiptRequested == true)
         {
             receiptStatus.put("page", "finish");
-            receiptStatus.put("message", "je bon wordt geprint");
+            receiptStatus.put("message", "Uw bon wordt geprint");
             receiptStatus.put("receiptRequested", true);
         }
         else if(receiptRequested == false)
         {
             receiptStatus.put("page", "finish");
-            receiptStatus.put("message", "doei");
+            receiptStatus.put("message", "Fijne dag verder");
             receiptStatus.put("receiptRequested", false);
         }
         objSender.sendObject(receiptStatus);
@@ -127,16 +153,24 @@ public class Webkit
     {
         cancelReq = new JSONObject();
         cancelReq.put("page" , "finish");
-        cancelReq.put("message", "geannuleerd doei");
+        cancelReq.put("message", "Bedankt en tot ziens");
         objSender.sendObject(cancelReq);
     }
-    public void sendClearInput()
+    public void sendClearPinInput()
     {
-        clearInput = new JSONObject();
-        clearInput.put("page", "code");
-        clearInput.put("codelength", 0);
-        objSender.sendObject(clearInput);
+        clearPinInput = new JSONObject();
+        //clearPinInput.put("page", "code");
+        clearPinInput.put("codelength", 0);
+        objSender.clearMoney();
+        objSender.sendObject(clearPinInput);
     }
+	public void sendClearWithdrawInput()
+	{
+		clearWDInput = new JSONObject();
+		clearWDInput.put("page","withdraw");
+		objSender.clearMoney();
+		objSender.sendObject(clearWDInput);
+	}
     public void sendBackRequest()
     {
         backRequest = new JSONObject();
@@ -146,7 +180,7 @@ public class Webkit
     public void sendWithdrawRequest()
     {
         withdrawRequest = new JSONObject();
-        withdrawRequest.put("page", "withdraw");
+        withdrawRequest.put("page", "money");
         objSender.sendObject(withdrawRequest);
     }
 }
