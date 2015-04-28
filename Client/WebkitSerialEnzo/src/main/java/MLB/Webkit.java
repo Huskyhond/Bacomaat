@@ -183,4 +183,19 @@ public class Webkit
         withdrawRequest.put("page", "money");
         objSender.sendObject(withdrawRequest);
     }
+    public void toReceipt()
+    {
+    	JSONObject j = new JSONObject();
+    	j.put("page","receipt");
+    	objSender.sendObject(j);
+    }
+    public void invalidSaldo()
+    {
+    	JSONObject s = new JSONObject();
+    	s.put("page","confirm");
+    	s.put("error",10);
+    	s.put("message","Niet genoeg saldo.");
+    	objSender.sendObject(s);
+
+    }
 }

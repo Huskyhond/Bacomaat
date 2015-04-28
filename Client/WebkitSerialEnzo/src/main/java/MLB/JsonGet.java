@@ -199,6 +199,34 @@ public class JsonGet
     	}
     }
     
+    public boolean checkWithdraw(String rekeningnummer, String withdrawAmount)//return saldo
+    {
+    	System.out.println("Start: checkWithdraw");
+    	try
+    	{
+   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
+   	    	JSONObject obj = new JSONObject(https);
+   	    	int saldo = obj.getInt("saldo");
+   	    	System.out.println("checkWithdraw saldo: "+saldo+"\nWithdraw: "+withdrawAmount);
+   	    	if(Integer.parseInt(withdrawAmount)>saldo)
+   	    	{
+   	    		System.out.println("Niet genoeg saldo!");
+   	    		return false;
+   	    	}
+   	    	else
+   	    	{
+   	    		System.out.println("Genoeg Saldo!");
+   	    		return true;
+   	    	}
+  
+       }
+       catch(Exception e)
+       {
+       	System.out.println(e.getMessage());
+       }
+    	return true;
+    }
+    
     public void test()
     {
     	try
