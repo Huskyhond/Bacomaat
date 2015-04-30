@@ -305,7 +305,8 @@ public class App
 				}
 				else//niet genoeg saldo
 				{
-					withdrawAmount = "";
+					resetWithdraw();
+					//withdrawAmount = "";
 					try
 					{
 						serialPort.writeInt(49); // dit schrijft een 1, Nee dus
@@ -321,6 +322,7 @@ public class App
 			}	
 			else //niet doorgaan. Niet satisfied met afgerond bedrag
 			{
+				resetWithdraw();
 				//Hier terug naar withdraw page
 			}
 			result = "withdraw: " + withdrawAmount;		
