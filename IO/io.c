@@ -291,7 +291,8 @@ void loop()
                           case 'B':
                             Serial.print("1");
                             verifyAmount = 0;
-                            //keyCounter3 = 0;
+                            keyCounter3 = 0;
+                            goto withdraw;
                           break;
 
                           default:
