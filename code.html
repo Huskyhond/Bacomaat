@@ -6,6 +6,7 @@
     <div class="main">
       <h1>Voer uw code in!</h1>
       <div id="code"></div>
+      <div id="failCount"></div>
     </div>
   
   <script src="./js/jquery.min.js"></script>
@@ -29,6 +30,14 @@
       }
       else {
         printCode(0);
+      }
+      if(data.failCount) {
+        if(data.failCount == 1) {
+          $("#failCount").html("Onjuiste pincode! U heeft nog 1 poging.");
+        }
+        else if(data.failCount > 1) {
+          $("#failCount").html("Onjuiste pincode! U heeft nog " + data.failCount + " pogingen.");
+        }
       }
     });
      
