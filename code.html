@@ -36,7 +36,7 @@
           $("#failCount").html("Onjuiste pincode! U heeft nog 1 poging.");
         }
         else if(data.failCount > 1) {
-          $("#failCount").html("Onjuiste pincode! U heeft nog " + data.failCount + " pogingen.");
+          $("#failCount").html("Onjuiste pincode! U heeft nog " + (3-data.failCount) + " pogingen.");
         }
       }
     });
