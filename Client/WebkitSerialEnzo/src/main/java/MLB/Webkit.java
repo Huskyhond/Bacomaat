@@ -40,7 +40,7 @@ public class Webkit
         {
             accExist.put("page", "finish");
             accExist.put("failed", 1);
-            accExist.put("message", "fak jou je account bestaat niet");
+            accExist.put("message", "Account bestaat niet of is geblokkeerd, probeert u het later nog eens of neem contact op met de bank.");
         }
         objSender.sendObject(accExist);
     }
@@ -167,7 +167,7 @@ public class Webkit
 	public void sendClearWithdrawInput()
 	{
 		clearWDInput = new JSONObject();
-		clearWDInput.put("page","withdraw");
+		clearWDInput.put("page","money");
 		objSender.clearMoney();
 		objSender.sendObject(clearWDInput);
 	}

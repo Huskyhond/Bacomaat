@@ -25,7 +25,7 @@ public class App
 	static boolean accountExist = false;
 	static boolean receipt = false;
 	static String pinLength = "";
-	static int failCount;
+	static int failCount = 0;
 	static String withdrawDigit = "";
 	static int[] withdrawArray = {0,0,0};
 	static int withdrawDigitCount=0;
@@ -157,7 +157,6 @@ public class App
 				{
 					System.out.println("locked");
 					serialPort.writeInt(49); // dit schrijft een 1
-					
 				}
 				catch(Exception e)
 				{
@@ -323,6 +322,7 @@ public class App
 			else //niet doorgaan. Niet satisfied met afgerond bedrag
 			{
 				resetWithdraw();
+				wk.sendClearWithdrawInput();
 				//Hier terug naar withdraw page
 			}
 			result = "withdraw: " + withdrawAmount;		
