@@ -32,10 +32,10 @@
         printCode(0);
       }
       if(data.failCount) {
-        if(data.failCount == 1) {
+        if(data.failCount == 2) {
           $("#failCount").html("Onjuiste pincode! U heeft nog 1 poging.");
         }
-        else if(data.failCount > 1) {
+        else if(data.failCount < 2) {
           $("#failCount").html("Onjuiste pincode! U heeft nog " + (3-data.failCount) + " pogingen.");
         }
       }
