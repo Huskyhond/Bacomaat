@@ -34,7 +34,8 @@ socket.on("update", function(data) {
     	location.href = "finish.html?message=" + message;
     }
     else if(data.page == "balance" && global.currentPage != "balance") {
-      location.href = "balance.html";
+      var balance = (data.amount ? data.amount : "");
+      location.href = "balance.html?balance=" + balance;
     }
     else if(data.page == "confirm" && global.currentPage != "confirm") {
       var amount = (data.amount ? data.amount : "");
