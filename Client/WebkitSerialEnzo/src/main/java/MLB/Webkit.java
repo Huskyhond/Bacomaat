@@ -54,6 +54,7 @@ public class Webkit
         else
         {
             accStatus.put("status", false);
+			accStatus.put("message", "Uw account is geblokkeerd. U kunt niet meer pinnen. Neem contact op met de bank.");
         }
         objSender.sendObject(accStatus);
     }
