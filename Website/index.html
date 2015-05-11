@@ -1,0 +1,107 @@
+<html>
+	<head>
+		<title>Project 3/4 MLB Banking</title>
+		<link href="style/style.css" rel="stylesheet" />
+		<link href="style/messi.min.css" rel="stylesheet" />
+	</head>
+	<body>
+		
+		<div class="popup"><iframe width="560" height="315" src="https://www.youtube.com/embed/YE7VzlLtp-4?showinfo=0" frameborder="0" allowfullscreen></iframe></iframe></div>	
+		<div id="container">
+			<h1><img id="logo" src="img/logo.png"></h1>
+			<div id="dots"></div>
+		</div>
+	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="messi.min.js"></script>
+	<script>
+		var windowWidth = $(window).width();
+		var windowHeight = $(window).height();
+	</script>
+	<script>
+		
+		function getRandomColor() {
+	    var letters = '0123456789ABCDEF'.split('');
+	    var color = '#';
+	    for (var i = 0; i < 6; i++ ) {
+	        color += letters[Math.floor(Math.random() * 16)];
+	    }
+	    return color;
+		}
+
+		function doRandom(max) {
+		  return Math.random() * max; 
+		}
+		
+		function generateDots(dots, excludes, items, cb) {
+			
+			if(dots.length > 0) {
+				for(i in dots) {
+					var randomX = doRandom((windowWidth * 0.9));
+					var randomY = doRandom((windowHeight * 0.9));
+					var dot = $("<div>").attr("class", "dot " + dots[i].toLowerCase()).css({ left: randomX, 
+																							 top: randomY,
+																							 "background-color": getRandomColor(),
+																							 width: (dots[i].length * 11) + "px",
+																							 height: (dots[i].length * 11) + "px",
+																							 "line-height": (dots[i].length * 11) + "px"
+																												}
+					).html(dots[i]);
+					if(dots[i]) {
+						items.push(dot);
+					}
+				}
+			}
+			cb(items);
+		}
+		setInterval(function() {
+			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case"]; // aka links
+			var excludes = ["#logo", ".popup"];
+			generateDots(dots, excludes, [], function(items) {
+				//$("#dots").html(" ");
+				var ids = [];
+				for(i in items) {
+					var id = Math.round(doRandom(1000));
+					ids.push(id);
+					var thing = $("#dots").append(items[i].attr("id", id));
+					
+				}
+				setTimeout(function() {
+					for(i in ids) {
+						$("#" + ids[i]).remove();
+					}
+				}, 5000);
+
+			});
+		}, 1000);
+
+		$("#container").on('click', '.dot.groepsonderzoek', function() {
+			new Messi('<object data="docs/groepsonderzoekrapport.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/groepsonderzoekrapport.pdf">Klik hier</a></p></object>', {title: 'Groepsonderzoek rapport', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.flowchart', function() {
+			new Messi("<img src='docs/dfnp.png' width='100%' height='100%' />", {title: 'Flowchart', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.aanpak', function() {
+			new Messi('<object data="docs/pva.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/pva.pdf">Klik hier</a></p></object>', {title: 'Plan van aanpak', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.samenwerkingscontract', function() {
+			new Messi('<object data="docs/Samenwerkingscontract-echte.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Samenwerkingscontract-echte.pdf">Klik hier</a></p></object>', {title: 'Samenwerkingscontract', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.security', function() {
+			new Messi('<object data="docs/Securityspecificatie.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Securityspecificatie.pdf">Klik hier</a></p></object>', {title: 'Security specificatie', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.test', function() {
+			new Messi('<object data="docs/Testplan.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Testplan.pdf">Klik hier</a></p></object>', {title: 'Test plan', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.use', function() {
+			new Messi("<img src='docs/usecase.png' width='100%' height='100%' />", {title: 'Use case', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+	</script>
+</html>
