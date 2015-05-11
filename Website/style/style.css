@@ -1,0 +1,46 @@
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    border: 1px solid black;
+    z-index: 10;
+}
+
+#container {
+	height: 90%;
+}
+
+.dot {
+	box-shadow: 2px 2px 2px black;
+	font-size: 20px;
+	font-weight: bold;
+	position: absolute;
+	border-radius: 999px;
+	background-color: #123;
+
+	text-align: center;
+	z-index: 2;
+	-webkit-animation: dotFade 7s infinite; /* Safari 4+ */
+	  -moz-animation:  dotFade 7s infinite; /* Fx 5+ */
+	  -o-animation:    dotFade 7s infinite; /* Opera 12+ */
+	  animation:       dotFade 7s infinite; /* IE 10+, Fx 29+ */
+	}
+
+@-webkit-keyframes dotFade {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+@-moz-keyframes dotFade {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+@-o-keyframes dotFade {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes dotFade {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
