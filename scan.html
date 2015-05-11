@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Major League Banking</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/scan.css" />
+  </head>
+  <body>
+    <div id="logo"><img src="./img/logo.png" /></div>
+    <div class="main"><h1>Scan uw pas</h1>
+      <div>
+        Scan uw pas om te beginnen.
+      </div>
+    </div>
+
+  </body>
+  <script src="./js/jquery.min.js"></script>
+  <script>
+    global.socket = require('socket.io-client')('http://localhost');
+  
+    global.currentPage = "scan";
+
+  </script>
+  <script src="./js/listener.js"></script>
+</html>

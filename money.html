@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Major League Banking</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <style>
+      .input::before {
+        content: '\20AC ';
+      }
+    </style>
+  </head>
+  <body>
+    <div id="logo"><img src="img/Logo.png" width="200"/></div>
+    <div class="main">
+      <h1>Kies je money!</h1>
+      <div id="money">
+      <!--
+        <div class="row">
+          <div class="row_left">1 - &euro; 20</div>
+          <div class="row_right">&euro; 100 - 4</div>
+        </div>
+        <div class="row">
+          <div class="row_left">2 - &euro; 50</div>
+          <div class="row_right">&euro; 200 - 5</div>
+        </div>
+        <div class="row">
+          <div class="row_left">3 - &euro; 80</div>
+          <div class="row_right">&euro; 500 - 6</div>
+        </div>
+        <div class="row">
+          <div class="row_left">&nbsp;</div>
+          <div class="row_right" style="margin-left: 223px">Zelf kiezen - 7</div>
+        </div>
+      </div>
+      !-->
+       <div>
+       Vul een bedrag in:
+      </div>
+      <div class="input"></div>
+      <div>
+        <font color="#FF0000">Let op: Minimaal &euro; 10! </font><br />
+        Druk op A om te bevestigen. <br />
+        Druk op B om te wissen. <br />
+        Druk op C om af te breken. <br />
+
+      </div>
+     
+    </div>
+  </body>
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/listener.js"></script>
+  <script>
+    global.currentPage = "money";
+    var digit = " ";
+    socket.on("update", function(data) {
+      data = JSON.parse(data); 
+      console.log(data);
+      if(data.digit) {
+        digit = digit + data.digit;
+        $("#money .input").html(digit);
+      }
+    });
+
+    socket.on("clear", function(data) {
+      digit = " ";
+      $("#money .input").html(digit);
+    });
+
+    socket.emit("money");
+    socket.on("money", function(data) {
+      var str = "";
+      data = JSON.parse(data);
+      console.log(data);
+      for(biljet in data.moneyOptions) {
+        var aantalVanBiljet = data.moneyOptions[biljet];
+        str += aantalVanBiljet + " x " + "&euro; " + biljet + "<br />";
+      }
+      str += "<br />" +
+        "<div>" +
+          "Druk op A om te bevestigen. <br />" +
+          "Druk op C om af te breken." +
+        "</div>";
+      $("#money").html(str);
+      $("h1").html("Biljet uitgave")
+    });
+
+  </script>
+</html>
