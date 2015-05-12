@@ -3,6 +3,11 @@
   <head>
     <title>Major League Banking</title>
     <link rel="stylesheet" href="./css/main.css" />
+    <style>
+      .input::before {
+        content: '\20AC ';
+      }
+    </style>
   </head>
   <body>
     <div id="logo"><img src="img/Logo.png" width="200"/></div>
@@ -33,9 +38,11 @@
       </div>
       <div class="input"></div>
       <div>
+        <font color="#FF0000">Let op: Minimaal &euro; 10! </font><br />
         Druk op A om te bevestigen. <br />
         Druk op B om te wissen. <br />
         Druk op C om af te breken. <br />
+
       </div>
      
     </div>
@@ -44,8 +51,19 @@
   <script src="./js/listener.js"></script>
   <script>
     global.currentPage = "money";
-    socket.on("update", function(data) { 
+    var digit = " ";
+    socket.on("update", function(data) {
+      data = JSON.parse(data); 
+      console.log(data);
+      if(data.digit) {
+        digit = digit + data.digit;
+        $("#money .input").html(digit);
+      }
+    });
 
+    socket.on("clear", function(data) {
+      digit = " ";
+      $("#money .input").html(digit);
     });
 
     socket.emit("money");

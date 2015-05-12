@@ -6,6 +6,12 @@
     <div class="main">
       <h1>Voer uw code in!</h1>
       <div id="code"></div>
+      <div id="failCount"></div>
+      <div class="warning">
+        <div>Druk op A om te bevestigen.</div>
+        <div>Druk op B om te corrigeren.</div>
+        <div>Druk op C om af te breken.</div>
+      </div>
     </div>
   
   <script src="./js/jquery.min.js"></script>
@@ -23,8 +29,20 @@
     }
     global.socket.on("update", function(data) {
       data = JSON.parse(data);
+      console.log(data);
       if(data.codelength) {
         printCode(data.codelength);
+      }
+      else {
+        printCode(0);
+      }
+      if(data.failCount) {
+        if(data.failCount == 2) {
+          $("#failCount").html("Onjuiste pincode! U heeft nog 1 poging.");
+        }
+        else if(data.failCount < 2) {
+          $("#failCount").html("Onjuiste pincode! U heeft nog " + (3-data.failCount) + " pogingen.");
+        }
       }
     });
      

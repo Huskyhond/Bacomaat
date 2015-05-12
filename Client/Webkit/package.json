@@ -1,10 +1,10 @@
 {
 	"version": "1.0.0",
-  "name": "Hoi",
+  "name": "MLB Banking",
   "main": "scan.html",
   "window": {
   	"title": "MLB Inc",
-  	"toolbar": true,
+  	"toolbar": false,
   	"frame": false,
   	"kiosk": true
   }

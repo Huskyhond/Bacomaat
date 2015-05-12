@@ -1,0 +1,36 @@
+<html><head>
+    <title>Major League Banking</title>
+    <link rel="stylesheet" href="./css/main.css">
+  </head>
+  <body>
+    <div id="logo"><img src="img/Logo.png" width="200"/></div>
+    <div class="main">
+      <h1>Bevestiging bedrag</h1>
+      <div id="error"></div>
+      <div id="bedrag"></div>
+      <div>Kies A om te bevestigen.</div>
+      <div>Kies B om te corrigeren.</div>
+    </div>
+
+  <script src="./js/jquery.min.js"></script>
+  <script src="./js/listener.js"></script>
+  <script>
+  
+    if(getUrlVars()["amount"]) {
+      $("#bedrag").html("<h2>&euro; " +  decodeURI(getUrlVars()["amount"]) + "</h2>");
+    }
+    
+    if(parseInt(getUrlVars()["error"]) > 0) {
+      if(getUrlVars()["message"]) {
+        $(".main").html("<h1>Er is een fout opgetreden!</h1><div>&nbsp;&nbsp;&nbsp;" + decodeURI(getUrlVars()["message"]) + "</div>");
+        
+        setTimeout(function() {
+          location.href = "money.html";
+        }, 3000);
+        
+      }
+    }
+    
+    global.currentPage = "confirm";
+  </script>
+</body></html>
