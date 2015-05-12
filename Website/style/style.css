@@ -6,6 +6,12 @@
     transform: translate(-50%, -50%);
     border: 1px solid black;
     z-index: 10;
+    box-shadow: 4px 4px 4px black;
+}
+
+#logo {
+  position: relative;
+  z-index: 10;
 }
 
 #container {

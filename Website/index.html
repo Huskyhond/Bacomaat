@@ -6,14 +6,16 @@
 	</head>
 	<body>
 		
-		<div class="popup"><iframe width="560" height="315" src="https://www.youtube.com/embed/YE7VzlLtp-4?showinfo=0" frameborder="0" allowfullscreen></iframe></iframe></div>	
+		<div class="popup"><iframe width="560" height="315" src="https://www.youtube.com/embed/IZDczJaA0Rc?showinfo=0&autoplay=1" frameborder="0" allowfullscreen></iframe></iframe></div>	
 		<div id="container">
 			<h1><img id="logo" src="img/logo.png"></h1>
+			<div style="position:relative; z-index:10;"> Je kan de snelheid van de dots aanpassen met : <br />CTRL + pijltje omhoog of omlaag </div>
 			<div id="dots"></div>
 		</div>
 	</body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="messi.min.js"></script>
+	<script src="mousetrap.min.js"></script>
 	<script>
 		var windowWidth = $(window).width();
 		var windowHeight = $(window).height();
@@ -21,12 +23,13 @@
 	<script>
 		
 		function getRandomColor() {
-	    var letters = '0123456789ABCDEF'.split('');
-	    var color = '#';
-	    for (var i = 0; i < 6; i++ ) {
-	        color += letters[Math.floor(Math.random() * 16)];
-	    }
-	    return color;
+			// Deze functie is gejat van stackoverflow.
+		    var letters = '0123456789ABCDEF'.split('');
+		    var color = '#';
+		    for (var i = 0; i < 6; i++ ) {
+		        color += letters[Math.floor(Math.random() * 16)];
+		    }
+		    return color;
 		}
 
 		function doRandom(max) {
@@ -39,14 +42,15 @@
 				for(i in dots) {
 					var randomX = doRandom((windowWidth * 0.9));
 					var randomY = doRandom((windowHeight * 0.9));
-					var dot = $("<div>").attr("class", "dot " + dots[i].toLowerCase()).css({ left: randomX, 
-																							 top: randomY,
-																							 "background-color": getRandomColor(),
-																							 width: (dots[i].length * 11) + "px",
-																							 height: (dots[i].length * 11) + "px",
-																							 "line-height": (dots[i].length * 11) + "px"
-																												}
-					).html(dots[i]);
+					var dot = $("<div>").attr("class", "dot " + dots[i].toLowerCase()).css({ 
+						left: randomX, 
+						top: randomY,
+						"background-color": getRandomColor(),
+						width: (dots[i].length * 11) + "px",
+						height: (dots[i].length * 11) + "px",		
+						"line-height": (dots[i].length * 11) + "px"
+					
+					}).html(dots[i]);
 					if(dots[i]) {
 						items.push(dot);
 					}
@@ -54,7 +58,8 @@
 			}
 			cb(items);
 		}
-		setInterval(function() {
+
+		function build() {
 			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case"]; // aka links
 			var excludes = ["#logo", ".popup"];
 			generateDots(dots, excludes, [], function(items) {
@@ -71,9 +76,28 @@
 						$("#" + ids[i]).remove();
 					}
 				}, 5000);
-
 			});
-		}, 1000);
+		}
+		var sI = setInterval(build, 1000);
+		var curspeed = 1000;
+		Mousetrap.bind('ctrl+up', function() {
+			if(curspeed > 100) {
+				curspeed = curspeed - 100;
+			}
+			console.log("speed increased to", curspeed);
+			clearInterval(sI);
+			sI = setInterval(build, curspeed);
+		});
+
+		Mousetrap.bind('ctrl+down', function() {
+			if(curspeed < 10000) {
+				curspeed = curspeed + 100;
+			}
+			clearInterval(sI);
+			console.log("speed decreased to", curspeed);
+			sI = setInterval(build, curspeed);
+		});
+
 
 		$("#container").on('click', '.dot.groepsonderzoek', function() {
 			new Messi('<object data="docs/groepsonderzoekrapport.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/groepsonderzoekrapport.pdf">Klik hier</a></p></object>', {title: 'Groepsonderzoek rapport', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
