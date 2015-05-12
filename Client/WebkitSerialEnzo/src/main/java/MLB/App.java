@@ -162,7 +162,8 @@ public class App
 				{
 					System.out.println("Writing to serialPort: Failed");
 				}
-				//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED	
+				//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED
+				wk.sendAccBlock(true);
 			}
 			else//als hij wel verder mag
 			{
@@ -196,7 +197,7 @@ public class App
 					System.out.println("Writing to serialPort: Failed");
 				}
 				//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED
-				wk.sendAccStatus(false);
+				wk.sendAccBlock(false);
 			}
 			else//als hij wel verder mag.
 			{

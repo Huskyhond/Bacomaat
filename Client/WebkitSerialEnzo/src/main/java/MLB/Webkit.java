@@ -6,7 +6,7 @@ public class Webkit
 {
     JSONObject accExist;
     JSONObject pinStatus;
-    JSONObject accStatus;
+	JSONObject accBlock;
     JSONObject failCountObj;
     JSONObject balanceAmount;
     JSONObject withdrawStatus;
@@ -44,20 +44,20 @@ public class Webkit
         }
         objSender.sendObject(accExist);
     }
-    public void sendAccStatus(boolean accountStatus)
-    {
-        accStatus = new JSONObject();
-        if (accountStatus)
-        {
-            accStatus.put("status", true);
-        }
-        else
-        {
-            accStatus.put("status", false);
-			accStatus.put("message", "Uw account is geblokkeerd. U kunt niet meer pinnen. Neem contact op met de bank.");
-        }
-        objSender.sendObject(accStatus);
-    }
+	public void sendAccBlock(boolean accBlocked)
+	{
+		accBlock = new JSONObject();
+		if (accBlocked)
+		{
+			accBlock.put("page", "finish");
+			accBlock.put("message", "U heeft tevaak een foute pincode ingevoerd. Uw account is geblokkeerd. Neem contact op met de bank.");
+		}
+		else
+		{
+			
+		}
+		objSender.sendObject(accBlock);
+	}
     public void sendPinLength(String pinLength)
     {
         int codeLength = Integer.parseInt(pinLength.replaceAll("[^\\d.]", ""));
