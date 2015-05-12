@@ -30,7 +30,6 @@ socket.on("update", function(data) {
     	location.href = "receipt.html";
     }
     else if(data.page == "finish" && global.currentPage != "finish") {
-      global.currentPage = finish;
     	var message = (data.message ? data.message : "");
     	location.href = "finish.html?message=" + message;
     }
