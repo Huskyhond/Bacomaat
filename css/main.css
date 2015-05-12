@@ -4,6 +4,10 @@ body {
 	color: white;
 }
 
+.warning {
+	padding-top: 30px
+}
+
 #logo {
 	text-align: center;
 }
