@@ -40,7 +40,7 @@ public class App
 		//String withdrawAmount="10";
 		
 		//***********JsonGet methodes***********//
-		//Jget.checkAccount(rekeningnummer);
+		Jget.checkAccount(rekeningnummer);
 		//Jget.getBalance(rekeningnummer);
 		//Jget.withdraw(rekeningnummer,withdrawAmount);
 		//Jget.pinFail(rekeningnummer);

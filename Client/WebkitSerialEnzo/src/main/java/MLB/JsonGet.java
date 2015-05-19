@@ -93,17 +93,28 @@ public class JsonGet
     	try
     	{
    	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
-   	    	JSONObject obj = new JSONObject(https);
+   	        JSONObject obj1 = new JSONObject(https);
+	    	JSONObject obj = obj1.getJSONObject("success");
    	    	int bankid = obj.getInt("bankid");   
     		System.out.println("banknr Exists_"+ "id: "+bankid);
    	    	return true; 	    	
    	    	
        }
        catch(Exception e)
-       {
+       {	
+    	   try
+    	   {
+        	   catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
+    	   }
+    	   catch(Exception ex)
+    	   {
+    	       	System.out.println("error in catchError");
+    	   }
+    	   
     	   System.out.println("banknr unknown or failcount > 2");
     	   return false;
        }
+    	
     }
     
     
@@ -113,24 +124,32 @@ public class JsonGet
     	try
     	{
    	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
-   	    	JSONObject obj = new JSONObject(https);
+   	    	JSONObject obj1 = new JSONObject(https);
+   	    	JSONObject obj = obj1.getJSONObject("success");
    	    	int bankid = obj.getInt("bankid");
    	    	String pasid = obj.getString("pasid");
    	    	int saldo = obj.getInt("saldo");
    	    	int failCount = obj.getInt("failCount");
    	    	int dailyLimit = obj.getInt("dailyLimit");
-
+   	    	
    	    	System.out.println("bankid: "+bankid);
    	    	System.out.println("pasid: "+pasid);
    	    	System.out.println("saldo: "+saldo);
    	    	System.out.println("failCount: "+failCount);
-   	    	System.out.println("dailyLimit: "+dailyLimit);
-   	    	
+   	    	System.out.println("dailyLimit: "+dailyLimit);	
    	    	return saldo;
 
        }
        catch(Exception e)
        {
+    	   try
+    	   {
+        	   catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
+    	   }
+    	   catch(Exception ex)
+    	   {
+    		   System.out.println("error in catchError");
+    	   }
        	System.out.println(e.getMessage());
        }
     	return 0;
@@ -144,7 +163,8 @@ public class JsonGet
     	try
     	{
     		String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+token);
-	    	JSONObject obj1 = new JSONObject(https);
+    		JSONObject obj = new JSONObject(https);
+   	    	JSONObject obj1 = obj.getJSONObject("success");
 	    	JSONObject obj2 = obj1.getJSONObject("transaction");
 	    	
 	    	int transactionid = obj2.getInt("id");
@@ -164,6 +184,14 @@ public class JsonGet
     	}
     	catch(Exception e)
     	{
+    	   try
+      	   {
+          	   catchError(httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+token));
+      	   }
+      	   catch(Exception ex)
+      	   {
+      		 System.out.println("error in catchError");
+      	   }
            	System.out.println(e.getMessage());
     	}
     }
@@ -174,13 +202,22 @@ public class JsonGet
     	try
     	{
 	    	String https = httpsGet(url+"/account/"+rekeningnummer+"/failed"+token);
-	    	JSONObject obj = new JSONObject(https);
+	    	JSONObject obj1 = new JSONObject(https);
+   	    	JSONObject obj = obj1.getJSONObject("success");
 	    	failCount = obj.getInt("failCount");
 	    	
 	    	System.out.println("failCount: "+failCount);
     	}
     	catch(Exception e)
     	{
+    	   try
+       	   {
+           	   catchError(httpsGet(url+"/account/"+rekeningnummer+"/failed"+token));
+       	   }
+       	   catch(Exception ex)
+       	   {
+       		System.out.println("error in catchError");
+       	   }
            	System.out.println(e.getMessage());
     	}
     	return failCount;
@@ -195,6 +232,14 @@ public class JsonGet
     	}
     	catch(Exception e)
     	{
+    		try
+        	{
+    			catchError(httpsGet(url+"/account/"+rekeningnummer+"/failed"+token));
+    	    }
+        	catch(Exception ex)
+    		{
+        		System.out.println("error in catchError");
+            }
            	System.out.println(e.getMessage());
     	}
     }
@@ -205,8 +250,9 @@ public class JsonGet
     	try
     	{
    	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
-   	    	JSONObject obj = new JSONObject(https);
-   	    	int saldo = obj.getInt("saldo");
+   	        JSONObject obj1 = new JSONObject(https);
+	    	JSONObject obj = obj1.getJSONObject("success");   	    	
+	    	int saldo = obj.getInt("saldo");
    	    	System.out.println("checkWithdraw saldo: "+saldo+"\nWithdraw: "+withdrawAmount);
    	    	if(Integer.parseInt(withdrawAmount)>saldo)
    	    	{
@@ -222,7 +268,15 @@ public class JsonGet
        }
        catch(Exception e)
        {
-       	System.out.println(e.getMessage());
+    	   try
+	       	{
+	   			catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
+	   	    }
+	       	catch(Exception ex)
+	   		{
+	       		System.out.println("error in catchError");
+	        }
+	       	System.out.println(e.getMessage());
        }
     	return true;
     }
@@ -231,10 +285,10 @@ public class JsonGet
     {
     	try
     	{
-	    	String https = httpsGet("https://145.24.222.177/balance/MLBI0200000002?changeBalance=1&token=Dk49D9dka13D9f03S9dj1D9da01Akd03");
+	    	String https = httpsGet("https://145.24.222.177/balance/22");
 	    	JSONObject obj1 = new JSONObject(https);
-	    	JSONObject obj2 = obj1.getJSONObject("transaction");
-	    	int id = obj2.getInt("id");
+	    	JSONObject obj2 = obj1.getJSONObject("error");
+	    	/*int id = obj2.getInt("id");
 	    	String accountNumber = obj2.getString("accountNumber");
 	    	int amount = obj2.getInt("amount");
 	    	int machineid = obj2.getInt("machineID");
@@ -243,8 +297,30 @@ public class JsonGet
 	    	System.out.println("accountNumber: "+accountNumber);
 	    	System.out.println("amount: "+amount);
 	    	System.out.println("machineid: "+machineid);
-
+	    	 */
+	    	int errorCode = obj2.getInt("error");
+	    	String message = obj2.getString("message");
+	    	System.out.println(errorCode);
+	    	System.out.println(message);
 	
+
+    	}
+    	catch(Exception e)
+    	{
+           	System.out.println(e.getMessage());
+    	}
+    }
+    public void catchError(String https)
+    {
+    	try
+    	{
+	    	JSONObject obj1 = new JSONObject(https);
+	    	JSONObject obj2 = obj1.getJSONObject("error");
+	    	
+	    	int errorCode = obj2.getInt("error");
+	    	String message = obj2.getString("message");
+	    	System.out.println(errorCode);
+	    	System.out.println(message);
 
     	}
     	catch(Exception e)
