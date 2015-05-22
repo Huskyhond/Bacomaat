@@ -14,7 +14,7 @@ import jssc.SerialPortException;
 public class App 
 {
 	final static Printer printer = new Printer();
-	final static SerialPort serialPort = new SerialPort("COM3");
+	static SerialPort serialPort = new SerialPort("COM3");
 	final static SQLDataBase db = new SQLDataBase();
 	final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
 	final static JsonGet Jget = new JsonGet(printer);
@@ -38,7 +38,12 @@ public class App
 	{
 		//String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
 		//String withdrawAmount="10";
-		
+                if(args.length > 0){
+                    serialPort = new SerialPort(args[0]);
+                }
+                else {
+                    serialPort = new SerialPort("COM3"); // Debugging
+                }
 		//***********JsonGet methodes***********//
 		Jget.checkAccount(rekeningnummer);
 		//Jget.getBalance(rekeningnummer);
@@ -62,12 +67,14 @@ public class App
 		
 		try 
 		{
+                    /* WTF?
 			for(int i=0;i<2;i++)
 			{
 				serialPort.openPort();//Open serial port
 				serialPort.setParams(2000000, 8, 1, 2);//Set params.
 				serialPort.closePort();
 			}
+                    */
 			serialPort.openPort();//Open serial port
 			serialPort.setParams(2000000, 8, 1, 2);//Set params.
 			
