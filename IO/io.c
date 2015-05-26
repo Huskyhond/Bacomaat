@@ -124,42 +124,11 @@ void loop()
   //read the accountnumber from block 2. 
   readBlock(2, readblockBuffer);
   byte accountNumber[16];
-  for(int c = 0; c < 16; c++)
+  for(int c = 0; c < 15; c++)
   {
     accountNumber[c]=readblockBuffer[c];
-    Serial.write(readblockBuffer[c]);
+    //Serial.write(readblockBuffer[c]);
   }
-  
-
-  int accountExists;
-  int state = 1;
-  
-  while(state) // wait for serial data
-  {
-    if(Serial.available() > 0) // check for serial data
-    {
-      accountExists = Serial.read(); // fill the byte
-      state = 0; //reset state we've got what we need
-    }
-  }
-  
-  if(accountExists != 50) // check if we havent been returned a 2 exactly.
-  {
-    Serial.print("06"); // print cancel
-    accountExists = 0; // clear the identifying variable
-    finish(); // finish aka, get ready to read another card.
-    return; // return and start over.
-  }
-  
-  //read the pin number from block 6.
-  readBlock(6, readblockBuffer);
-  byte pin[4];
-  for(int c = 0; c < 4; c++)
-  {
-    pin[c]=readblockBuffer[c];
-    //Serial.write(pin[c]);
-  }
-  //Serial.println(""); 
   
   //setup variables, and start pin verification loop.
   loop:
@@ -176,52 +145,30 @@ void loop()
     char keypress = keyPad.getKey();
     switch(keypress)
     {
+      //pin has been chosen check if the length is correct and return if it's to short.
       case 'A':
         if(keyCounter < 4)
         {
           run = 0;
           goto loop;
         }
+
+        //if the keycounter is 4 we can let the client verify the pin and account. Since the whole crap was merged in 1 API call /login.
         if(keyCounter >= 4)
         { 
           keyCounter=0;
-          for(int x=0; x<=3; x++)
+          Serial.write("20");
+          for(int c = 0; c < 15; c++)
           {
-            if(pin[x] != input[x])
-            {
-              Serial.println("20");//fase 2, verification
-              /*for(int x=0; x<16; x++)
-              {
-                Serial.write(accountNumber[x]);
-              }*/
-              //Serial.println("");
-              
-              stateFailCount = 1;
-              failCheck = 0;
-              while(stateFailCount) // wait for serial data
-              {
-                if(Serial.available() > 0) // check for serial data
-                {
-                  failCheck = Serial.read(); // fill the byte
-                  stateFailCount = 0; //reset state we've got what we need
-                }
-              }
-              
-              if(failCheck != 50) // check if we havent been returned a 2 exactly.
-              {
-                Serial.print("06"); // print cancel
-                failCheck = 0; // clear the identifying variable
-                finish(); // finish aka, get ready to read another card.
-                return; // return and start over.
-              }
-              
-              run = 0;
-              goto loop;
-            }
+            Serial.write(accountNumber[c]);
+          }
+          for(int x = 0; x <= 3; x++)
+          {
+            Serial.write(input[x]);
           }
         }
-        Serial.println("21");//fase 2, verification
         
+        //wait for verification of pin and accountnumber.
         stateFailCount = 1;
         failCheck = 0;
         while(stateFailCount) // wait for serial data
@@ -313,7 +260,7 @@ void loop()
                       }
                       if(enoughBalance != 50) // check if we havent been returned a 2 exactly.
                       {
-                        Serial.print("04"); // print fase withdraw.
+                        //Serial.print("04"); // print fase withdraw.
                         enoughBalance = 0; // clear the identifying variable.
                         runWithdraw = 1;
                         goto withdraw;
@@ -375,7 +322,6 @@ void loop()
                     }
                     for(int x=0; x<4; x++)
                     {
-                    pin[x] = 0;
                     input[x] = 0;
                     }
                     for(int x=0; x<16; x++)
@@ -435,7 +381,6 @@ void loop()
          keyCounter=0;
          for(int x=0; x<4; x++)
          {
-          pin[x] = 0;
           input[x] = 0;
          }
          for(int x=0; x<16; x++)
