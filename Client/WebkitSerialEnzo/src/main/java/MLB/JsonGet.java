@@ -5,6 +5,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
@@ -37,20 +38,25 @@ public class JsonGet
     
     public SocketIOClient client;
     private Printer printer;
+    private String token;
+    private String url = "https://145.24.222.177";
+	private String https = null;
+	private boolean balance;
     
     public JsonGet(Printer _printer)
     {
     	printer = _printer;
     }
     
-    private String httpsGet(String url) throws Exception {
+    public String sendPost(String url,String urlParameters,String token) throws Exception 
+    {
         String USER_AGENT = "Mozilla/5.0 (Windows NT 6.3; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0";
-        URL obj = new URL(url);
-        
+
+		URL obj = new URL(url);
         SslCert.trustMe(); // SSL certificaat laden ( self signed).
-        
-        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-        con.setHostnameVerifier(new HostnameVerifier() {
+
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+		con.setHostnameVerifier(new HostnameVerifier() {
             public boolean verify(String hostname, SSLSession session)
             {
                 if (hostname.equals("145.24.222.177"))
@@ -59,45 +65,49 @@ public class JsonGet
             }
         });
 
-        // optional default is GET
-        con.setRequestMethod("GET");
+		//add reuqest header
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", USER_AGENT);
+		con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+		con.setRequestProperty("token",token);
 
-        //add request header
-        con.setRequestProperty("User-Agent", USER_AGENT);
 
-        // Debugging
-        //int responseCode = con.getResponseCode();
-        //System.out.println("\nSending 'GET' request to URL : " + url);
-        //System.out.println("Response Code : " + responseCode);
+		// Send post request
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.writeBytes(urlParameters);
+		wr.flush();
+		wr.close();
 
-        BufferedReader in = new BufferedReader(
-        new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
+		int responseCode = con.getResponseCode();
+		//System.out.println("\nSending 'POST' request to URL : " + url);
+		//System.out.println("Post parameters : " + urlParameters);
+		//System.out.println("Response Code : " + responseCode);
 
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+		BufferedReader in = new BufferedReader(
+		new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
 
-        //print result
-        return response.toString();
+		while ((inputLine = in.readLine()) != null) {
+		response.append(inputLine);
+		}
+		in.close();
 
-    }
-    
-    private String token = "?token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
-    private String url = "https://145.24.222.177";
-    
-    public boolean checkAccount(String rekeningnummer)
+		//print result
+		return response.toString();
+
+		}
+  
+    public boolean login(String rekeningnummer, String pin)//<<---DONE
     {
-    	
     	try
     	{
-   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
-   	        JSONObject obj1 = new JSONObject(https);
+   	        https = sendPost(url+"/login","cardId="+rekeningnummer+"&pin="+pin,"");
+    		JSONObject obj1 = new JSONObject(https);
 	    	JSONObject obj = obj1.getJSONObject("success");
-   	    	int bankid = obj.getInt("bankid");   
-    		System.out.println("banknr Exists_"+ "id: "+bankid);
+   	    	token = obj.getString("token");   
+    		System.out.println("cardId: Exist , pin: SUCCES, token: "+token);
    	    	return true; 	    	
    	    	
        }
@@ -105,36 +115,33 @@ public class JsonGet
        {	
     	   try
     	   {
-        	   catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
+        	   catchError(https);
     	   }
     	   catch(Exception ex)
     	   {
     	       	System.out.println("error in catchError");
     	   }
-    	   
-    	   System.out.println("banknr unknown or failcount > 2");
     	   return false;
        }
-    	
     }
     
     
-    public int getBalance(String rekeningnummer)//return saldo
+    public int getBalance(String rekeningnummer) //<<---DONE
     {
     	System.out.println(rekeningnummer);
     	try
     	{
-   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
+   	        https = sendPost(url+"/balance/","",token);
    	    	JSONObject obj1 = new JSONObject(https);
    	    	JSONObject obj = obj1.getJSONObject("success");
    	    	int bankid = obj.getInt("bankid");
-   	    	String pasid = obj.getString("pasid");
+   	    	String cardId = obj.getString("cardId");
    	    	int saldo = obj.getInt("saldo");
    	    	int failCount = obj.getInt("failCount");
    	    	int dailyLimit = obj.getInt("dailyLimit");
    	    	
    	    	System.out.println("bankid: "+bankid);
-   	    	System.out.println("pasid: "+pasid);
+   	    	System.out.println("cardId: "+cardId);
    	    	System.out.println("saldo: "+saldo);
    	    	System.out.println("failCount: "+failCount);
    	    	System.out.println("dailyLimit: "+dailyLimit);	
@@ -145,18 +152,110 @@ public class JsonGet
        {
     	   try
     	   {
-        	   catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
+        	   catchError(https);
     	   }
     	   catch(Exception ex)
     	   {
     		   System.out.println("error in catchError");
     	   }
-       	System.out.println(e.getMessage());
        }
     	return 0;
     }
     
-    public void withdraw(String rekeningnummer, String withdrawAmount)//return transid,accountnumber,amount,machineid,date naar PRINTER
+    public void withdraw(String rekeningnummer, String withdrawAmount)//<-----DONE
+    {
+    	System.out.println("JsonGet: withdraw:"+withdrawAmount);
+    	try
+    	{
+    		https = sendPost(url+"/withdraw/","amount="+withdrawAmount,token);
+    		JSONObject obj = new JSONObject(https);
+   	    	JSONObject obj1 = obj.getJSONObject("success");
+	    	JSONObject obj2 = obj1.getJSONObject("transaction");
+	    	
+	    	int transactionid = obj2.getInt("id");
+	    	int amount = obj2.getInt("amount");
+	    	int machineid = obj2.getInt("machineID");
+	    	String date = obj2.getString("date");
+	    	
+   	    	printer.setPrinter(rekeningnummer, Integer.toString(amount), Integer.toString(transactionid),date);
+
+		    
+		    System.out.println("transactionid: "+transactionid);
+		    System.out.println("cardId: "+ rekeningnummer);
+	    	System.out.println("amount: "+amount);
+	    	System.out.println("machineid: "+machineid);
+	    	System.out.println("date: "+date);
+	    	balance = true;
+    	}
+    	catch(Exception e)
+    	{
+    	   try
+      	   {
+          	   catchError(https);
+      	   }
+      	   catch(Exception ex)
+      	   {
+      		 System.out.println("error in catchError");
+      	   }
+    	}
+    }
+
+    public void test()
+    {
+    	try
+    	{
+	    	String https = sendPost("https://145.24.222.177/balance/","",token);
+	    	JSONObject obj1 = new JSONObject(https);
+	    	JSONObject obj2 = obj1.getJSONObject("error");
+	    
+	    	int errorCode = obj2.getInt("error");
+	    	String message = obj2.getString("message");
+	    	System.out.println(errorCode);
+	    	System.out.println(message);
+	
+
+    	}
+    	catch(Exception e)
+    	{
+           	System.out.println(e.getMessage());
+    	}
+    }
+    public void catchError(String https)
+    {
+    	try
+    	{
+    		System.out.println("catchError: ");
+	    	JSONObject obj1 = new JSONObject(https);
+	    	JSONObject obj2 = obj1.getJSONObject("error");
+	    	
+	    	int code = obj2.getInt("code");
+	    	String message = obj2.getString("message");
+	    	
+	    	System.out.println("Error: "+code);
+	    	System.out.println("Message: "+message);
+	    	
+	    	if(code == 15)
+	    	{
+	    		int failedAttempts = obj2.getInt("failedAttempts");
+	    		System.out.println("failedAttempts: "+failedAttempts);
+	    	}
+	    	if(code == 32)
+	    	{
+	    		balance = false;
+	    	}
+
+    	}
+    	catch(Exception e)
+    	{
+           	System.out.println(e.getMessage());
+    	}
+    }
+    public boolean getBooleanBalance()
+    {
+    	return balance;
+    }
+    
+    /* public void withdraw(String rekeningnummer, String withdrawAmount)//return transid,accountnumber,amount,machineid,date naar PRINTER
     {
     	System.out.println("JsonGet: withdraw:"+withdrawAmount);
     	String token = withdrawAmount+"&token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
@@ -195,6 +294,43 @@ public class JsonGet
       	   }
            	System.out.println(e.getMessage());
     	}
+    }
+    
+    public int getBalance(String rekeningnummer)//return saldo
+    {
+    	System.out.println(rekeningnummer);
+    	try
+    	{
+   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
+   	    	JSONObject obj1 = new JSONObject(https);
+   	    	JSONObject obj = obj1.getJSONObject("success");
+   	    	int bankid = obj.getInt("bankid");
+   	    	String cardId = obj.getString("cardId");
+   	    	int saldo = obj.getInt("saldo");
+   	    	int failCount = obj.getInt("failCount");
+   	    	int dailyLimit = obj.getInt("dailyLimit");
+   	    	
+   	    	System.out.println("bankid: "+bankid);
+   	    	System.out.println("cardId: "+cardId);
+   	    	System.out.println("saldo: "+saldo);
+   	    	System.out.println("failCount: "+failCount);
+   	    	System.out.println("dailyLimit: "+dailyLimit);	
+   	    	return saldo;
+
+       }
+       catch(Exception e)
+       {
+    	   try
+    	   {
+        	   catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
+    	   }
+    	   catch(Exception ex)
+    	   {
+    		   System.out.println("error in catchError");
+    	   }
+       	System.out.println(e.getMessage());
+       }
+    	return 0;
     }
     
     public int pinFail(String rekeningnummer)//return failCount
@@ -280,45 +416,6 @@ public class JsonGet
 	       	System.out.println(e.getMessage());
        }
     	return true;
-    }
-    
-    public void test()
-    {
-    	try
-    	{
-	    	String https = httpsGet("https://145.24.222.177/balance/22");
-	    	JSONObject obj1 = new JSONObject(https);
-	    	JSONObject obj2 = obj1.getJSONObject("error");
-	    
-	    	int errorCode = obj2.getInt("error");
-	    	String message = obj2.getString("message");
-	    	System.out.println(errorCode);
-	    	System.out.println(message);
-	
-
-    	}
-    	catch(Exception e)
-    	{
-           	System.out.println(e.getMessage());
-    	}
-    }
-    public void catchError(String https)
-    {
-    	try
-    	{
-	    	JSONObject obj1 = new JSONObject(https);
-	    	JSONObject obj2 = obj1.getJSONObject("error");
-	    	
-	    	int errorCode = obj2.getInt("error");
-	    	String message = obj2.getString("message");
-	    	System.out.println("Error: "+errorCode);
-	    	System.out.println("Message: "+message);
-
-    	}
-    	catch(Exception e)
-    	{
-           	System.out.println(e.getMessage());
-    	}
-    }
+    }*/
     
 }
