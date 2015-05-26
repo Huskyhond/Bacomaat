@@ -13,10 +13,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
 import org.json.JSONObject;
+/*
 import org.json.JSONArray;
 import org.json.simple.JSONValue;
 import org.json.*;
-import org.json.simple.parser.*;
+import org.json.simple.parser.*;*/
 
 
 /*
@@ -288,16 +289,7 @@ public class JsonGet
 	    	String https = httpsGet("https://145.24.222.177/balance/22");
 	    	JSONObject obj1 = new JSONObject(https);
 	    	JSONObject obj2 = obj1.getJSONObject("error");
-	    	/*int id = obj2.getInt("id");
-	    	String accountNumber = obj2.getString("accountNumber");
-	    	int amount = obj2.getInt("amount");
-	    	int machineid = obj2.getInt("machineID");
-	    	
-	    	System.out.println("id: "+id);
-	    	System.out.println("accountNumber: "+accountNumber);
-	    	System.out.println("amount: "+amount);
-	    	System.out.println("machineid: "+machineid);
-	    	 */
+	    
 	    	int errorCode = obj2.getInt("error");
 	    	String message = obj2.getString("message");
 	    	System.out.println(errorCode);
@@ -319,8 +311,8 @@ public class JsonGet
 	    	
 	    	int errorCode = obj2.getInt("error");
 	    	String message = obj2.getString("message");
-	    	System.out.println(errorCode);
-	    	System.out.println(message);
+	    	System.out.println("Error: "+errorCode);
+	    	System.out.println("Message: "+message);
 
     	}
     	catch(Exception e)

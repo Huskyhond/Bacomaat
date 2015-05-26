@@ -45,9 +45,10 @@ public class App
                     serialPort = new SerialPort("COM3"); // Debugging
                 }
 		//***********JsonGet methodes***********//
-		Jget.checkAccount(rekeningnummer);
+		//Jget.checkAccount(rekeningnummer);
 		//Jget.getBalance(rekeningnummer);
 		//Jget.withdraw(rekeningnummer,withdrawAmount);
+		//Jget.checkWithdraw(rekeningnummer,withdrawAmount);
 		//Jget.pinFail(rekeningnummer);
 		//Jget.pinSucces(rekeningnummer);
 		//Jget.test();
