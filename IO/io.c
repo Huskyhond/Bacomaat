@@ -8,10 +8,9 @@ MFRC533.h can be found at https://github.com/miguelbalboa/rfid
 
 Case explantion
 You can except the following cases:
-01 = card found, break idle, wait for accountnumber 10 bytes.
+01 = card found, break idle.
 02 = clear input.
-20 = pin verification failed.
-21 = pin verification succeeded.
+20 = wait for accountnumber and pin 19 bytes.
 03 = return balance. 
 04 = withdraw cash, wait for amount, 3 bytes.
 05 = print ticket, with accountnumber, withdrawn amount, date and time.
