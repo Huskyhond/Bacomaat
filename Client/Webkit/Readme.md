@@ -1,18 +1,13 @@
-- Update
-  { 
-    "page" : "code", - Code pagina laden 
-  	"codelength": getal, - Lengte van huidige code
-  } 
-  { 
-  	"page" : "scan" - Scan pagina laden  
-  } 
-  {
-  	"page" : "money", - Geld pagina laden
-  	"moneyOptions": [10, 20, 50, 100] - Uit welke bedragen gekozen kunnen worden (en hoeveel)
-  }
-  {
-  	"page" : "receipt" - Of ze een bonnetje willen.
-  }
-  {
-  	"page" : "finish" - Bedankt pagina ( deze reset zich zelf weer naar de scan pagina na 5 secs)
-  }
+# Bacomaat
+**TODO**
+ - case 01: accountExist doorgeven webkit
+ - case 21: pin gelukt doorgeven webkit
+ - case 22: pin faal doorgeven webkit
+ -          bij 3x falen zal accountState op "LOCK" gaan, verstuur dit dus ook
+ - case 03: getBalance doorgeven webkit - Mogelijke opties doorgeven (10, 20, 50 euro etc..)
+ - case 04: withdrawAmount doorgeven webkit
+ -          ook een error doorgeven als er niet genoeg saldo is om te withdrawen (dit gebeurt in de if van case 04)
+ - case 51 & 52: receipt : Ja of Nee, doorgeven webkit
+ - case 06: cancel request doorgeven webkit
+ - case 07: clear input
+ - case 02: pin lengte doorgeven webkit
