@@ -38,14 +38,16 @@ public class JsonGet
     
     public SocketIOClient client;
     private Printer printer;
+    private Webkit wk;
     private String token;
     private String url = "https://145.24.222.177";
 	private String https = null;
 	private boolean balance;
     
-    public JsonGet(Printer _printer)
+    public JsonGet(Printer _printer, Webkit _wk)
     {
     	printer = _printer;
+    	wk = _wk;
     }
     
     public String sendPost(String url,String urlParameters,String token) throws Exception 
@@ -97,7 +99,7 @@ public class JsonGet
 		//print result
 		return response.toString();
 
-		}
+	}
   
     public boolean login(String rekeningnummer, String pin)//<<---DONE
     {
@@ -237,6 +239,8 @@ public class JsonGet
 	    	if(code == 15)
 	    	{
 	    		int failedAttempts = obj2.getInt("failedAttempts");
+				wk.sendFailCount(failedAttempts);
+
 	    		System.out.println("failedAttempts: "+failedAttempts);
 	    	}
 	    	if(code == 32)

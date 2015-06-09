@@ -17,7 +17,7 @@ public class App
 	static SerialPort serialPort = new SerialPort("COM3");
 	final static SQLDataBase db = new SQLDataBase();
 	final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
-	final static JsonGet Jget = new JsonGet(printer);
+	final static JsonGet Jget = new JsonGet(printer,wk);
 	
 	static String rekeningnummer = "MLBI0200000001";
 	static String withdrawAmount ="";
@@ -45,9 +45,9 @@ public class App
                     serialPort = new SerialPort("COM3"); // Debugging
                 }
                 
-                Jget.login("MLBI02000000002","1234");
-                Jget.getBalance("MLBI02000000002");
-                Jget.withdraw("MLBI02000000002", "10");
+               // Jget.login("MLBI02000000002","1234");
+               // Jget.getBalance("MLBI02000000002");
+               // Jget.withdraw("MLBI02000000002", "10");
                 
         //***********JsonGet methodes***********//
 		//Jget.checkAccount(rekeningnummer);
@@ -113,9 +113,9 @@ public class App
 								if(a==20)
 								{
 									System.out.println("waiting for reknr+pin...");
-									String read1 = new String(serialPort.readString(19));//reknmr+pin aan elkaar
-									System.out.println("read1: "+read1);
-									switchCase(a,read1);
+									//String read1 = new String(serialPort.readString(19));//reknmr+pin aan elkaar
+									System.out.println("read1: "+sub2);
+									switchCase(a,sub2);
 									
 								}
 								else if(a==7)
@@ -386,7 +386,7 @@ public class App
 		String result= "";	
 		switch(caseFromArduino)
 		{
-			case 20: //pinpas word hier gescant //<-----DONE
+			case 20: //pinpas login //<-----DONE
 			rekeningnummer = restBytes.substring(0, 15);
 			String pin = restBytes.substring(15,19);
 			accountExist = Jget.login(rekeningnummer,pin);
@@ -406,7 +406,7 @@ public class App
 			{
 				System.out.println("Writing to serialPort: Failed");
 			}
-			System.out.println(accountExist);
+			System.out.println("accountExist: "+accountExist);
 			
 			result = "rekeningnummer: "+rekeningnummer+"\npin: "+pin; //print rekeningnummer en pin van Arduino	
 			
