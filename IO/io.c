@@ -123,7 +123,7 @@ void loop()
   //read the accountnumber from block 2. 
   readBlock(2, readblockBuffer);
   byte accountNumber[16];
-  for(int c = 0; c < 15; c++)
+  for(int c = 0; c < 14; c++)
   {
     accountNumber[c]=readblockBuffer[c];
     //Serial.write(readblockBuffer[c]);
@@ -157,7 +157,7 @@ void loop()
         { 
           keyCounter=0;
           Serial.write("20");
-          for(int c = 0; c < 15; c++)
+          for(int c = 0; c < 14; c++)
           {
             Serial.write(accountNumber[c]);
           }
