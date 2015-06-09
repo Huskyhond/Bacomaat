@@ -44,7 +44,12 @@ public class App
                 else {
                     serialPort = new SerialPort("COM3"); // Debugging
                 }
-		//***********JsonGet methodes***********//
+                
+                Jget.login("MLBI02000000002","1234");
+                Jget.getBalance("MLBI02000000002");
+                Jget.withdraw("MLBI02000000002", "10");
+                
+        //***********JsonGet methodes***********//
 		//Jget.checkAccount(rekeningnummer);
 		//Jget.getBalance(rekeningnummer);
 		//Jget.withdraw(rekeningnummer,withdrawAmount);
@@ -102,8 +107,13 @@ public class App
 								int a = Integer.parseInt(sub);
 								if(a==1)
 								{
-									System.out.println("waiting for reknr...");
-									String read1 = new String(serialPort.readString(14));
+									System.out.println("Pinpas gescand!");
+								}
+								
+								if(a==20)
+								{
+									System.out.println("waiting for reknr+pin...");
+									String read1 = new String(serialPort.readString(19));//reknmr+pin aan elkaar
 									System.out.println("read1: "+read1);
 									switchCase(a,read1);
 									
@@ -156,7 +166,7 @@ public class App
 		
 		switch(caseFromArduino)
 		{
-			case 21: //pin verify Succes
+			/*case 21: //pin verify Succes
 			result = "pin gelukt!";
 			failCount = Jget.pinFail(rekeningnummer);
 			if(failCount>3)//als de arduino niet verder mag
@@ -222,6 +232,7 @@ public class App
 			//HIER MOET JE failcount NAAR NIEK
 			wk.sendFailCount(failCount);
 			break;
+			*/
 			
 			case 3: //Get balance
 			balance = Jget.getBalance(rekeningnummer);
@@ -231,7 +242,7 @@ public class App
 			wk.sendBalance(balance);
 			break;
 			
-			case 4: //Withdraw some amount
+			case 4: //Naar withdraw page
 			result = "Entering withdraw page";
 			resetWithdraw();
 			//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
@@ -295,6 +306,7 @@ public class App
 			
 			if(confirm == 2)//doorgaan met afgerond bedrag
 			{
+				/*
 				//Hier checken of er genoeg saldo is
 				boolean check = Jget.checkWithdraw(rekeningnummer, afgerond);
 				if(check == true) //Er is genoeg saldo
@@ -315,6 +327,34 @@ public class App
 				{
 					resetWithdraw();
 					//withdrawAmount = "";
+					try
+					{
+						serialPort.writeInt(49); // dit schrijft een 1, Nee dus
+					}
+					catch(Exception e)
+					{
+						System.out.println("Error in serialWrite");	
+					}
+					//Hier terug naar withdraw page
+					wk.invalidSaldo();
+				}*/
+				Jget.withdraw(rekeningnummer, afgerond);
+				if(Jget.getBooleanBalance()==true)
+				{
+					try
+					{
+						serialPort.writeInt(50); // dit schrijft een 2, Ja dus
+					}
+					catch(Exception e)
+					{
+						System.out.println("Error in serialWrite");
+					}
+					//Hier naar bon page
+					wk.toReceipt();
+				}
+				else
+				{
+					resetWithdraw();
 					try
 					{
 						serialPort.writeInt(49); // dit schrijft een 1, Nee dus
@@ -346,9 +386,10 @@ public class App
 		String result= "";	
 		switch(caseFromArduino)
 		{
-			case 1: //pinpas word hier gescant
-			rekeningnummer = restBytes;
-			accountExist = Jget.checkAccount(rekeningnummer);
+			case 20: //pinpas word hier gescant //<-----DONE
+			rekeningnummer = restBytes.substring(0, 15);
+			String pin = restBytes.substring(15,19);
+			accountExist = Jget.login(rekeningnummer,pin);
 			try
 			{
 				if(accountExist == true)
@@ -367,7 +408,7 @@ public class App
 			}
 			System.out.println(accountExist);
 			
-			result = "rekeningnummer: "+rekeningnummer; //print rekeningnummer van Arduino	
+			result = "rekeningnummer: "+rekeningnummer+"\npin: "+pin; //print rekeningnummer en pin van Arduino	
 			
 			//HIER MOET JE accountExist NAAR WEBKIT STUREN
 			wk.sendAccExist(accountExist);
