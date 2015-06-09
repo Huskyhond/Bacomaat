@@ -1,11 +1,9 @@
 
 package MLB;
 
-//import com.corundumstudio.socketio.SocketIOClient;
+//import com.corundumstu1dio.socketio.SocketIOClient;
 
 import jssc.SerialPort;
-
-//import org.json.*;
 
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;

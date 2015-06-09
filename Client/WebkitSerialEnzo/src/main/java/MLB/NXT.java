@@ -1,4 +1,5 @@
-Public interface NXT
+Public interface NXT;
+
 {
 	//Deze string geeft de COM poort aan die gebruikt wordt.
 	private String comport;
