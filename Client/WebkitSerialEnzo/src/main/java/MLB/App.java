@@ -387,8 +387,9 @@ public class App
 		switch(caseFromArduino)
 		{
 			case 20: //pinpas login //<-----DONE
-			rekeningnummer = restBytes.substring(0, 15);
-			String pin = restBytes.substring(15,19);
+			rekeningnummer = restBytes.substring(0, 14);
+			int pinsub = restBytes.length();
+			String pin = restBytes.substring((pinsub-4),pinsub);
 			accountExist = Jget.login(rekeningnummer,pin);
 			try
 			{
