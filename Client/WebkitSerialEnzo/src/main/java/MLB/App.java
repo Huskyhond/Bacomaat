@@ -4,10 +4,10 @@ package MLB;
 //import com.corundumstu1dio.socketio.SocketIOClient;
 
 import jssc.SerialPort;
-
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
+import lejos.pc.comm.*;
 
 public class App 
 {
@@ -34,6 +34,14 @@ public class App
 	*/
 	public static void main(String[] args) 
 	{
+		try {
+			NXTComm nxtComm = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+			NXTInfo x[] = nxtComm.search("PLAT2");
+			nxtComm.open(x[0]);
+		}
+		catch(Exception ex) {
+			System.out.println("NXJ Not Found.");
+		}
 		//String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
 		//String withdrawAmount="10";
                 if(args.length > 0){

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="com/corundumstudio/socketio/" kind="src" path="java/src/main/java"/>
+	<classpathentry kind="src" path="java/src/main/java/com/corundumstudio/socketio"/>
+	<classpathentry kind="src" path="java/src/test/java"/>
+	<classpathentry kind="src" path="Serial2Java/src"/>
+	<classpathentry kind="src" path="WebkitSerialEnzo/src/main/java"/>
+	<classpathentry kind="lib" path="java/netty-socketio-1.5.0.jar"/>
+	<classpathentry kind="lib" path="java/target/mavenproject1_ioserver-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="Serial2Java/jssc.jar"/>
+	<classpathentry kind="lib" path="Serial2Java/mysql-connector-java-3.1.14-bin.jar"/>
+	<classpathentry kind="lib" path="WebkitSerialEnzo/json-20141113.jar"/>
+	<classpathentry kind="lib" path="WebkitSerialEnzo/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="WebkitSerialEnzo/jssc.jar"/>
+	<classpathentry kind="lib" path="WebkitSerialEnzo/mysql-connector-java-3.1.14-bin.jar"/>
+	<classpathentry kind="lib" path="WebkitSerialEnzo/socketio.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="java/target/classes"/>
+</classpath>
