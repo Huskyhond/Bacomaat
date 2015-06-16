@@ -1,16 +1,4 @@
-
 package MLB;
-
-//import com.corundumstu1dio.socketio.SocketIOClient;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 import jssc.SerialPort;
 import jssc.SerialPortEvent;
@@ -23,10 +11,11 @@ public class App
 	final static Printer printer = new Printer();
 	static SerialPort serialPort = new SerialPort("COM3");
 	final static SQLDataBase db = new SQLDataBase();
-	final static Webkit wk = new Webkit(); //GUN'S CLASS NAAR WEBKIT
+	final static Webkit wk = new Webkit();
 	final static JsonGet Jget = new JsonGet(printer,wk);
+	static Dispenser dispenser = new Dispenser();
 	
-	static String rekeningnummer = "MLBI0200000001";
+	static String rekeningnummer = null;
 	static String withdrawAmount ="";
 	static int balance = 0;
 	static boolean accountExist = false;
@@ -38,109 +27,25 @@ public class App
 	static int withdrawDigitCount=0;
 	static String afgerond="";
 	
-	public static void printMoney(int ma, int mb, int mc) {
-		//Setting java files process:
-		ArrayList<String> lines = new ArrayList<String>();
-		String line = null;
-		try {
-            File f1 = new File("./Lejos.java");
-            FileReader fr = new FileReader(f1);
-            BufferedReader br = new BufferedReader(fr);
-            while ((line = br.readLine()) != null) {
-                if (line.contains("int dispenserA"))
-                    line = "int dispenserA = " + ma + ";";
-                else if(line.contains("int dispenserB"))
-                	line = "int dispenserB = " + mb + ";";
-                else if(line.contains("int dispenserC"))
-                	line = "int dispenserC = " + mc + ";";
-                line = line + "\r\n";
-                lines.add(line);
-            }
-            fr.close();
-            br.close();
-
-            FileWriter fw = new FileWriter(f1);
-            BufferedWriter out = new BufferedWriter(fw);
-            for(String s : lines)
-                 out.write(s);
-            out.flush();
-            out.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-		
-		//Building process:
-		ProcessBuilder builder = new ProcessBuilder(
-	            "cmd.exe", "/c", "nxjc Lejos.java && nxj -r Lejos");
-        builder.redirectErrorStream(true);
-        try {
-	        Process p = builder.start();
-	        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	        while (true) {
-	            line = r.readLine();
-	            if (line == null) { break; }
-	            System.out.println(line);
-	        }
-        }
-        catch(IOException ie) {
-        	
-        	
-        }
-	}
-	
 	/**
 		* @param args the command line arguments
 	*/
 	public static void main(String[] args) 
 	{
-	
-		//String rekeningnummer="MLBI0200000001"; //Deze zijn om mee te testen
-		//String withdrawAmount="10";
-                if(args.length > 0){
-                    serialPort = new SerialPort(args[0]);
-                }
-                else {
-                    serialPort = new SerialPort("COM3"); // Debugging
-                }
-                
-               // Jget.login("MLBI02000000002","1234");
-               // Jget.getBalance("MLBI02000000002");
-               // Jget.withdraw("MLBI02000000002", "10");
-                
-        //***********JsonGet methodes***********//
-		//Jget.checkAccount(rekeningnummer);
-		//Jget.getBalance(rekeningnummer);
-		//Jget.withdraw(rekeningnummer,withdrawAmount);
-		//Jget.checkWithdraw(rekeningnummer,withdrawAmount);
-		//Jget.pinFail(rekeningnummer);
-		//Jget.pinSucces(rekeningnummer);
-		//Jget.test();
-		//printer.print();
-		
-		
-		//*********Attempt at JSON parsing*********//
-		
-		//String str = "{ \"name\": \"Alice\", \"age\": 20 }";
-		//JSONObject obj = new JSONObject(str);
-		//String n = obj.getString("name");
-		//int a = obj.getInt("age");
-		//System.out.println(n + " " + a);
-		
-		
+		if(args.length > 0)
+		{
+			serialPort = new SerialPort(args[0]);
+		}
+		else 
+		{
+			serialPort = new SerialPort("COM3");
+		}
 		//*************Serial to Java********************//
 		
 		try 
 		{
-                    /* WTF?
-			for(int i=0;i<2;i++)
-			{
-				serialPort.openPort();//Open serial port
-				serialPort.setParams(2000000, 8, 1, 2);//Set params.
-				serialPort.closePort();
-			}
-                    */
-			serialPort.openPort();//Open serial port
-			serialPort.setParams(2000000, 8, 1, 2);//Set params.
+			serialPort.openPort();
+			serialPort.setParams(2000000, 8, 1, 2);
 			
 			//******Serial to Java read*****//
 			System.out.println("Serial Ready");
@@ -154,7 +59,6 @@ public class App
 						int bytesCount = event.getEventValue();
 						try 
 						{
-							//String read1 = new String(serialPort.readString(1));
 							String read = new String(serialPort.readString(bytesCount));
 							System.out.println("READ: "+read);
 							try
@@ -171,7 +75,6 @@ public class App
 								if(a==20)
 								{
 									System.out.println("waiting for reknr+pin...");
-									//String read1 = new String(serialPort.readString(19));//reknmr+pin aan elkaar
 									System.out.println("read1: "+sub2);
 									switchCase(a,sub2);
 									
@@ -194,12 +97,8 @@ public class App
 							}
 							catch(Exception e)
 							{
-								//System.out.println("Error in eventlistener"); 
+								
 							}
-							
-							//	System.out.println(caseArduino);
-							//	System.out.println(restBytes);
-							
 							
 						} 
 						catch (SerialPortException e) 
@@ -214,96 +113,26 @@ public class App
 		catch (SerialPortException ex)
 		{
 			System.out.println(ex);
-			// serialPort.closePort();//Close serial port
 		} 
 		
-	}//einde main methode
+	}
 	public static void switchCase2(int caseFromArduino)
 	{
 		String result= "";
 		
 		switch(caseFromArduino)
 		{
-			/*case 21: //pin verify Succes
-			result = "pin gelukt!";
-			failCount = Jget.pinFail(rekeningnummer);
-			if(failCount>3)//als de arduino niet verder mag
-			{
-				try
-				{
-					System.out.println("locked");
-					serialPort.writeInt(49); // dit schrijft een 1
-				}
-				catch(Exception e)
-				{
-					System.out.println("Writing to serialPort: Failed");
-				}
-				//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED
-				wk.sendAccBlock(true);
-			}
-			else//als hij wel verder mag
-			{
-				try
-				{
-					serialPort.writeInt(50); // dit schrijft een 2
-					Jget.pinSucces(rekeningnummer);
-					// HIER MOET JE pinVerify NAAR WEBKIT STUREN
-					wk.sendPinStatus(true);
-				}
-				catch(Exception e)
-				{
-					System.out.println("Writing to serialPort: Failed");
-				}
-			}
-			
-			break;
-			
-			case 20: //pin verify Fail
-			result = "pin gefaalt!"; 
-			failCount = Jget.pinFail(rekeningnummer);
-			if(failCount>2)//als de arduino niet verder mag
-			{
-				try
-				{
-					serialPort.writeInt(49); // dit schrijft een 1
-					System.out.println("locked");
-				}
-				catch(Exception e)
-				{
-					System.out.println("Writing to serialPort: Failed");
-				}
-				//HIER NAAR NIEK STUREN DAT ACCOUNT IS BLOCKED
-				wk.sendAccBlock(false);
-			}
-			else//als hij wel verder mag.
-			{
-				try
-				{
-					serialPort.writeInt(50); // dit schrijft een 2
-					
-				}
-				catch(Exception e)
-				{
-					System.out.println("Writing to serialPort: Failed");
-				}
-			}
-			//HIER MOET JE failcount NAAR NIEK
-			wk.sendFailCount(failCount);
-			break;
-			*/
 			
 			case 3: //Get balance
 			balance = Jget.getBalance(rekeningnummer);
 			result = Integer.toString(balance);
 			
-			//HIER MOET JE balance NAAR WEBKIT STUREN
 			wk.sendBalance(balance);
 			break;
 			
 			case 4: //Naar withdraw page
 			result = "Entering withdraw page";
 			resetWithdraw();
-			//HIER WITHDRAW REQUEST, WE GAAN WITHDRAW SCREEN IN
 			wk.sendWithdrawRequest();
 			break;
 			
@@ -313,25 +142,21 @@ public class App
 			wk.sendReceiptStatus(receipt);
 			printer.print();
 			
-			//HIER MOET JE DE BOOLEAN VAN receipt NAAR WEBKIT STUREN
 			receipt = false;
 			break;
 			
 			case 6: //cancel
 			result = "cancel";
-			//HIER MOET EEN CANCEL REQUEST NAAR WEBKIT
 			wk.sendCancelRequest();
 			break;
 			case 2: //clear pin input
 			result = "clear input";
 			resetWithdraw();
-			//HIER MOET CLEAR INPUT REQUESTz
 			wk.sendClearPinInput();
 			break;
 			
 			case 10: //back request
 			result = "Back to Home screen";
-			//HIER MOET BACK REQUEST
 			wk.sendBackRequest();
 			break;
 			
@@ -342,13 +167,11 @@ public class App
 			}
 			System.out.println(rekeningnummer+"\n"+withdrawAmount);
 			
-			//in biljet word withdraw afgerond
-			wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); // DIT IS EEN ARRAY VAN BILJETTEN
-			wk.sendWithdrawAmount(afgerond);//Naar niek afgerond bedrag
-
-			//Wachten op bevestiging voor withdrawen
+			wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); //in biljet word withdraw afgerond
+			wk.sendWithdrawAmount(afgerond);
+			
 			int confirm=0;
-		
+			
 			try
 			{
 				System.out.println("wachten op response");
@@ -364,44 +187,12 @@ public class App
 			
 			if(confirm == 2)//doorgaan met afgerond bedrag
 			{
-				/*
-				//Hier checken of er genoeg saldo is
-				boolean check = Jget.checkWithdraw(rekeningnummer, afgerond);
-				if(check == true) //Er is genoeg saldo
-				{
-					Jget.withdraw(rekeningnummer, afgerond);
-					try
-					{
-						serialPort.writeInt(50); // dit schrijft een 2, Ja dus
-					}
-					catch(Exception e)
-					{
-						System.out.println("Error in serialWrite");
-					}
-					//Hier naar bon page
-					wk.toReceipt();
-				}
-				else//niet genoeg saldo
-				{
-					resetWithdraw();
-					//withdrawAmount = "";
-					try
-					{
-						serialPort.writeInt(49); // dit schrijft een 1, Nee dus
-					}
-					catch(Exception e)
-					{
-						System.out.println("Error in serialWrite");	
-					}
-					//Hier terug naar withdraw page
-					wk.invalidSaldo();
-				}*/
 				Jget.withdraw(rekeningnummer, afgerond);
 				if(Jget.getBooleanBalance()==true)
 				{
 					try
 					{
-						serialPort.writeInt(50); // dit schrijft een 2, Ja dus
+						serialPort.writeInt(50); 
 					}
 					catch(Exception e)
 					{
@@ -415,7 +206,7 @@ public class App
 					resetWithdraw();
 					try
 					{
-						serialPort.writeInt(49); // dit schrijft een 1, Nee dus
+						serialPort.writeInt(49); 
 					}
 					catch(Exception e)
 					{
@@ -424,13 +215,12 @@ public class App
 					//Hier terug naar withdraw page
 					wk.invalidSaldo();
 				}
-			
+				
 			}	
-			else //niet doorgaan. Niet satisfied met afgerond bedrag
+			else //niet doorgaan
 			{
 				resetWithdraw();
 				wk.sendClearWithdrawInput();
-				//Hier terug naar withdraw page
 			}
 			result = "withdraw: " + withdrawAmount;		
 			break;
@@ -444,7 +234,7 @@ public class App
 		String result= "";	
 		switch(caseFromArduino)
 		{
-			case 20: //pinpas login //<-----DONE
+			case 20: //pinpas login
 			rekeningnummer = restBytes.substring(0, 14);
 			int pinsub = restBytes.length();
 			String pin = restBytes.substring((pinsub-4),pinsub);
@@ -453,12 +243,11 @@ public class App
 			{
 				if(accountExist == true)
 				{
-					serialPort.writeInt(50); // dit schrijft een 2
-					//&& Jget.pinFail(rekeningnummer)<3
+					serialPort.writeInt(50);
 				}
 				else
 				{
-					serialPort.writeInt(49); // dit schrijft een 1
+					serialPort.writeInt(49);
 				}
 			}
 			catch(Exception e)
@@ -467,30 +256,29 @@ public class App
 			}
 			System.out.println("accountExist: "+accountExist);
 			
-			result = "rekeningnummer: "+rekeningnummer+"\npin: "+pin; //print rekeningnummer en pin van Arduino	
+			result = "rekeningnummer: "+rekeningnummer+"\npin: "+pin;
 			
-			//HIER MOET JE accountExist NAAR WEBKIT STUREN
+
 			wk.sendAccExist(accountExist);
 			break;
 			
-			case 7: //pinLength naar niek
+			case 7:
 			pinLength = restBytes;
 			result = "pin length"+pinLength;
-			//HIER MOET STRING LENGTE VAN PIN NAAR WEBKIT
+
 			wk.sendPinLength(pinLength);
 			break;
 			
-			case 9: //withdraw digit naar niek
+			case 9:
 			withdrawDigit = restBytes;
 			result = "withdrawDigit: "+withdrawDigit;
-			//HIER MOET withdrawDigit naar niek
 			wk.sendWithdrawDigit(withdrawDigit);
 			break;
 			
-		}//Einde switch
+		}
 		
 		System.out.println("case "+caseFromArduino);
-		System.out.println(result+"\n"); //check reply
+		System.out.println(result+"\n");
 	}
 	
 	public static int[] biljet(int withdrawAmount)
@@ -508,13 +296,6 @@ public class App
 			System.out.println("Aantal "+bills[i]+" : " + outputs[i]);				
 		}
 		afgerond = ""+(oldWithdraw - withdraw);
-
-		/*if(withdraw>0)
-		{
-			/////////////////HIER message STUREN////////////////////////
-			//String message = "Withdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro";
-			System.out.println("Withdraw: "+oldWithdraw+"\nWithdraw Afgerond naar : "+(oldWithdraw - withdraw)+ " euro");
-		}*/
 		return outputs;
 	}
 	
@@ -526,7 +307,5 @@ public class App
 		}
 		withdrawAmount = "";
 		withdrawDigitCount=0;
-	}
-	
+	}	
 }
-
