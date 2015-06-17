@@ -4,7 +4,6 @@ import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import jssc.SerialPortException;
-import lejos.pc.comm.*;
 
 public class App 
 {
