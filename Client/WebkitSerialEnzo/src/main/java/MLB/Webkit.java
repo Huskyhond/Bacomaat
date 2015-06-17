@@ -29,6 +29,13 @@ public class Webkit
         objSender =  new WebkitConnect();
     }
     
+    public void scanPas()
+    {
+    	JSONObject j = new JSONObject();
+    	j.put("page","code");
+    	objSender.sendObject(j);
+    }
+    
     public void sendAccExist(boolean accountExist)
     {
         accExist = new JSONObject();

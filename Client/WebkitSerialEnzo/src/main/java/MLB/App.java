@@ -71,6 +71,7 @@ public class App
 								if(a==1)
 								{
 									System.out.println("Pinpas gescand!");
+									wk.scanPas();
 								}
 								
 								if(a==20)
@@ -169,11 +170,11 @@ public class App
 			System.out.println(rekeningnummer+"\n"+withdrawAmount);
 			
 			wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); //in biljet word withdraw afgerond
-			wk.sendWithdrawAmount(afgerond);
+			wk.sendWithdrawAmount(afgerond); //afgerond bedrag word gestuurd
 			
 			int confirm=0;
 			
-			try
+			try //kijken of tevreden met afgerond bedrag
 			{
 				System.out.println("wachten op response");
 				String read1 = new String(serialPort.readString(1));//1=Nee, 2=Ja
@@ -189,7 +190,7 @@ public class App
 			if(confirm == 2)//doorgaan met afgerond bedrag
 			{
 				Jget.withdraw(rekeningnummer, afgerond);
-				if(Jget.getBooleanBalance()==true)
+				if(Jget.getBooleanBalance()==true) //genoeg saldo om te pinnen
 				{
 					try
 					{
@@ -202,7 +203,7 @@ public class App
 					//Hier naar bon page
 					wk.toReceipt();
 				}
-				else
+				else //niet genoeg saldo
 				{
 					resetWithdraw();
 					try
