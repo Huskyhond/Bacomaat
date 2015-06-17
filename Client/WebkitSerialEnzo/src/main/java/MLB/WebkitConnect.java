@@ -56,7 +56,7 @@ public class WebkitConnect
         }
         else 
         {
-            System.out.println("je bent niet connected kill");
+            System.out.println("Je bent niet connected met Node Webkit");
         }
     }
     public void sendObjectArray(JSONObject sendObj)
@@ -67,7 +67,7 @@ public class WebkitConnect
         }
         else
         {
-            System.out.println("je bent niet connected kill");
+            System.out.println("Je bent niet connected met Node Webkit, kill");
         }
     }
 }
