@@ -128,7 +128,7 @@ public class Webkit
 		wdDigit.put("digit", withdrawDigit);
 		objSender.sendObject(wdDigit);
     }
-    public void sendMoneyOptions(int[] moneyOptions)
+   /* public void sendMoneyOptions(int[] moneyOptions)
     {
         stacksOptionsArray = new JSONArray();
         stacksOptions = new JSONObject();
@@ -139,7 +139,7 @@ public class Webkit
         stacksOptionsArray.add(moneyOptions[4]);
         stacksOptions.put("moneyOptions", stacksOptionsArray);
         objSender.sendObjectArray(stacksOptions);
-    }
+    }*/
     public void sendReceiptStatus(boolean receiptRequested)
     {
         receiptStatus = new JSONObject();

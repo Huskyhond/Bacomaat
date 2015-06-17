@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 public class Dispenser
 {
-	public static void printMoney(int ma, int mb, int mc) 
+	public static void printMoney(int ma, int mb, int mc) //50 , 20 , 10 || ma = onderste tray, mc = bovenste
 	{
 		//Setting java files process:
 		ArrayList<String> lines = new ArrayList<String>();

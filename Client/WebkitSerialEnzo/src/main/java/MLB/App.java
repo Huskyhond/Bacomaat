@@ -169,7 +169,7 @@ public class App
 			}
 			System.out.println(rekeningnummer+"\n"+withdrawAmount);
 			
-			wk.sendMoneyOptions(biljet(Integer.parseInt(withdrawAmount))); //in biljet word withdraw afgerond
+			int biljetten[] = biljet(Integer.parseInt(withdrawAmount)); //in biljet word withdraw afgerond
 			wk.sendWithdrawAmount(afgerond); //afgerond bedrag word gestuurd
 			
 			int confirm=0;
@@ -202,6 +202,7 @@ public class App
 					}
 					//Hier naar bon page
 					wk.toReceipt();
+					Dispenser.printMoney(biljetten[2], biljetten[1], biljetten[0]); //A , B , C | 50 , 20 , 10 
 				}
 				else //niet genoeg saldo
 				{
@@ -288,8 +289,8 @@ public class App
 		int oldWithdraw = withdrawAmount;
 		int withdraw = withdrawAmount;
 		
-		int bills[] = {100,50,20,10,5};
-		int outputs[] = {0,0,0,0,0};
+		int bills[] = {50,20,10};
+		int outputs[] = {0,0,0};
 		
 		for(int i =0; i<bills.length; i++)
 		{
