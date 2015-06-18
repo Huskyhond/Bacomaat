@@ -33,5 +33,7 @@ pause
 
 # Bacomaat
 **TODO**
-Deze regel --> "static Dispenser dispenser = new Dispenser();" moet gedebugged worden aub.
+GUI opnieuw testen.
+Dispenser extensief testen.
+Andermans REST fixxen.
 
