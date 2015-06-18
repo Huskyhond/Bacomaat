@@ -4,10 +4,10 @@ The SPI and MiFare header are strictly required.
 There's no other way of normally (with limited time) implementing MiFare's RFID Implementation without the MFRC522 header.
 Keypad.h can be found at http://playground.arduino.cc/uploads/Code/keypad.zip
 SPI.h is packaged with the Arduino IDE 
-MFRC533.h can be found at https://github.com/miguelbalboa/rfid
+MFRC522.h can be found at https://github.com/miguelbalboa/rfid
 
 Case explantion
-You can except the following cases:
+You can except the following cases:x
 01 = card found, break idle.
 02 = clear input.
 20 = wait for accountnumber and pin 19 bytes.
