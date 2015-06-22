@@ -199,7 +199,7 @@ public class App
 					}
 					//Hier naar bon page
 					wk.toReceipt();
-					Dispenser.printMoney(biljetten[2], biljetten[1], biljetten[0]); //A , B , C | 50 , 20 , 10 
+					Dispenser.printMoney(biljetten[0], biljetten[1], biljetten[2]); //A , B , C | 50 , 20 , 10 
 				}
 				else //niet genoeg saldo
 				{
