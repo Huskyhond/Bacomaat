@@ -16,7 +16,7 @@ public class App
 	static String rekeningnummer = null;
 	static String withdrawAmount ="";
 	static int balance = 0;
-	static boolean accountExist = false;
+	static int accountExist = 0;
 	static boolean receipt = false;
 	static String pinLength = "";
 	static int failCount = 0;
@@ -241,12 +241,14 @@ public class App
 			accountExist = Jget.login(rekeningnummer,pin);
 			try
 			{
-				if(accountExist == true)
+				if(accountExist == 2)
 				{
+					System.out.println("Sending true (success login) to arduino.");
 					serialPort.writeInt(50);
 				}
 				else
 				{
+					System.out.println("Sending false (failed login) to arduino.");
 					serialPort.writeInt(49);
 				}
 			}

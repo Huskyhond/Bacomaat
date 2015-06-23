@@ -101,29 +101,31 @@ public class JsonGet
 
 	}
   
-    public boolean login(String rekeningnummer, String pin)//<<---DONE
+    public int login(String rekeningnummer, String pin)//<<---DONE
     {
+    	System.out.println("Trying to login using " + rekeningnummer + " & " + pin);
     	try
     	{
    	        https = sendPost(url+"/login","cardId="+rekeningnummer+"&pin="+pin,"");
+   	        System.out.println(https);
     		JSONObject obj1 = new JSONObject(https);
 	    	JSONObject obj = obj1.getJSONObject("success");
    	    	token = obj.getString("token");   
     		System.out.println("cardId: Exist , pin: SUCCES, token: "+token);
-   	    	return true; 	    	
+   	    	return 2; 	    	
    	    	
        }
        catch(Exception e)
        {	
     	   try
     	   {
-        	   catchError(https);
+        	   return catchError(https);
     	   }
     	   catch(Exception ex)
     	   {
     	       	System.out.println("error in catchError");
     	   }
-    	   return false;
+    	   return 0;
        }
     }
     
@@ -222,7 +224,7 @@ public class JsonGet
            	System.out.println(e.getMessage());
     	}
     }
-    public void catchError(String https)
+    public int catchError(String https)
     {
     	try
     	{
@@ -235,15 +237,20 @@ public class JsonGet
 	    	
 	    	System.out.println("Error: "+code);
 	    	System.out.println("Message: "+message);
-	    	
-	    	if(code == 15)
+	    	if(code == 14) {
+	    		return 0;
+	    	}
+	    	else if(code == 15)
 	    	{
 	    		int failedAttempts = obj2.getInt("failedAttempts");
 				wk.sendFailCount(failedAttempts);
 
 	    		System.out.println("failedAttempts: "+failedAttempts);
 	    	}
-	    	if(code == 32)
+	    	else if(code == 16) {
+	    		return 0;
+	    	}
+	    	else if(code == 32)
 	    	{
 	    		balance = false;
 	    	}
@@ -253,6 +260,7 @@ public class JsonGet
     	{
            	System.out.println(e.getMessage());
     	}
+    	return  1;
     }
     public boolean getBooleanBalance()
     {

