@@ -179,13 +179,29 @@ void loop()
           }
         }
         
-        if(failCheck != 50) // check if we havent been returned a 2 exactly.
+        switch(failCheck)
         {
-          //Serial.print("06"); // print cancel
-          failCheck = 0; // clear the identifying variable
-          //finish(); // finish aka, get ready to read another card.
-          //return; // return and start over.
-          goto loop;
+          case 49: //pin rejected.
+            failCheck = 0; // clear the identifier.
+            goto loop; //return to pin input. remember pin.
+          break;
+
+          case 50: //pin verified.
+            //do nothing break the switch.
+            //runAuth will be set to 1 below.
+          break;
+
+          case 51: //pin rejected fail count >= 3.
+            Serial.println("06");
+            finish();//clear everything, requires user to rescan the card.
+            return;
+          break;
+
+          default: //Read error.
+            Serial.println("06");
+            finish();
+            return;
+          break;
         }
         
         runAuth=1;
