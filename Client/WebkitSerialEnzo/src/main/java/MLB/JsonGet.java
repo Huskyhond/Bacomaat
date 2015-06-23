@@ -43,6 +43,7 @@ public class JsonGet
     private String url = "https://145.24.222.177";
 	private String https = null;
 	private boolean balance;
+	private int failedAttempts;
     
     public JsonGet(Printer _printer, Webkit _wk)
     {
@@ -237,17 +238,20 @@ public class JsonGet
 	    	
 	    	System.out.println("Error: "+code);
 	    	System.out.println("Message: "+message);
-	    	if(code == 14) {
+	    	if(code == 14) 
+	    	{
 	    		return 0;
 	    	}
 	    	else if(code == 15)
 	    	{
-	    		int failedAttempts = obj2.getInt("failedAttempts");
+	    		failedAttempts = obj2.getInt("failedAttempts");
 				wk.sendFailCount(failedAttempts);
+				
 
 	    		System.out.println("failedAttempts: "+failedAttempts);
 	    	}
-	    	else if(code == 16) {
+	    	else if(code == 16) 
+	    	{
 	    		return 0;
 	    	}
 	    	else if(code == 32)
@@ -262,172 +266,13 @@ public class JsonGet
     	}
     	return  1;
     }
+    public int getAttempts()
+    {
+    	return failedAttempts;
+    }
+    
     public boolean getBooleanBalance()
     {
     	return balance;
     }
-    
-    /* public void withdraw(String rekeningnummer, String withdrawAmount)//return transid,accountnumber,amount,machineid,date naar PRINTER
-    {
-    	System.out.println("JsonGet: withdraw:"+withdrawAmount);
-    	String token = withdrawAmount+"&token=Dk49D9dka13D9f03S9dj1D9da01Akd03";
-
-    	try
-    	{
-    		String https = httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+token);
-    		JSONObject obj = new JSONObject(https);
-   	    	JSONObject obj1 = obj.getJSONObject("success");
-	    	JSONObject obj2 = obj1.getJSONObject("transaction");
-	    	
-	    	int transactionid = obj2.getInt("id");
-	    	String accountNumber = obj2.getString("accountNumber");
-	    	int amount = obj2.getInt("amount");
-	    	int machineid = obj2.getInt("machineID");
-	    	String date = obj1.getString("date");
-	    	
-   	    	printer.setPrinter(accountNumber, Integer.toString(amount), Integer.toString(transactionid),date);
-
-		    
-		    System.out.println("transactionid: "+transactionid);
-		    System.out.println("accountNumber: "+ accountNumber);
-	    	System.out.println("amount: "+amount);
-	    	System.out.println("machineid: "+machineid);
-	    	System.out.println("date: "+date);
-    	}
-    	catch(Exception e)
-    	{
-    	   try
-      	   {
-          	   catchError(httpsGet(url+"/balance/"+rekeningnummer+"?changeBalance="+token));
-      	   }
-      	   catch(Exception ex)
-      	   {
-      		 System.out.println("error in catchError");
-      	   }
-           	System.out.println(e.getMessage());
-    	}
-    }
-    
-    public int getBalance(String rekeningnummer)//return saldo
-    {
-    	System.out.println(rekeningnummer);
-    	try
-    	{
-   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
-   	    	JSONObject obj1 = new JSONObject(https);
-   	    	JSONObject obj = obj1.getJSONObject("success");
-   	    	int bankid = obj.getInt("bankid");
-   	    	String cardId = obj.getString("cardId");
-   	    	int saldo = obj.getInt("saldo");
-   	    	int failCount = obj.getInt("failCount");
-   	    	int dailyLimit = obj.getInt("dailyLimit");
-   	    	
-   	    	System.out.println("bankid: "+bankid);
-   	    	System.out.println("cardId: "+cardId);
-   	    	System.out.println("saldo: "+saldo);
-   	    	System.out.println("failCount: "+failCount);
-   	    	System.out.println("dailyLimit: "+dailyLimit);	
-   	    	return saldo;
-
-       }
-       catch(Exception e)
-       {
-    	   try
-    	   {
-        	   catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
-    	   }
-    	   catch(Exception ex)
-    	   {
-    		   System.out.println("error in catchError");
-    	   }
-       	System.out.println(e.getMessage());
-       }
-    	return 0;
-    }
-    
-    public int pinFail(String rekeningnummer)//return failCount
-    {
-    	int failCount=0;
-    	try
-    	{
-	    	String https = httpsGet(url+"/account/"+rekeningnummer+"/failed"+token);
-	    	JSONObject obj1 = new JSONObject(https);
-   	    	JSONObject obj = obj1.getJSONObject("success");
-	    	failCount = obj.getInt("failCount");
-	    	
-	    	System.out.println("failCount: "+failCount);
-    	}
-    	catch(Exception e)
-    	{
-    	   try
-       	   {
-           	   catchError(httpsGet(url+"/account/"+rekeningnummer+"/failed"+token));
-       	   }
-       	   catch(Exception ex)
-       	   {
-       		System.out.println("error in catchError");
-       	   }
-           	System.out.println(e.getMessage());
-    	}
-    	return failCount;
-    }
-    
-    public void pinSucces(String rekeningnummer)
-    {
-    	try
-    	{
-        	String https = httpsGet(url+"/account/"+rekeningnummer+"/passed"+token);
-    		
-    	}
-    	catch(Exception e)
-    	{
-    		try
-        	{
-    			catchError(httpsGet(url+"/account/"+rekeningnummer+"/failed"+token));
-    	    }
-        	catch(Exception ex)
-    		{
-        		System.out.println("error in catchError");
-            }
-           	System.out.println(e.getMessage());
-    	}
-    }
-    
-    public boolean checkWithdraw(String rekeningnummer, String withdrawAmount)//return saldo
-    {
-    	System.out.println("Start: checkWithdraw");
-    	try
-    	{
-   	        String https = httpsGet(url+"/balance/"+rekeningnummer+token);
-   	        JSONObject obj1 = new JSONObject(https);
-	    	JSONObject obj = obj1.getJSONObject("success");   	    	
-	    	int saldo = obj.getInt("saldo");
-   	    	System.out.println("checkWithdraw saldo: "+saldo+"\nWithdraw: "+withdrawAmount);
-   	    	if(Integer.parseInt(withdrawAmount)>saldo)
-   	    	{
-   	    		System.out.println("Niet genoeg saldo!");
-   	    		return false;
-   	    	}
-   	    	else
-   	    	{
-   	    		System.out.println("Genoeg Saldo!");
-   	    		return true;
-   	    	}
-  
-       }
-       catch(Exception e)
-       {
-    	   try
-	       	{
-	   			catchError(httpsGet(url+"/balance/"+rekeningnummer+token));
-	   	    }
-	       	catch(Exception ex)
-	   		{
-	       		System.out.println("error in catchError");
-	        }
-	       	System.out.println(e.getMessage());
-       }
-    	return true;
-    }*/
-    
 }

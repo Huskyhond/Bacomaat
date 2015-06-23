@@ -249,7 +249,14 @@ public class App
 				else
 				{
 					System.out.println("Sending false (failed login) to arduino.");
-					serialPort.writeInt(49);
+					if(Jget.getAttempts()<3)
+					{
+						serialPort.writeInt(49);
+					}
+					else if(Jget.getAttempts()==3)
+					{
+						serialPort.writeInt(51);
+					}
 				}
 			}
 			catch(Exception e)
