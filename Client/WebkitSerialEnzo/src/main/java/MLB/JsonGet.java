@@ -8,6 +8,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -170,26 +172,29 @@ public class JsonGet
     public void withdraw(String rekeningnummer, String withdrawAmount)//<-----DONE
     {
     	System.out.println("JsonGet: withdraw:"+withdrawAmount);
+    	Date date = new Date();
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+    	String datenow = sdf.format(new Date());
     	try
     	{
     		https = sendPost(url+"/withdraw/","amount="+withdrawAmount,token);
     		JSONObject obj = new JSONObject(https);
    	    	JSONObject obj1 = obj.getJSONObject("success");
-	    	JSONObject obj2 = obj1.getJSONObject("transaction");
+	    	//JSONObject obj2 = obj1.getJSONObject("transaction");
 	    	
-	    	int transactionid = obj2.getInt("id");
-	    	int amount = obj2.getInt("amount");
-	    	int machineid = obj2.getInt("machineID");
-	    	String date = obj2.getString("date");
+	    	//int transactionid = obj2.getInt("id");
+	    	//int amount = obj2.getInt("amount");
+	    	//int machineid = obj2.getInt("machineID");
+	    	//String date = obj2.getString("date");
 	    	
-   	    	printer.setPrinter(rekeningnummer, Integer.toString(amount), Integer.toString(transactionid),date);
+   	    	printer.setPrinter(rekeningnummer, withdrawAmount,datenow);
 
 		    
-		    System.out.println("transactionid: "+transactionid);
+		  //  System.out.println("transactionid: "+transactionid);
 		    System.out.println("cardId: "+ rekeningnummer);
-	    	System.out.println("amount: "+amount);
-	    	System.out.println("machineid: "+machineid);
-	    	System.out.println("date: "+date);
+	    	//System.out.println("amount: "+amount);
+	    	//System.out.println("machineid: "+machineid);
+	    	//System.out.println("date: "+date);
 	    	balance = true;
     	}
     	catch(Exception e)

@@ -5,7 +5,7 @@ public class Printer
 {	
 	private String reknummer;
 	private String withdrawAmount;
-	private String transactieID;
+	//private String transactieID;
 	private String date;
 
 	public void print()
@@ -16,11 +16,11 @@ public class Printer
 		text[0] = "Welcome to";
 		text[1] = "MLB";
 		text[2] = "Automaat ID: MLB-1";
-		text[3] = "Transactie ID: "+transactieID;
-		text[4] = "Rekening nummer: ";
-		text[5] = "xxxxxxxxxx"+reknummer;
-		text[6] = "Withdraw Amount: "+withdrawAmount;
-		text[7] = date;
+		//text[3] = "Transactie ID: "+transactieID;
+		text[3] = "Rekening nummer: ";
+		text[4] = "xxxxxxxxxx"+reknummer;
+		text[5] = "Withdraw Amount: "+withdrawAmount;
+		text[6] = date;
 		
 		/*text[7] = "LMAO";
 		text[8] = "LMAO";
@@ -32,11 +32,11 @@ public class Printer
 		labelwriter.printLabel(text);	
 	}
 	
-	public void setPrinter(String reknummer, String withdrawAmount, String transactieID, String date)
+	public void setPrinter(String reknummer, String withdrawAmount, String date)
 	{
 		this.reknummer = reknummer.substring(10);
 		this.withdrawAmount = withdrawAmount;
-		this.transactieID = transactieID;
+		//this.transactieID = transactieID;
 		this.date = date;
 		System.out.println("Setting up printer");
 
