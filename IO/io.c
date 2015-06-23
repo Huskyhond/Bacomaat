@@ -181,10 +181,11 @@ void loop()
         
         if(failCheck != 50) // check if we havent been returned a 2 exactly.
         {
-          Serial.print("06"); // print cancel
+          //Serial.print("06"); // print cancel
           failCheck = 0; // clear the identifying variable
-          finish(); // finish aka, get ready to read another card.
-          return; // return and start over.
+          //finish(); // finish aka, get ready to read another card.
+          //return; // return and start over.
+          goto loop;
         }
         
         runAuth=1;
