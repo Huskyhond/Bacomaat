@@ -137,13 +137,15 @@ public class JsonGet
     	System.out.println("logout");
     	try
     	{
-    		https = sendPost(url+"/logout","",token);
-    		System.out.println(https);
-    		JSONObject obj1 = new JSONObject(https);
-	    	JSONObject obj = obj1.getJSONObject("success");
-	    	int code = obj1.getInt("code");
-	    	int active = obj1.getInt("active");
-    		
+    		if(token != null) {
+	    		https = sendPost(url+"/logout","",token);
+	    		System.out.println(https);
+	    		JSONObject obj1 = new JSONObject(https);
+		    	JSONObject obj = obj1.getJSONObject("success");
+		    	int code = obj1.getInt("code");
+		    	int active = obj1.getInt("active");
+		    	this.token = null;
+    		}
     	}
     	catch(Exception e)
     	{

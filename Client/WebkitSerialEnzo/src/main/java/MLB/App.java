@@ -146,6 +146,7 @@ public class App
 			
 			case 6: //cancel
 			result = "cancel";
+			Jget.logout();
 			wk.sendCancelRequest();
 			break;
 			case 2: //clear pin input
