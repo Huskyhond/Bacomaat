@@ -15,5 +15,8 @@
   <script src="./js/listener.js"></script>
   <script>
     global.currentPage = "select";
+    if(getUrlVars()["local"] < 1) {
+      $(".main div:first").remove();
+    }
   </script>
 </body></html>

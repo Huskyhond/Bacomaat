@@ -156,7 +156,7 @@ public class App
 			
 			case 10: //back request
 			result = "Back to Home screen";
-			wk.sendBackRequest();
+			wk.sendBackRequest(rekeningnummer);
 			break;
 			
 			case 14:
@@ -268,7 +268,7 @@ public class App
 			result = "rekeningnummer: "+rekeningnummer+"\npin: "+pin;
 			
 
-			wk.sendAccExist(accountExist);
+			wk.sendAccExist(accountExist, rekeningnummer);
 			break;
 			
 			case 7:

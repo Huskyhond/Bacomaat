@@ -10,8 +10,8 @@ var socket = global.socket;
 
 socket.on("update", function(data) {
   var data = JSON.parse(data);
+  console.log(data);
   if(data.page) {
-    
     if(data.page == "code" && global.currentPage != "code") {
       var codelength = (data.codelength ? data.codelength : 0);
       location.href = "code.html?codelength=" + codelength;
@@ -20,7 +20,8 @@ socket.on("update", function(data) {
       location.href = "scan.html";
     }
     else if(data.page == "select" && global.currentPage != "select") {
-    	location.href = "select.html";
+      var remote = (data.local  == 0 ? data.local : 1);
+    	location.href = "select.html?local=" + remote;
     }
     else if(data.page == "money" && global.currentPage != "money") {
     	var message = (data.message ? data.message : "");
@@ -42,6 +43,5 @@ socket.on("update", function(data) {
       var message = (data.message ? data.message : "");
       location.href = "confirm.html?message=" + message + "&amount=" + amount;
     }
-
   }
 });

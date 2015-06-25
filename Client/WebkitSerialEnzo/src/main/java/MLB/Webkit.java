@@ -36,12 +36,18 @@ public class Webkit
     	objSender.sendObject(j);
     }
     
-    public void sendAccExist(int accountExist)
+    public void sendAccExist(int accountExist, String accNr)
     {
         accExist = new JSONObject();
         if (accountExist == 2)
         {
+        	System.out.println(accNr.substring(0, 4).toLowerCase());
+            if(!accNr.substring(0, 4).toLowerCase().equals("mlbi")) {
+            	System.out.println("LOCAL = 0");
+            	accExist.put("local", 0);
+            }
             accExist.put("page", "select");
+            
         }
         else if(accountExist == 0)
         {
@@ -52,6 +58,7 @@ public class Webkit
         
         if(accountExist != 1) 
         {
+        	System.out.println(accExist.toString());
         	objSender.sendObject(accExist);
         }
     }
@@ -96,7 +103,7 @@ public class Webkit
         failCountObj = new JSONObject();
         failCountObj.put("page", "code");
         if(failcount > 2) {
-        	sendAccExist(0);
+        	sendAccExist(0, "");
         }
         failCountObj.put("failCount", failcount);
         objSender.sendObject(failCountObj);
@@ -187,8 +194,9 @@ public class Webkit
 		objSender.clearMoney();
 		objSender.sendObject(clearWDInput);
 	}
-    public void sendBackRequest()
+    public void sendBackRequest(String nr)
     {
+    	
         backRequest = new JSONObject();
         backRequest.put("page", "select");
         objSender.sendObject(backRequest);
