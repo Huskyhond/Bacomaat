@@ -199,9 +199,14 @@ public class JsonGet
     	try
     	{
     		https = sendPost(url+"/withdraw/","amount="+withdrawAmount,token);
+    		System.out.println("####DEBUG#####" + https);
     		JSONObject obj = new JSONObject(https);
    	    	JSONObject obj1 = obj.getJSONObject("success");
-	    	//JSONObject obj2 = obj1.getJSONObject("transaction");
+	    	int code = obj1.getInt("code");
+	    	System.out.println("code: "+code);
+   	    	//JSONObject obj2 = obj1.getJSONObject("code");
+	    	
+	    //	int code = obj1.getInt(1337);
 	    	
 	    	//int transactionid = obj2.getInt("id");
 	    	//int amount = obj2.getInt("amount");
