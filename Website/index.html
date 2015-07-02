@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		
-		<div class="popup"><iframe width="560" height="315" src="https://www.youtube.com/embed/IZDczJaA0Rc?showinfo=0&autoplay=1" frameborder="0" allowfullscreen></iframe></iframe></div>	
+		<div class="popup"><iframe width="560" height="315" src="https://www.youtube.com/embed/egmcD7jWXG0?showinfo=0&autoplay=1" frameborder="0" allowfullscreen></iframe></iframe></div>	
 		<div id="container">
 			<h1><img id="logo" src="img/logo.png"></h1>
 			<div style="position:relative; z-index:10;"> Je kan de snelheid van de dots aanpassen met : <br />CTRL + pijltje omhoog of omlaag </div>
@@ -60,7 +60,7 @@
 		}
 
 		function build() {
-			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case"]; // aka links
+			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case", "Evaluatie Niek", "Evaluatie Stephan"]; // aka links
 			var excludes = ["#logo", ".popup"];
 			generateDots(dots, excludes, [], function(items) {
 				//$("#dots").html(" ");
@@ -126,6 +126,16 @@
 		$("#container").on('click', '.dot.use', function() {
 			new Messi("<img src='docs/usecase.png' width='100%' height='100%' />", {title: 'Use case', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
 		});
+
+		$("#container").on('click', '.dot.niek', function() {
+			new Messi('<object data="docs/Evaluatie Niek Eichner.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Evaluatie Niek Eichner.pdf">Klik hier</a></p></object>', {title: 'Evaluatie Niek Eichner', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.stephan', function() {
+			new Messi('<object data="docs/Evaluatie Stephan de Jonge.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Evaluatie Stephan de Jonge.pdf">Klik hier</a></p></object>', {title: 'Evaluatie Stephan de Jonge', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+
 
 	</script>
 </html>
