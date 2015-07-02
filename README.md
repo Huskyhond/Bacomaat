@@ -29,11 +29,3 @@ pause
 4. Ga nu naar de gecompilde java, dit is 1 JAR file en een folder lib/ daarin staan alle dependencies.
 5. Kopieer deze ook naar het webkit mapje.
 6. Run de .bat file en voila.
-
-
-# Bacomaat
-**TODO**
-GUI opnieuw testen.
-Dispenser extensief testen.
-Andermans REST fixxen.
-
