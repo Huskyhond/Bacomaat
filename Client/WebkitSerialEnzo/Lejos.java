@@ -37,8 +37,8 @@ public class Lejos extends Thread {
 
   public static void main (String[] args) {
 
-int dispenserA = 1;
-int dispenserB = 1;
+int dispenserA = 0;
+int dispenserB = 0;
 int dispenserC = 1;
 
     // Default engine speeds.
@@ -62,6 +62,6 @@ int dispenserC = 1;
     }
 
     //Debugging
-    Button.waitForAnyPress();
+    //Button.waitForAnyPress();
   }
 }

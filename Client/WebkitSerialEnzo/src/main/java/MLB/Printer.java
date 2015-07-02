@@ -12,7 +12,7 @@ public class Printer
 	{
 		
 		
-		String[] text = new String[8];
+		String[] text = new String[7];
 		text[0] = "Welcome to";
 		text[1] = "MLB";
 		text[2] = "Automaat ID: MLB-1";
