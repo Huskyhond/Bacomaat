@@ -60,7 +60,7 @@
 		}
 
 		function build() {
-			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case", "Evaluatie Niek", "Evaluatie Stephan"]; // aka links
+			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case", "Evaluatie Niek", "Evaluatie Stephan", "Evaluatie Gun", "Evaluatie Chinji", "Project Code"]; // aka links
 			var excludes = ["#logo", ".popup"];
 			generateDots(dots, excludes, [], function(items) {
 				//$("#dots").html(" ");
@@ -133,6 +133,18 @@
 
 		$("#container").on('click', '.dot.stephan', function() {
 			new Messi('<object data="docs/Evaluatie Stephan de Jonge.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Evaluatie Stephan de Jonge.pdf">Klik hier</a></p></object>', {title: 'Evaluatie Stephan de Jonge', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.gun', function() {
+			new Messi('<object data="docs/Evaluatie Gunduzhan Coban.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Evaluatie Gunduzhan Coban.pdf">Klik hier</a></p></object>', {title: 'Evaluatie Gunduzhan Coban', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.chinji', function() {
+			new Messi('<object data="docs/Evaluatie Chinji Hoe.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Evaluatie Chinji Hoe.pdf">Klik hier</a></p></object>', {title: 'Evaluatie Chinji Hoe', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
+		});
+
+		$("#container").on('click', '.dot.code', function() {
+				location.href = "https://github.com/Huskyhond/Bacomaat";
 		});
 
 
