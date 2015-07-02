@@ -60,7 +60,7 @@
 		}
 
 		function build() {
-			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case", "Evaluatie Niek", "Evaluatie Stephan", "Evaluatie Gun", "Evaluatie Chinji", "Project Code"]; // aka links
+			var dots = ["Groepsonderzoek", "Flowchart", "Plan van aanpak", "Samenwerkingscontract", "Security", "Test plan", "Use case", "Blog", "Evaluatie Niek", "Evaluatie Stephan", "Evaluatie Gun", "Evaluatie Chinji", "Project Code"]; // aka links
 			var excludes = ["#logo", ".popup"];
 			generateDots(dots, excludes, [], function(items) {
 				//$("#dots").html(" ");
@@ -142,7 +142,9 @@
 		$("#container").on('click', '.dot.chinji', function() {
 			new Messi('<object data="docs/Evaluatie Chinji Hoe.pdf" type="application/pdf" width="100%" height="100%"><p>Inline reader werkt niet? <a href="docs/Evaluatie Chinji Hoe.pdf">Klik hier</a></p></object>', {title: 'Evaluatie Chinji Hoe', modal: true, width: (windowWidth*0.9) + "px", height: (windowHeight*0.9) + "px"});
 		});
-
+		$("#container").on('click', '.dot.blog', function() {
+				location.href = "https://siliciumbaker.wordpress.com/";
+		});
 		$("#container").on('click', '.dot.code', function() {
 				location.href = "https://github.com/Huskyhond/Bacomaat";
 		});
